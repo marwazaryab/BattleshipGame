@@ -49,6 +49,13 @@ public class BattleshipGUI extends JPanel {
 
     private JButton[][] playerGrid = new JButton[10][10];
     private JButton[][] computerGrid = new JButton[10][10];
+    private PANEL_STATES currentState;
+
+    public enum PANEL_STATES{
+        TITLE,
+        GAME,
+        END
+    }
 
     public BattleshipGUI (BattleshipGame data) {
 
@@ -57,9 +64,12 @@ public class BattleshipGUI extends JPanel {
         this.model.setGUI(this);
         this.update();
         this.registerControllers();
-        // this.setPanelState(PANEL_STATES.TITLE);
+        this.setPanelState(PANEL_STATES.TITLE);
     }
         
+    public void setPanelState(PANEL_STATES state){
+        this.currentState = state;
+    }
     
 
     public void titleView() {
