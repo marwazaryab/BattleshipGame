@@ -4,8 +4,8 @@ import java.util.*;
 
 import Game.View.BattleshipGUI;
 
-public class BattleshipGame extends Object{
-    
+public class BattleshipGame extends Object {
+
     private BattleshipGUI view;
     private Timer time;
     private int playerShipsSunk;
@@ -14,20 +14,21 @@ public class BattleshipGame extends Object{
     private int playerRemainingShips;
     private int playerGuessHighScore;
     private double playerTimeHighScore;
-    private String [][] playerGuesses;
-    private String [][] computerGuesses;
-    private String [][] playerShips;
-    private String [][] computerShips;
+    private String[][] playerGuesses;
+    private String[][] computerGuesses;
+    private String[][] playerShips;
+    private String[][] computerShips;
     private String currentTurn;
     private String playerName;
-    private boolean isGuessed; //double check use of said variable
+    private boolean isGuessed; // double check use of said variable
     private boolean isGameEnded;
+    private boolean isHit;
 
     public BattleshipGame() {
 
     }
-    
-    public void setGUI (BattleshipGUI gui) {
+
+    public void setGUI(BattleshipGUI gui) {
 
     }
 
@@ -39,7 +40,7 @@ public class BattleshipGame extends Object{
 
     }
 
-    public void deployShips(){
+    public void deployShips() {
 
     }
 
@@ -63,7 +64,7 @@ public class BattleshipGame extends Object{
 
     }
 
-    public void printResults(){
+    public void printResults() {
 
     }
 
@@ -124,27 +125,32 @@ public class BattleshipGame extends Object{
     }
 
     public void setGameStatus(boolean status) {
+        this.isGameEnded = status;
 
     }
 
     public void setHitStatus(boolean status) {
-
+        this.isHit = status;
     }
 
     public void setPlayerGuessHighScore(int score) {
+        this.playerGuessHighScore = score;
 
     }
 
     public void setPlayerTimeHighScore(double score) {
+        this.playerTimeHighScore = score;
 
     }
 
     public void setPlayerName(String name) {
+        this.playerName = name;
 
     }
 
     public void setGameTurn(String turn) {
-        
+        this.currentTurn = turn;
+
     }
 
 }
