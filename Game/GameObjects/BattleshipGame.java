@@ -124,33 +124,36 @@ public class BattleshipGame extends Object {
         return this.currentTurn;
     }
 
+    public boolean getHitStatus() {
+        return this.isHit;
+    }
+
     public void setGameStatus(boolean status) {
+        this.isGameEnded = status;
         this.isGameEnded = status;
 
     }
 
+
     public void setHitStatus(boolean status) {
+        this.isHit = status;
         this.isHit = status;
     }
 
     public void setPlayerGuessHighScore(int score) {
         this.playerGuessHighScore = score;
-
     }
 
     public void setPlayerTimeHighScore(double score) {
         this.playerTimeHighScore = score;
-
     }
 
     public void setPlayerName(String name) {
         this.playerName = name;
-
     }
 
     public void setGameTurn(String turn) {
         this.currentTurn = turn;
-
     }
 
 }
