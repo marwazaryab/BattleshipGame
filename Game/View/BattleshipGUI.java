@@ -33,13 +33,13 @@ public class BattleshipGUI extends JPanel{
 
     private JTextField nameField = new JTextField();
 
-    private JLabel name = new JLabel();
+    private JLabel name = new JLabel("Name: ");
     private JLabel currentTurn= new JLabel();
-    private JLabel computerShipsSunk = new JLabel();
-    private JLabel playerShipsSunk = new JLabel();
-    private JLabel playerGuess = new JLabel();
-    private JLabel computerGuess = new JLabel();
-    private JLabel timer = new JLabel();
+    private JLabel computerShipsSunk = new JLabel("Computer Ships Sunk: ");
+    private JLabel playerShipsSunk = new JLabel("Player Ships Sunk: ");
+    private JLabel playerGuess = new JLabel("Player Guess: ");
+    private JLabel computerGuess = new JLabel("Computer Guess: ");
+    private JLabel timer = new JLabel("Timer: ");
 
     private JButton[][] playerGrid = new JButton[10][10];
     private JButton[][] computerGrid = new JButton[10][10];
@@ -51,6 +51,7 @@ public class BattleshipGUI extends JPanel{
         this.model.setGUI(this);
         this.registerControllers();
         this.update();
+        
     }
 
     public void titleView() {
@@ -98,6 +99,8 @@ public class BattleshipGUI extends JPanel{
         playerStats.add(playerGuess);
 
         //timer panel visuals 
+        timerPanel.add(timer);
+        timerPanel.add(exit);
 
         //computer panel visuals 
         computerPanel.add(new JLabel("Computer"));
@@ -107,6 +110,8 @@ public class BattleshipGUI extends JPanel{
         computerStats.add(computerGuess);
 
         //empty panel in the middle
+        JPanel emptyPanel = new JPanel();
+        emptyPanel.setPreferredSize(new Dimension());
         gamePanel.add(new JPanel(), BorderLayout.CENTER);
 
         //set layouts for game grid
