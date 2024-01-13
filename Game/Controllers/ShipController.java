@@ -14,7 +14,8 @@ public class ShipController implements ActionListener {
     private BattleshipGame model;
 
     public ShipController (JButton b, BattleshipGame data) {
-
+        this.button = b;
+        this.model = data;
     }
 
     public void actionPerformed(ActionEvent e) {

@@ -8,7 +8,7 @@ public class Battleship {
     
     public static void main (String [] args) {
 
-        JFrame frame = new JFrame();
+        JFrame frame = new JFrame("Battleship");
         BattleshipGame model = new BattleshipGame();
         BattleshipGUI view = new BattleshipGUI(model);
         
