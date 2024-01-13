@@ -23,7 +23,8 @@ public class BattleshipGame extends Object {
     private boolean isGuessed; // double check use of said variable
     private boolean isGameEnded;
     private boolean isHit;
-    private int [] ships = new int[] {5, 5, 3, 3, 3, 2 , 2, 1, 1, 1};
+    private int [] ships = new int[] {5, 5, 3, 3, 3, 2, 2, 1, 1, 1};
+    private int NUM_SHIPS = 10;
 
     public BattleshipGame() {
 
@@ -161,6 +162,10 @@ public class BattleshipGame extends Object {
 
     public boolean getHitStatus() {
         return this.isHit;
+    }
+
+    public int[] getShips() {
+        return this.ships;
     }
 
     public void setGameStatus(boolean status) {
