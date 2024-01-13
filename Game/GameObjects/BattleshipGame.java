@@ -23,21 +23,56 @@ public class BattleshipGame extends Object {
     private boolean isGuessed; // double check use of said variable
     private boolean isGameEnded;
     private boolean isHit;
+    private int [] ships = new int[] {5, 5, 3, 3, 3, 2 , 2, 1, 1, 1};
 
     public BattleshipGame() {
 
     }
 
     public void setGUI(BattleshipGUI gui) {
-
+        this.view = gui;
     }
 
     public void updateView() {
-
+        this.view.update();
     }
 
     public void startGame() {
 
+    }
+
+    public void createGrid(String difficulty) {
+        
+        switch (difficulty) {
+            
+            case "Easy":
+                playerGuesses = new String[10][10];
+                computerGuesses = new String[10][10];
+                playerShips = new String[10][10];
+                computerShips = new String[10][10];
+
+                break;
+
+            case "Medium":
+                playerGuesses = new String[20][20];
+                computerGuesses = new String[20][20];
+                playerShips = new String[20][20];
+                computerShips = new String[20][20];
+
+                break;
+
+            case "Hard":
+                playerGuesses = new String[30][30];
+                computerGuesses = new String[30][30];
+                playerShips = new String[30][30];
+                computerShips = new String[30][30];
+
+                break;
+
+            default: 
+
+                break;
+        }
     }
 
     public void deployShips() {
@@ -130,13 +165,9 @@ public class BattleshipGame extends Object {
 
     public void setGameStatus(boolean status) {
         this.isGameEnded = status;
-        this.isGameEnded = status;
-
     }
 
-
     public void setHitStatus(boolean status) {
-        this.isHit = status;
         this.isHit = status;
     }
 

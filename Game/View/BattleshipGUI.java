@@ -55,11 +55,11 @@ public class BattleshipGUI extends JPanel {
     public BattleshipGUI (BattleshipGame data) {
 
         this.model = data;
-        this.gameView();
+        // this.titleView();
         this.model.setGUI(this);
         this.update();
-        this.registerControllers();
-        // this.setPanelState(PANEL_STATES.TITLE);
+        this.registerButtonController();
+        this.setPanelState(PANEL_STATES.TITLE);
     }
         
     public void setPanelState(PANEL_STATES state){
@@ -147,8 +147,8 @@ public class BattleshipGUI extends JPanel {
 
         //putting everything where it's supposed to go 
         gamePanel.add(statsPanel, BorderLayout.NORTH);
-        gamePanel.add(playerGridPanel, BorderLayout.EAST);
-        gamePanel.add(computerGridPanel, BorderLayout.WEST);
+        gamePanel.add(playerGridPanel, BorderLayout.WEST);
+        gamePanel.add(computerGridPanel, BorderLayout.EAST);
         gamePanel.add(timerPanel, BorderLayout.SOUTH);
 
         //overall north panel visuals
@@ -234,12 +234,38 @@ public class BattleshipGUI extends JPanel {
     }
 
     public void update() {
-        // this.gameView();
+        this.gameView();
+        this.registerShipController();
 
     }
 
-    public void registerControllers() {
-        
+    public void registerShipController() {
+
+        sController = new ShipController(playerGrid, computerGrid, model);
+
+        for (int x = 0; x < computerGrid.length; x++) {
+            for (int y = 0; y < computerGrid[x].length; y++) {
+                computerGrid[x][y].addActionListener(sController);
+            }
+        }
+
+        for (int x = 0; x < playerGrid.length; x++) {
+            for (int y = 0; y < playerGrid[x].length; y++) {
+                playerGrid[x][y].addActionListener(sController);
+            }
+        }
+    }
+
+    public void registerButtonController() {
+
+        bController = new ButtonController(exit, model);
+        ButtonController bController2 = new ButtonController(easy, medium, hard, model, nameField);
+
+        exit.addActionListener(bController);
+        easy.addActionListener(bController2);
+        medium.addActionListener(bController2);
+        hard.addActionListener(bController2);
+
     }
 
     // public void setPanelState(PANEL_STATES state) {
