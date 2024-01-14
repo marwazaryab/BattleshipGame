@@ -38,16 +38,16 @@ public class ShipController implements ActionListener {
 
         if (this.model.getGameTurn() == null) {
 
-            if (buttonsPressed == 1) {
-                b.setEnabled(false);
-                b.setText("O");
-
+            
                 for (int x = 0; x < computerGrid.length; x++) {
                     for (int y = 0; y < computerGrid[x].length; y++) {
                         computerGrid[x][y].setEnabled(false);
                     }
                 }
                 
+            if (buttonsPressed == 1) {
+                b.setEnabled(false);
+                b.setText("O");
             }
 
             for (int x = 0; x < playerGrid.length; x++) {
@@ -72,10 +72,16 @@ public class ShipController implements ActionListener {
             if (buttonsPressed > 1) {
                 if (rowClicked == rowButtonsClicked[buttonsPressed-1]-1 || rowClicked == rowButtonsClicked[buttonsPressed-1]+1){
                     rowButtonsClicked[buttonsPressed] = rowClicked;
+                    generateRowShip();
                 }
-                if (columnClicked == columnButtonsClicked[buttonsPressed-1]-1 || columnClicked == columnButtonsClicked[buttonsPressed-1]+1) {
+                else if (columnClicked == columnButtonsClicked[buttonsPressed-1]-1 || columnClicked == columnButtonsClicked[buttonsPressed-1]+1) {
                     columnButtonsClicked[buttonsPressed] = columnClicked;
+                    generateColumnShip();
                     System.out.println("This is when the if runs " + columnButtonsClicked[buttonsPressed]);
+                }
+
+                else {
+                    System.out.println("That is not a valid ship placement");
                 }
 
                 if (ships < 10) {
@@ -118,6 +124,15 @@ public class ShipController implements ActionListener {
     
             System.out.println(rowClicked + " " + columnClicked);
         }
+    }
+
+    public void generateRowShip(){
+        System.out.println("making a row ship");
+    }
+
+    public void generateColumnShip() {
+        System.out.println("making a column ship");
+
     }
 
     }

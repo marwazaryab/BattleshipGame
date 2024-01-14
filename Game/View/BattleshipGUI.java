@@ -11,7 +11,7 @@ import Game.Images.BattleshipImageComponent;
 public class BattleshipGUI extends JPanel {
 
     private BattleshipGame model;
-    private BattleshipImageComponent battleship = new BattleshipImageComponent("Battleship.png");
+    private BattleshipImageComponent battleship = new BattleshipImageComponent();
     private ButtonController bController;
     private ShipController sController;
 
@@ -24,6 +24,7 @@ public class BattleshipGUI extends JPanel {
     private JPanel statsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
     private JPanel playerGridPanel = new JPanel();
     private JPanel computerGridPanel = new JPanel();
+    JPanel titlePanel = new JPanel();
 
     private JButton exit = new JButton("Exit");
     private JButton easy = new JButton("Easy");
@@ -55,7 +56,7 @@ public class BattleshipGUI extends JPanel {
     public BattleshipGUI (BattleshipGame data) {
 
         this.model = data;
-        // this.titleView();
+        this.titleView();
         this.model.setGUI(this);
         this.update();
         this.registerButtonController();
@@ -77,6 +78,7 @@ public class BattleshipGUI extends JPanel {
         middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.X_AXIS));
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.X_AXIS));
         namePanel.setLayout(new BoxLayout(namePanel, BoxLayout.X_AXIS));
+        titlePanel.setLayout(new BorderLayout());
 
         title.setFont(new Font("Montserrat", Font.BOLD, 30));
         easy.setFont(new Font("Montserrat", Font.BOLD, 14));
@@ -95,12 +97,19 @@ public class BattleshipGUI extends JPanel {
         middlePanel.add(battleship);
    
 
-        this.setPreferredSize(new Dimension(300, 300));
-        this.setLayout(new BorderLayout());
-        this.setBackground(getBackground());
-        this.add(buttonsPanel, BorderLayout.SOUTH);
-        this.add(title, BorderLayout.NORTH);
-        this.add(middlePanel, BorderLayout.CENTER);
+        titlePanel.setPreferredSize(new Dimension(300, 300));
+        // this.setLayout(new BorderLayout());
+        // this.setBackground(battleship);
+
+        titlePanel.add(buttonsPanel, BorderLayout.SOUTH);
+        titlePanel.add(title, BorderLayout.NORTH);
+        titlePanel.add(middlePanel, BorderLayout.CENTER);
+
+        this.add(titlePanel);
+
+        // this.add(buttonsPanel, BorderLayout.SOUTH);
+        // this.add(title, BorderLayout.NORTH);
+        // this.add(middlePanel, BorderLayout.CENTER);
 
     }
 
@@ -234,8 +243,13 @@ public class BattleshipGUI extends JPanel {
     }
 
     public void update() {
-        this.gameView();
-        this.registerShipController();
+
+        // if (this.model.getGameStatus() == false) {
+        //     this.gameView();
+        //     this.titlePanel.setEnabled(false);
+        //     this.registerShipController();
+        // }
+
 
     }
 
