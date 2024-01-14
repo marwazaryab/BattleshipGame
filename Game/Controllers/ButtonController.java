@@ -18,12 +18,8 @@ public class ButtonController implements ActionListener {
     private BattleshipGame model;
     private JTextField field;
 
-    public ButtonController (JButton exitButton, BattleshipGame data) {
-        this.exit = exitButton;
-        this.model = data;
-    }
 
-    public ButtonController (JButton easyButton, JButton mediumButton, JButton hardButton, BattleshipGame data, JTextField f) {
+    public ButtonController (JButton easyButton, JButton mediumButton, JButton hardButton, JButton exit, BattleshipGame data, JTextField f) {
         this.easy = easyButton;
         this.medium = mediumButton;
         this.hard = hardButton;
@@ -40,28 +36,23 @@ public class ButtonController implements ActionListener {
             case "Easy":
                 this.model.setPlayerName(this.field.getText());
                 this.model.createGrid(buttonText);
-
                 break;
         
             case "Medium":
                 this.model.setPlayerName(this.field.getText());
                 this.model.createGrid(buttonText);
-
                 break;
 
             case "Hard":
                 this.model.setPlayerName(this.field.getText());
                 this.model.createGrid(buttonText);
-
                 break;
 
-
             case "Exit":
-                
+                System.exit(0);
                 break;
                 
             default: 
-
                 break;
         }
     }

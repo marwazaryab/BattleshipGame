@@ -11,7 +11,7 @@ import Game.Images.BattleshipImageComponent;
 public class BattleshipGUI extends JPanel {
 
     private BattleshipGame model;
-    private BattleshipImageComponent battleship = new BattleshipImageComponent();
+    private BattleshipImageComponent battleship = new BattleshipImageComponent("icon.jpg");
     private ButtonController bController;
     private ShipController sController;
 
@@ -24,67 +24,87 @@ public class BattleshipGUI extends JPanel {
     private JPanel statsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
     private JPanel playerGridPanel = new JPanel();
     private JPanel computerGridPanel = new JPanel();
-    JPanel titlePanel = new JPanel();
+    JPanel titleContentsPanel = new JPanel();
 
     private JButton exit = new JButton("Exit");
     private JButton easy = new JButton("Easy");
     private JButton medium = new JButton("Medium");
     private JButton hard = new JButton("Hard");
-    private JButton stats = new JButton("Stats");
 
     private JTextField nameField = new JTextField();
 
-    private JLabel name = new JLabel("Name: ");
+    private JLabel name = new JLabel("Welcome Player 1! Please enter your name: ");
     private JLabel computerName = new JLabel("Computer");
-    private JLabel currentTurn= new JLabel("Turn: ");
+    private JLabel currentTurn = new JLabel("Turn: ");
     private JLabel computerShipsSunk = new JLabel("Computer Ships Sunk: ");
     private JLabel playerShipsSunk = new JLabel("Player Ships Sunk: ");
     private JLabel playerGuess = new JLabel("Player Guess: ");
     private JLabel computerGuess = new JLabel("Computer Guess: ");
     private JLabel timer = new JLabel("Timer: ");
+    private JLabel title = new JLabel();
 
     private JButton[][] playerGrid = new JButton[10][10];
     private JButton[][] computerGrid = new JButton[10][10];
-    private PANEL_STATES currentState;
+    private PANEL_STATES currentState = PANEL_STATES.TITLE;
+    int gridSize;
 
-    public enum PANEL_STATES{
+    public enum PANEL_STATES {
         TITLE,
         GAME,
         END
     }
 
-    public BattleshipGUI (BattleshipGame data) {
+    public BattleshipGUI(BattleshipGame data) {
 
         this.model = data;
-        this.titleView();
+        this.setPanelState(PANEL_STATES.TITLE);
         this.model.setGUI(this);
         this.update();
         this.registerButtonController();
-        this.setPanelState(PANEL_STATES.TITLE);
     }
-        
-    public void setPanelState(PANEL_STATES state){
+
+    public void setPanelState(PANEL_STATES state) {
         this.currentState = state;
     }
-    
 
     public void titleView() {
 
-        JLabel title = new JLabel("BATTLESHIP");
         JPanel buttonsPanel = new JPanel();
-        JPanel middlePanel = new JPanel();
+        JPanel bottomPanel = new JPanel();
         JPanel namePanel = new JPanel();
 
-        middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.X_AXIS));
+        ImageIcon icon = new ImageIcon("title.jpg");
+        title.setIcon(icon);
+
+        Color navyBlue = new Color(5, 1, 23);
+        Color gray = new Color(115, 147, 179);
+
+        bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.X_AXIS));
         namePanel.setLayout(new BoxLayout(namePanel, BoxLayout.X_AXIS));
-        titlePanel.setLayout(new BorderLayout());
+        titleContentsPanel.setLayout(new BorderLayout());
 
-        title.setFont(new Font("Montserrat", Font.BOLD, 30));
-        easy.setFont(new Font("Montserrat", Font.BOLD, 14));
-        medium.setFont(new Font("Montserrat", Font.BOLD, 14));
-        hard.setFont(new Font("Montserrat", Font.BOLD, 14));
-        exit.setFont(new Font("Montserrat", Font.BOLD, 14));
+        easy.setFont(new Font("Montserrat", Font.BOLD, 70));
+        medium.setFont(new Font("Montserrat", Font.BOLD, 70));
+        hard.setFont(new Font("Montserrat", Font.BOLD, 70));
+        exit.setFont(new Font("Montserrat", Font.BOLD, 70));
+        name.setFont(new Font("Montserrat", Font.BOLD, 30));
+        nameField.setFont(new Font("Montserrat", Font.BOLD, 30));
+
+        easy.setBackground(navyBlue);
+        easy.setForeground(gray);
+
+        medium.setBackground(navyBlue);
+        medium.setForeground(gray);
+
+        hard.setBackground(navyBlue);
+        hard.setForeground(gray);
+
+        exit.setBackground(navyBlue);
+        exit.setForeground(gray);
+
+        namePanel.setBackground(navyBlue);
+        name.setForeground(gray);
 
         buttonsPanel.add(easy);
         buttonsPanel.add(medium);
@@ -94,26 +114,20 @@ public class BattleshipGUI extends JPanel {
         namePanel.add(name);
         namePanel.add(nameField);
 
-        middlePanel.add(battleship);
-   
+        bottomPanel.add(namePanel);
+        bottomPanel.add(buttonsPanel);
 
-        titlePanel.setPreferredSize(new Dimension(300, 300));
-        // this.setLayout(new BorderLayout());
-        // this.setBackground(battleship);
+        titleContentsPanel.add(bottomPanel, BorderLayout.SOUTH);
+        titleContentsPanel.add(title, BorderLayout.NORTH);
 
-        titlePanel.add(buttonsPanel, BorderLayout.SOUTH);
-        titlePanel.add(title, BorderLayout.NORTH);
-        titlePanel.add(middlePanel, BorderLayout.CENTER);
-
-        this.add(titlePanel);
-
-        // this.add(buttonsPanel, BorderLayout.SOUTH);
-        // this.add(title, BorderLayout.NORTH);
-        // this.add(middlePanel, BorderLayout.CENTER);
+        this.add(titleContentsPanel);
 
     }
 
     public void gameView() {
+
+        computerGrid = new JButton[this.getGridSize()][this.getGridSize()];
+        playerGrid = new JButton[this.getGridSize()][this.getGridSize()];
 
         this.add(gamePanel);
 
@@ -124,7 +138,12 @@ public class BattleshipGUI extends JPanel {
         playerGuess.setFont(f);
         timer.setFont(f);
         currentTurn.setFont(f);
+
+
         name.setFont(f);
+        name.setText(this.model.getPlayerName());
+
+
         computerName.setFont(f);
 
         computerShipsSunk.setForeground(Color.white);
@@ -139,94 +158,95 @@ public class BattleshipGUI extends JPanel {
         exit.setBackground(Color.blue);
         exit.setForeground(Color.white);
         exit.setBorder(BorderFactory.createLineBorder(Color.black));
-        exit.setPreferredSize(new Dimension(50,40));
+        exit.setPreferredSize(new Dimension(50, 40));
 
-        //initialize layouts
+        // initialize layouts
         BorderLayout gameLayout = new BorderLayout();
-        BoxLayout playerLayout = new BoxLayout(playerPanel, BoxLayout.Y_AXIS); 
-        BoxLayout computerLayout = new BoxLayout(computerPanel, BoxLayout.Y_AXIS); 
+        BoxLayout playerLayout = new BoxLayout(playerPanel, BoxLayout.Y_AXIS);
+        BoxLayout computerLayout = new BoxLayout(computerPanel, BoxLayout.Y_AXIS);
         // BoxLayout timerLayout = new BoxLayout(timerPanel, BoxLayout.Y_AXIS);
         GridLayout gameGrid = new GridLayout(10, 10);
 
-        //set layouts 
+        // set layouts
         gamePanel.setLayout(gameLayout);
         playerPanel.setLayout(playerLayout);
         computerPanel.setLayout(computerLayout);
         // timerPanel.setLayout(timerLayout);
 
-        //putting everything where it's supposed to go 
+        // putting everything where it's supposed to go
         gamePanel.add(statsPanel, BorderLayout.NORTH);
         gamePanel.add(playerGridPanel, BorderLayout.WEST);
         gamePanel.add(computerGridPanel, BorderLayout.EAST);
         gamePanel.add(timerPanel, BorderLayout.SOUTH);
 
-        //overall north panel visuals
+        // overall north panel visuals
         statsPanel.add(playerPanel);
         // statsPanel.add(timerPanel);
         statsPanel.add(computerPanel);
         statsPanel.setBackground(Color.BLACK);
 
-        //timer panel visuals 
+        // timer panel visuals
         timerPanel.setBackground(Color.BLACK);
         timerPanel.add(timer);
         timerPanel.add(exit);
         timerPanel.add(currentTurn);
 
-        //TODO - put the player panel and computer panel visuals after making the grid so i can set the panel size respective to button size
+        // TODO - put the player panel and computer panel visuals after making the grid
+        // so i can set the panel size respective to button size
 
-        //player panel visuals
-        playerPanel.setPreferredSize(new Dimension(400,50));
+        // player panel visuals
+        playerPanel.setPreferredSize(new Dimension(400, 50));
         playerPanel.setBackground(Color.BLACK);
         playerPanel.add(name);
         playerPanel.add(playerStats);
 
-        //ships sunks and player guess
+        // ships sunks and player guess
         playerStats.setBackground(Color.BLACK);
         playerStats.add(playerShipsSunk);
         playerStats.add(playerGuess);
 
-        //computer panel visuals 
-        computerPanel.setPreferredSize(new Dimension(400,50));
+        // computer panel visuals
+        computerPanel.setPreferredSize(new Dimension(400, 50));
         computerPanel.setBackground(Color.black);
         computerPanel.add(computerName);
         computerPanel.add(computerStats);
 
-        //ships sunk and computer guess
+        // ships sunk and computer guess
         computerStats.setBackground(Color.black);
         computerStats.add(computerShipsSunk);
         computerStats.add(computerGuess);
 
-        //empty panel in the middle
+        // empty panel in the middle
         JPanel emptyPanel = new JPanel();
-        emptyPanel.setPreferredSize(new Dimension(10,100));
+        emptyPanel.setPreferredSize(new Dimension(10, 100));
         emptyPanel.setBackground(Color.black);
         gamePanel.add(emptyPanel, BorderLayout.CENTER);
 
-        //set layouts for game grid
+        // set layouts for game grid
         playerGridPanel.setLayout(gameGrid);
         computerGridPanel.setLayout(gameGrid);
 
-        //make player grid
-        for (int x = 0; x < 10; x++) {
-            for (int y = 0; y < 10; y++) {
+        // make player grid
+        for (int x = 0; x < this.getGridSize(); x++) {
+            for (int y = 0; y < this.getGridSize(); y++) {
                 playerGrid[x][y] = new JButton();
-                playerGrid[x][y].setPreferredSize(new Dimension(40,40));
+                playerGrid[x][y].setPreferredSize(new Dimension(40, 40));
                 playerGrid[x][y].setBackground(Color.BLUE);
                 playerGrid[x][y].setBorder(BorderFactory.createLineBorder(Color.black));
             }
         }
 
-        //make computer grid
-         for (int x = 0; x < 10; x++) {
-            for (int y = 0; y < 10; y++) {
+        // make computer grid
+        for (int x = 0; x < this.getGridSize(); x++) {
+            for (int y = 0; y < this.getGridSize(); y++) {
                 computerGrid[x][y] = new JButton();
-                computerGrid[x][y].setPreferredSize(new Dimension(40,40));
+                computerGrid[x][y].setPreferredSize(new Dimension(40, 40));
                 computerGrid[x][y].setBackground(Color.BLUE);
                 computerGrid[x][y].setBorder(BorderFactory.createLineBorder(Color.black));
             }
         }
 
-        //display grids
+        // display grids
         for (int x = 0; x < playerGrid.length; x++) {
 
             for (int y = 0; y < playerGrid[x].length; y++) {
@@ -242,14 +262,22 @@ public class BattleshipGUI extends JPanel {
         }
     }
 
+
+    
+
     public void update() {
 
-        // if (this.model.getGameStatus() == false) {
-        //     this.gameView();
-        //     this.titlePanel.setEnabled(false);
-        //     this.registerShipController();
-        // }
-
+        switch (currentState) {
+            case TITLE:
+                this.titleView();
+                
+                break;
+            case GAME:
+            this.titleContentsPanel.setVisible(false);
+                this.gameView();
+            default:
+                break;
+        }
 
     }
 
@@ -272,18 +300,22 @@ public class BattleshipGUI extends JPanel {
 
     public void registerButtonController() {
 
-        bController = new ButtonController(exit, model);
-        ButtonController bController2 = new ButtonController(easy, medium, hard, model, nameField);
+        ButtonController bController2 = new ButtonController(this.easy, this.medium, this.hard, this.exit, this.model,
+                this.nameField);
 
-        exit.addActionListener(bController);
+        exit.addActionListener(bController2);
         easy.addActionListener(bController2);
         medium.addActionListener(bController2);
         hard.addActionListener(bController2);
 
     }
 
-    // public void setPanelState(PANEL_STATES state) {
-    //     this.currentState = state;
+    public void setGridSize(int i) {
+        this.gridSize = i;
+    }
 
-    // }
+    public int getGridSize() {
+        return gridSize;
+    }
+    
 }

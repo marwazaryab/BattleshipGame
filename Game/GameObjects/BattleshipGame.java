@@ -3,6 +3,7 @@ package Game.GameObjects;
 import java.util.*;
 
 import Game.View.BattleshipGUI;
+import Game.View.BattleshipGUI.PANEL_STATES;
 
 public class BattleshipGame extends Object {
 
@@ -23,8 +24,9 @@ public class BattleshipGame extends Object {
     private boolean isGuessed; // double check use of said variable
     private boolean isGameEnded;
     private boolean isHit;
-    private int [] ships = new int[] {5, 5, 3, 3, 3, 2, 2, 1, 1, 1};
+    private int[] ships = new int[] { 5, 5, 3, 3, 3, 2, 2, 1, 1, 1 };
     private int NUM_SHIPS = 10;
+    private int gridSize = 0;
 
     public BattleshipGame() {
 
@@ -43,34 +45,44 @@ public class BattleshipGame extends Object {
     }
 
     public void createGrid(String difficulty) {
-        
+
         switch (difficulty) {
-            
+
             case "Easy":
+                this.view.setPanelState(PANEL_STATES.GAME);
                 playerGuesses = new String[10][10];
                 computerGuesses = new String[10][10];
                 playerShips = new String[10][10];
                 computerShips = new String[10][10];
-
+                this.view.setGridSize(10);
+                this.updateView();
                 break;
 
             case "Medium":
+                this.view.setPanelState(PANEL_STATES.GAME);
+
                 playerGuesses = new String[20][20];
                 computerGuesses = new String[20][20];
                 playerShips = new String[20][20];
                 computerShips = new String[20][20];
+                this.view.setGridSize(20);
+                this.updateView();
 
                 break;
 
             case "Hard":
+                view.setPanelState(PANEL_STATES.GAME);
+
                 playerGuesses = new String[30][30];
                 computerGuesses = new String[30][30];
                 playerShips = new String[30][30];
                 computerShips = new String[30][30];
+                this.view.setGridSize(30);
+                this.updateView();
 
                 break;
 
-            default: 
+            default:
 
                 break;
         }
