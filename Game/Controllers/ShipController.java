@@ -23,6 +23,8 @@ public class ShipController implements ActionListener {
     private int[]rowButtonsClicked;
     private int[]columnButtonsClicked;
 
+    
+
     public ShipController (JButton [][] player, JButton[][] computer, BattleshipGame data) {
         this.playerGrid = player;
         this.computerGrid = computer;

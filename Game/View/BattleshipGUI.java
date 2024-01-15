@@ -129,6 +129,17 @@ public class BattleshipGUI extends JPanel {
 
     public void gameView() {
 
+        //TODO make sure all variables are declared at the top of the method
+
+        JLabel alignmentLabel = new JLabel("Alignment: Left(L) or Up(U)");
+        JTextField alignment = new JTextField(); 
+
+        JPanel alignmentPanel = new JPanel(); // TODO why not showing up
+        alignmentPanel.add(alignmentLabel);
+        alignmentPanel.add(alignment); 
+        alignmentLabel.setForeground(Color.WHITE);
+
+
         this.add(gamePanel);
 
         Font f = new Font("Century Gothic", Font.BOLD, 14);
@@ -138,6 +149,8 @@ public class BattleshipGUI extends JPanel {
         playerGuess.setFont(f);
         timer.setFont(f);
         currentTurn.setFont(f);
+        alignmentLabel.setFont(f);
+        alignment.setFont(f);
 
         name.setFont(f);
         name.setText(this.model.getPlayerName());
@@ -183,6 +196,7 @@ public class BattleshipGUI extends JPanel {
         
         // timer panel visuals
         timerPanel.setBackground(Color.BLACK);
+        timer.add(alignmentPanel);
         timerPanel.add(timer);
         timerPanel.add(exit);
         timerPanel.add(currentTurn);
@@ -269,7 +283,6 @@ public class BattleshipGUI extends JPanel {
         switch (currentState) {
             case TITLE:
                 this.titleView();
-                
                 break;
             case GAME:
             this.titleContentsPanel.setVisible(false);
