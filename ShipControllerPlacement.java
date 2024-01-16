@@ -18,6 +18,7 @@ public class ShipControllerPlacement implements ActionListener {
     private int shipNum;
     private String alignment;
     private boolean isComputer;
+    private JTextField alignmentField;
 
     /**
      * Constructor
@@ -33,15 +34,21 @@ public class ShipControllerPlacement implements ActionListener {
         this.playerGrid = player;
         this.computerGrid = computer;
         this.model = data;
-        this.alignment = alignment.getText(); // TODO add try catch
+        this.alignment = alignment.getText();
         this.shipNum = Integer.parseInt(shipNum.getText());
         this.isComputer = false;
+        this.alignmentField = alignment;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
+        JButton rawButtonClicked = (JButton) e.getSource();
+
+        // If it is the players turn
         if (!isComputer) {
+
+            // Disable all the computers grids buttons
             for (int x = 0; x < computerGrid.length; x++) {
                 for (int y = 0; y < computerGrid[x].length; y++) {
                     computerGrid[x][y].setEnabled(false);
@@ -49,8 +56,8 @@ public class ShipControllerPlacement implements ActionListener {
             }
         }
 
-        JButton rawButtonClicked = (JButton) e.getSource();
 
+        // Identify the coloumn and row
         for (int row = 0; row < playerGrid.length; row++) {
 
             for (int col = 0; col < playerGrid[row].length; col++) {
@@ -65,49 +72,92 @@ public class ShipControllerPlacement implements ActionListener {
 
         if (alignment.equals("L")) {
             isHorizontal = false;
+        } else if (alignment.equals("L") || alignment.equals("U")) {
+            alignmentField.setText("Invalid. Try again");
         }
 
     }
 
     public void deployShipsPlayer() {
-        if (isHorizontal) {
 
-            for (int i = 0; i < shipNum; i++) {
+        if (!this.isHorizontal) {
 
+            if (this.isValidPlacement(isComputer, rowClicked, columnClicked, !isHorizontal, playerGrid)) {
+
+                for (int i = 0; i < shipNum; i++) {
+                    playerGrid[rowClicked - i][columnClicked].setText("X");
+                }
+
+            } else {
+                this.alignmentField.setText("Invalid Choice. Try again");
             }
 
-        }
+        } else {
 
-        this.isComputer = true;
+            if (this.isValidPlacement(isComputer, rowClicked, columnClicked, isHorizontal, playerGrid)) {
+
+                for (int i = 0; i < shipNum; i++) {
+
+                    playerGrid[rowClicked][columnClicked + i].setText("X");
+                }
+
+            } else {
+                this.alignmentField.setText("Invalid Choice. Try again");
+            }
+
+            deployShipsComputer();
+
+        }
 
     }
 
     public void deployShipsComputer() {
 
+        this.isComputer = true;
+        boolean isFinished = true;
+
         int computerRow;
         int computerCol;
 
-        computerRow = (int) (Math.random() * (computerGrid.length - 0 + 1) + 0);
-        computerCol = (int) (Math.random() * (computerGrid[0].length - 0 + 1) + 0);
+        while (!isFinished) {
+            computerRow = (int) (Math.random() * (computerGrid.length - 0 + 1) + 0);
+            computerCol = (int) (Math.random() * (computerGrid[0].length - 0 + 1) + 0);
 
-        if (this.isValid(true, computerRow, computerCol, isHorizontal, this.computerGrid)) {
+            if (this.isValidPlacement(isComputer, computerRow, computerCol, isHorizontal, this.computerGrid)) {
 
-            computerGrid[computerRow][computerCol].setText("X");
+                for (int i = 0; i < shipNum; i++) {
+
+                    if (isHorizontal) {
+                        computerGrid[computerRow - i][computerCol].setText("X");
+
+                    } else {
+                        computerGrid[computerRow][computerCol + 1].setText("X");
+                    }
+
+                }
+
+                isFinished = true;
+
+            }
+
         }
 
     }
 
-    public boolean isValid(boolean isComp, int row, int col, boolean isHorizontal, JButton[][] grid) {
-        return false;
+    public boolean isValidPlacement(boolean isComp, int row, int col, boolean isHorizontal, JButton[][] grid) {
+
+        if (isHorizontal) {
+            if (row + shipNum > grid.length) {
+                return false;
+            }
+        } else if (!isHorizontal) {
+            if (col + shipNum > grid[0].length) {
+                return false;
+            }
+        }
+
+        return true;
 
     }
 
-    public void generateRowShip() {
-        System.out.println("making a row ship");
-    }
-
-    public void generateColumnShip() {
-        System.out.println("making a column ship");
-
-    }
 }

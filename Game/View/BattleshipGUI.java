@@ -116,6 +116,7 @@ public class BattleshipGUI extends JPanel {
 
         bottomPanel.add(namePanel);
         bottomPanel.add(buttonsPanel);
+        
 
         titleContentsPanel.add(bottomPanel, BorderLayout.SOUTH);
         titleContentsPanel.add(title, BorderLayout.NORTH);
