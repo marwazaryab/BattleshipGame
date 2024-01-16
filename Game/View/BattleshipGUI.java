@@ -46,7 +46,9 @@ public class BattleshipGUI extends JPanel {
     private JButton[][] playerGrid;
     private JButton[][] computerGrid;
     private PANEL_STATES currentState = PANEL_STATES.TITLE;
-    int gridSize;
+    private int gridSize;
+
+    private JFrame parentFrame;
 
     public enum PANEL_STATES {
         TITLE,
@@ -127,7 +129,6 @@ public class BattleshipGUI extends JPanel {
 
     public void gameView() {
 
-        // this.removeAll();
         this.add(gamePanel);
         //TODO make sure all variables are declared at the top of the method
 
@@ -275,28 +276,22 @@ public class BattleshipGUI extends JPanel {
         gamePanel.add(computerGridPanel, BorderLayout.EAST);
         gamePanel.add(timerPanel, BorderLayout.SOUTH);
 
-        this.getTopLevelAncestor().revalidate();
-        this.getTopLevelAncestor().repaint();
-        this.getTopLevelAncestor().setPreferredSize(this.getSize());
-
-        System.out.println(this.getTopLevelAncestor().getName());
-        System.out.println(this.getParent());
-        // this.setPreferredSize(new Dimension(playerPanel.getWidth()+computerPanel.getWidth(), 
-        // playerGrid.length*30+playerPanel.getHeight()+timerPanel.getHeight()));
     }
 
     public void update() {
+
 
         switch (currentState) {
             case TITLE:
                 this.titleView();
                 break;
             case GAME:
-            // this.titleContentsPanel.setVisible(false);
-            this.remove(titleContentsPanel);
+            this.titleContentsPanel.setVisible(false);
             this.playerGrid = new JButton[this.model.getComputerGuesses().length][this.model.getComputerGuesses().length];
             this.computerGrid = new JButton[this.model.getComputerGuesses().length][this.model.getComputerGuesses().length];
             this.gameView();
+            parentFrame = (JFrame)this.getTopLevelAncestor();
+            parentFrame.pack();
                 break;  
 
             default:
