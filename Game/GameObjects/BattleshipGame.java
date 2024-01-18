@@ -85,6 +85,8 @@ public class BattleshipGame extends Object {
             default:
 
                 break;
+
+            
         }
     }
 
@@ -194,7 +196,7 @@ public class BattleshipGame extends Object {
 
     public void setPlayerTimeHighScore(double score) {
         this.playerTimeHighScore = score;
-    } 
+    }
 
     public void setPlayerName(String name) {
         this.playerName = name;
