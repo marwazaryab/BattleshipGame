@@ -303,8 +303,6 @@ public class BattleshipGUI extends JPanel {
         ShipControllerPlacement shipController = new ShipControllerPlacement(playerGrid, computerGrid, model, name,
                 alignment);
 
-                alignment.addActionListener(shipController);
-
         for (int row = 0; row < playerGrid.length; row++) {
 
             for (int col = 0; col < playerGrid[0].length; col++) {

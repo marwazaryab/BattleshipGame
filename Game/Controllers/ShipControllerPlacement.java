@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import Game.GameObjects.BattleshipGame;
+import java.util.*;
 
 public class ShipControllerPlacement implements ActionListener {
 
@@ -17,10 +18,18 @@ public class ShipControllerPlacement implements ActionListener {
     private int rowClicked;
     private int columnClicked;
     private boolean isHorizontal = false;
-    private int shipNum;
+    private int [] shipLength;
     private String alignment;
     private boolean isComputer;
     private JTextField alignmentField;
+    private int shipNum;
+    private boolean isFinished = false;
+    private Random randomBoolean;
+
+    int computerRow;
+    int computerCol;
+    int computerShipNum = 0;
+    int [] computerShipLength;;
 
     /**
      * Constructor
@@ -36,11 +45,13 @@ public class ShipControllerPlacement implements ActionListener {
         this.playerGrid = player;
         this.computerGrid = computer;
         this.model = data;
-        this.alignment = alignment.getText().toUpperCase();
         // this.shipNum = Integer.parseInt(shipNum.getText());
-        this.shipNum = 5;
+        this.shipLength = new int[] {5,3,3,2,1};
+        this.computerShipLength = new int[] {5,3,3,2,1};
         this.isComputer = false;
         this.alignmentField = alignment;
+        this.shipNum = 0;
+        this.randomBoolean = new Random();
     }
 
     @Override
@@ -73,99 +84,174 @@ public class ShipControllerPlacement implements ActionListener {
 
         if (alignment.equalsIgnoreCase("L")) {
             isHorizontal = true;
+            deployShipsPlayer();
         } else if (alignment.equalsIgnoreCase("U")) {
             isHorizontal = false;
+            deployShipsPlayer();
         } else {
             alignmentField.setText("Position 1");
-            ;
         }
-
-        deployShipsPlayer();
 
     }
 
     public void deployShipsPlayer() {
 
-        System.out.println(isHorizontal);
-        if (!this.isHorizontal) {
+        if (shipNum != 5) {
+            
+            if (this.isHorizontal == true) {
 
-            if (this.isValidPlacement(isComputer, rowClicked, columnClicked, !isHorizontal, playerGrid)) {
+                if (this.isValidPlacement(isComputer, rowClicked, columnClicked, isHorizontal, playerGrid)) {
 
-                for (int i = 0; i < shipNum; i++) {
-                    playerGrid[rowClicked+i][columnClicked].setText("X");
+                    for (int i = 0; i < shipLength[shipNum]; i++) {
+                        playerGrid[rowClicked][columnClicked+i].setText("X");
+                    }
+                    shipNum++;
+
+                } else {
+                    this.alignmentField.setText("That is not a valid placement!");
                 }
 
-            } else {
-                this.alignmentField.setText("position 2");
-            }
+            } else if (this.isHorizontal == false) {
 
-        } else if (this.isHorizontal) {
+                if (this.isValidPlacement(isComputer, rowClicked, columnClicked, isHorizontal, playerGrid)) {
 
-            if (this.isValidPlacement(isComputer, rowClicked, columnClicked, isHorizontal, playerGrid)) {
+                    for (int i = 0; i < shipLength[shipNum]; i++) {
 
-                for (int i = 0; i < shipNum; i++) {
+                        playerGrid[rowClicked+i][columnClicked].setText("X");
+                    }
+                    shipNum++;
 
-                    playerGrid[rowClicked][columnClicked +i].setText("X");
+                } else {
+                    this.alignmentField.setText("That is not a valid placement!");
                 }
 
-            } else {
-                this.alignmentField.setText("Invalid Choice. Try again");
             }
-
-            deployShipsComputer();
 
         }
+
+        else {
+            System.out.println("Ships deployed!");
+            deployShipsComputer();
+        }
+        
 
     }
 
     public void deployShipsComputer() {
 
         this.isComputer = true;
-        boolean isFinished = true;
 
-        int computerRow;
-        int computerCol;
+        System.out.println(isHorizontal);
 
-        while (!isFinished) {
-            computerRow = (int) (Math.random() * (computerGrid.length - 0 + 1) + 0);
-            computerCol = (int) (Math.random() * (computerGrid[0].length - 0 + 1) + 0);
+        while (computerShipNum != 5) {
 
-            if (this.isValidPlacement(isComputer, computerRow, computerCol, isHorizontal, this.computerGrid)) {
+            this.isHorizontal = randomBoolean.nextBoolean();
+            computerRow = (int) (Math.random() * (computerGrid.length));
+            computerCol = (int) (Math.random() * (computerGrid[0].length));
 
-                for (int i = 0; i < shipNum; i++) {
+            if (this.isHorizontal == true) {
 
-                    if (isHorizontal) {
-                        computerGrid[computerRow - i][computerCol].setText("X");
+                if (this.isValidPlacement(isComputer, computerRow, computerCol, isHorizontal, computerGrid)) {
 
-                    } else {
-                        computerGrid[computerRow][computerCol + 1].setText("X");
+                    for (int i = 0; i < computerShipLength[computerShipNum]; i++) {
+                        computerGrid[computerRow][computerCol+i].setText("X");
                     }
+                    computerShipNum++;
 
                 }
 
-                isFinished = true;
+            } else if (this.isHorizontal == false) {
+
+                if (this.isValidPlacement(isComputer, computerRow, computerCol, isHorizontal, computerGrid)) {
+
+                    for (int i = 0; i < computerShipLength[computerShipNum]; i++) {
+
+                        computerGrid[computerRow+i][computerCol].setText("X");
+                    }
+                    computerShipNum++;
+
+                } 
 
             }
-
         }
 
     }
 
     public boolean isValidPlacement(boolean isComp, int row, int col, boolean isHorizontal, JButton[][] grid) {
 
-        if (isHorizontal) {
-            if (row + shipNum > grid.length) {
-                return false;
+        if (isComp) {
+
+            if (isHorizontal == true) {
+                if (col + computerShipLength[computerShipNum] > grid.length) {
+                    return false;
+                }
+                else if (computerGrid[row][col].getText().equals("X")){
+                    return false;
+                }
+                else {
+                    for (int x = col; x < (col + computerShipLength[computerShipNum]); x++){
+                        if (computerGrid[row][x].getText().equals("X")) {
+                            return false;
+                        }
+                    }
             }
-        } else if (!isHorizontal) {
-            if (col + shipNum > grid[0].length) {
-                System.out.println("this means it is up");
-                return false;
+
+            } else if (isHorizontal == false) {
+                if (row + computerShipLength[computerShipNum] > grid[0].length) {
+                    return false;
+                }
+                else if (computerGrid[row][col].getText().equals("X")){
+                    return false;
+                }
+                else {
+                    for (int x = row; x < (row + computerShipLength[computerShipNum]); x++){
+                        if (computerGrid[x][col].getText() == "X") {
+                            return false;
+                        }
+                }
             }
+            }
+
+            return true;
         }
 
-        return true;
+        else {
 
-    }
+            if (isHorizontal == true) {
+                if (col + shipLength[shipNum] > grid.length) {
+                    return false;
+                }
+                else if (playerGrid[row][col].getText().equals("X")){
+                    return false;
+                }
+                else {
+                    for (int x = col; x < (col + shipLength[shipNum]); x++){
+                        if (playerGrid[row][x].getText().equals("X")) {
+                            return false;
+                        }
+                    }
+            }
+
+            } else if (isHorizontal == false) {
+
+                if (row + shipLength[shipNum] > grid.length) {
+                    return false;
+                }
+                else if (playerGrid[row][col].getText().equals("X")){
+                    return false;
+                }
+                else {
+                    for (int x = row; x < (row + shipLength[shipNum]); x++){
+                        if (playerGrid[x][col].getText() == "X") {
+                            return false;
+                        }
+                }
+            }
+        }
+            return true;
+
+        }
+
+    }  
 
 }
