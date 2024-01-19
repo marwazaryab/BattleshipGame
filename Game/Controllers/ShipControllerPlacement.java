@@ -12,18 +12,17 @@ import java.util.*;
 
 public class ShipControllerPlacement implements ActionListener {
 
-    private JButton[][] playerGrid;
-    private JButton[][] computerGrid;
+    private JButton[][] playerGrid; 
+    private JButton[][] computerGrid; 
     private BattleshipGame model;
-    private int rowClicked;
-    private int columnClicked;
-    private boolean isHorizontal = false;
+    private int rowClicked; 
+    private int columnClicked; 
+    private boolean isHorizontal = false; 
     private int [] shipLength;
-    private String alignment;
-    private boolean isComputer;
+    private String alignment; 
+    private boolean isComputer; 
     private JTextField alignmentField;
     private int shipNum;
-    private boolean isFinished = false;
     private Random randomBoolean;
 
     int computerRow;
@@ -91,6 +90,7 @@ public class ShipControllerPlacement implements ActionListener {
         } else {
             alignmentField.setText("Position 1");
         }
+        
 
     }
 
@@ -185,27 +185,27 @@ public class ShipControllerPlacement implements ActionListener {
                 if (col + computerShipLength[computerShipNum] > grid.length) {
                     return false;
                 }
-                else if (computerGrid[row][col].getText().equals("X")){
+                else if (grid[row][col].getText().equals("X")){
                     return false;
                 }
                 else {
                     for (int x = col; x < (col + computerShipLength[computerShipNum]); x++){
-                        if (computerGrid[row][x].getText().equals("X")) {
+                        if (grid[row][x].getText().equals("X")) {
                             return false;
                         }
                     }
             }
 
             } else if (isHorizontal == false) {
-                if (row + computerShipLength[computerShipNum] > grid[0].length) {
+                if (row + computerShipLength[computerShipNum] > grid.length) {
                     return false;
                 }
-                else if (computerGrid[row][col].getText().equals("X")){
+                else if (grid[row][col].getText().equals("X")){
                     return false;
                 }
                 else {
                     for (int x = row; x < (row + computerShipLength[computerShipNum]); x++){
-                        if (computerGrid[x][col].getText() == "X") {
+                        if (grid[x][col].getText() == "X") {
                             return false;
                         }
                 }
@@ -221,12 +221,12 @@ public class ShipControllerPlacement implements ActionListener {
                 if (col + shipLength[shipNum] > grid.length) {
                     return false;
                 }
-                else if (playerGrid[row][col].getText().equals("X")){
+                else if (grid[row][col].getText().equals("X")){
                     return false;
                 }
                 else {
                     for (int x = col; x < (col + shipLength[shipNum]); x++){
-                        if (playerGrid[row][x].getText().equals("X")) {
+                        if (grid[row][x].getText().equals("X")) {
                             return false;
                         }
                     }
@@ -237,12 +237,12 @@ public class ShipControllerPlacement implements ActionListener {
                 if (row + shipLength[shipNum] > grid.length) {
                     return false;
                 }
-                else if (playerGrid[row][col].getText().equals("X")){
+                else if (grid[row][col].getText().equals("X")){
                     return false;
                 }
                 else {
                     for (int x = row; x < (row + shipLength[shipNum]); x++){
-                        if (playerGrid[x][col].getText() == "X") {
+                        if (grid[x][col].getText() == "X") {
                             return false;
                         }
                 }
