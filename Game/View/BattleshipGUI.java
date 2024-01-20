@@ -1,7 +1,10 @@
 package Game.View;
 
 import javax.swing.*;
+import javax.xml.bind.ValidationEvent;
+
 import java.awt.*;
+import java.util.concurrent.TimeUnit;
 
 import Game.Controllers.ButtonController;
 import Game.Controllers.ShipControllerPlacement;
@@ -41,6 +44,7 @@ public class BattleshipGUI extends JPanel {
     private JLabel computerGuess = new JLabel("Computer Guess: ");
     private JLabel timer = new JLabel("Timer: ");
     private JLabel title = new JLabel();
+    private JLabel validateOutput = new JLabel("fawfaw"); //
 
     private JLabel alignmentLabel = new JLabel("Alignment: Left(L) or Up(U)");
     private JTextField alignment = new JTextField(10);
@@ -190,6 +194,7 @@ public class BattleshipGUI extends JPanel {
         statsPanel.add(playerPanel);
         // statsPanel.add(timerPanel);
         statsPanel.add(computerPanel);
+        statsPanel.add(validateOutput);
         statsPanel.setBackground(Color.BLACK);
 
         // timer panel visuals
@@ -198,6 +203,8 @@ public class BattleshipGUI extends JPanel {
         timerPanel.add(timer);
         timerPanel.add(exit);
         timerPanel.add(currentTurn);
+        timerPanel.add(validateOutput);
+        validateOutput.setForeground(Color.white);
 
         // TODO - put the player panel and computer panel visuals after making the grid
         // so i can set the panel size respective to button size
@@ -280,16 +287,66 @@ public class BattleshipGUI extends JPanel {
             case TITLE:
                 this.titleView();
                 break;
+
             case GAME:
+
+            if (this.model.getNewGame() == true) {
+
                 this.titleContentsPanel.setVisible(false);
                 this.playerGrid = new JButton[this.model.getComputerGuesses().length][this.model
                         .getComputerGuesses().length];
                 this.computerGrid = new JButton[this.model.getComputerGuesses().length][this.model
                         .getComputerGuesses().length];
+
                         this.gameView();
                         this.registerShipController();
-                parentFrame = (JFrame) this.getTopLevelAncestor();
-                parentFrame.pack();
+                this.parentFrame = (JFrame) this.getTopLevelAncestor();
+                this.parentFrame.pack();
+
+                this.validateOutput.setText("Welcome " + this.model.getPlayerName() + 
+                    "!. Please start by choosing an alignment for ship " + (this.model.getShipNum()+1)
+                        + " and then placing it on the left grid");
+            }
+
+            else if (this.model.getDeploymentStatus() == false) {
+
+                if (this.model.getValidPosition() == true) {
+                    this.validateOutput.setText("Please place ship " + (this.model.getShipNum()+1));
+
+                }
+
+                else if (this.model.getValidPosition() == false) {
+                    this.validateOutput.setText("That is not a valid position! Please reselect a position");
+
+                }
+
+                if (this.model.getShipNum() == 5) {
+                    this.validateOutput.setText("Player ships deployed! Click once more to deploy computer ships.");
+                }
+            }
+
+            else {
+                if (this.model.getGameTurn() == "Player") {
+                    if (this.model.getRowGuessed() == 0 || this.model.getColGuessed() == 0) {
+                        this.validateOutput.setText(this.model.getPlayerName() + "'s turn: ");
+                    }
+                    else {
+                        if (this.model.getHitStatus() == true) {
+                            this.validateOutput.setText(this.model.getPlayerName() + "'s turn: " + this.model.getPlayerName() + " guessed (" 
+                            + this.model.getRowGuessed() + ", " + this.model.getColGuessed() + ") and hit a ship!");
+                        }
+                        else {
+                            this.validateOutput.setText(this.model.getPlayerName() + "'s turn: " + this.model.getPlayerName() + " guessed (" 
+                            + this.model.getRowGuessed() + ", " + this.model.getColGuessed() + ") and missed!");
+                        }
+                    }
+                }
+
+                if (this.model.getGameTurn() == "Computer") {
+
+                }
+            }
+
                 break;
 
             default:

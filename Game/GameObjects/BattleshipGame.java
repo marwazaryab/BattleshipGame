@@ -16,29 +16,31 @@ public class BattleshipGame extends Object {
     private int computerRemainingShips;
     private int playerRemainingShips;
     private int playerGuessHighScore;
+    private int computerShipNum;
+    private int computerRow;
+    private int computerCol;
+    private int shipNum;
+    private int rowGuessed;
+    private int colGuessed;
     private double playerTimeHighScore;
     private String[][] playerGuesses;
     private String[][] computerGuesses;
     private String[][] playerShips;
     private String[][] computerShips;
-    private JButton[][] playerGrid;
-    private JButton[][] computerGrid;
     private String currentTurn;
     private String playerName;
-    private boolean isGuessed; // double check use of said variable
+    private int[] playerShipLength = new int[] {5, 3, 3, 2, 1};
+    private int[] computerShipLength = new int[] {5, 3, 3, 2, 1};
     private boolean isGameEnded;
     private boolean isHit;
-    private int[] playerShipLength = new int[] { 5, 5, 3, 3, 3, 2, 2, 1, 1, 1 };
-    private int[] computerShipLength = new int[] { 5, 5, 3, 3, 3, 2, 2, 1, 1, 1 };
-    private int computerShipNum;
-    private int computerRow;
-    private int computerCol;
-    private int shipNum;
     private boolean isCompShipHorizontal;
     private boolean isPlayerShipHorizontal;
     private boolean isComputerDeploy;
+    private boolean isDeploymentFinished;
+    private boolean isValidPosition;
+    private boolean isNewGame;
     private Random randomDirection;
-
+    
     public BattleshipGame() {
         super();
         this.shipNum = 0;
@@ -51,6 +53,8 @@ public class BattleshipGame extends Object {
         this.isCompShipHorizontal = false;
         this.randomDirection = new Random();
         this.isComputerDeploy = false;
+        this.isDeploymentFinished = false;
+        this.computerShipNum = 0;
     }
 
     public void setGUI(BattleshipGUI gui) {
@@ -76,7 +80,10 @@ public class BattleshipGame extends Object {
                 playerShips = new String[10][10];
                 computerShips = new String[10][10];
                 this.view.setGridSize(10);
+                this.isNewGame = true;
                 this.updateView();
+                this.isNewGame = false;
+
                 break;
 
             case "Medium":
@@ -87,7 +94,9 @@ public class BattleshipGame extends Object {
                 playerShips = new String[20][20];
                 computerShips = new String[20][20];
                 this.view.setGridSize(20);
+                this.isNewGame = true;
                 this.updateView();
+                this.isNewGame = false;
 
                 break;
 
@@ -99,29 +108,46 @@ public class BattleshipGame extends Object {
                 playerShips = new String[30][30];
                 computerShips = new String[30][30];
                 this.view.setGridSize(30);
+                this.isNewGame = true;
                 this.updateView();
-
+                this.isNewGame = false;
                 break;
 
             default:
 
                 break;
+        }
 
-            
+        setGridValues();
+    }
+
+    public void setGridValues() {
+
+        for (int x = 0; x < playerShips.length; x++) {
+            for (int y = 0; y < playerShips[x].length; y++) {
+                playerShips[x][y] = "O";
+            }
+        }
+        for (int x = 0; x < computerShips.length; x++) {
+            for (int y = 0; y < computerShips[x].length; y++) {
+                computerShips[x][y] = "O";
+            }
+        }
+        for (int x = 0; x < playerGuesses.length; x++) {
+            for (int y = 0; y < playerGuesses[x].length; y++) {
+                playerGuesses[x][y] = "O";
+            }
+        }
+        for (int x = 0; x < computerGuesses.length; x++) {
+            for (int y = 0; y < computerGuesses[x].length; y++) {
+                computerGuesses[x][y] = "O";
+            }
         }
     }
 
-    public void deployPlayerShips(JButton [][] playerGrid, JButton[][] computerGrid, int rowClicked, int columnClicked, boolean isHorizontal, 
-            String alignment) {
+    public void deployPlayerShips(JButton [][] playerGrid, JButton[][] computerGrid, int rowClicked, int columnClicked, boolean isHorizontal) {
 
-            if(alignment.equalsIgnoreCase("U")) {
-                this.isPlayerShipHorizontal = false;
-            }
-            else{
-                this.isPlayerShipHorizontal = true;
-            }
-
-            if (shipNum != 5) {
+            if (shipNum < 5) {
                 
                 if (isHorizontal == true) {
     
@@ -130,10 +156,11 @@ public class BattleshipGame extends Object {
                         for (int i = 0; i < playerShipLength[shipNum]; i++) {
                             playerGrid[rowClicked][columnClicked+i].setText("X");
                         }
+                        this.isValidPosition = true;
                         shipNum++;
     
                     } else {
-                        // this.alignmentField.setText("That is not a valid placement!");
+                        this.isValidPosition = false;
                     }
     
                 } else if (this.isPlayerShipHorizontal == false) {
@@ -141,35 +168,37 @@ public class BattleshipGame extends Object {
                     if (this.isValidPlacement(isComputerDeploy, rowClicked, columnClicked, isHorizontal, playerGrid)) {
     
                         for (int i = 0; i < playerShipLength[shipNum]; i++) {
-    
+                            
                             playerGrid[rowClicked+i][columnClicked].setText("X");
                         }
+                        this.isValidPosition = true;
                         shipNum++;
     
                     } else {
-                        // this.alignmentField.setText("That is not a valid placement!");
+                        this.isValidPosition = false;
                     }
     
                 }
-    
+
+                this.updateView();
             }
     
             else {
-                System.out.println("Ships deployed!");
-                deployShipsComputer();
+                updatePlayerShips(playerGrid);
+                deployShipsComputer(computerGrid);
             }
             
     
 
     }
 
-    public void deployShipsComputer() {
+    public void deployShipsComputer(JButton[][] computerGrid) {
 
         this.isComputerDeploy = true;
 
         System.out.println(isCompShipHorizontal);
 
-        while (computerShipNum != 5) {
+        while (computerShipNum < 5) {
 
             this.isCompShipHorizontal = randomDirection.nextBoolean();
             computerRow = (int) (Math.random() * (computerGrid.length));
@@ -200,6 +229,11 @@ public class BattleshipGame extends Object {
 
             }
         }
+
+        updateComputerShips(computerGrid);
+        this.isDeploymentFinished = true;
+        this.currentTurn = "Player";
+        this.updateView();
     }
 
     public boolean isValidPlacement(boolean isComp, int row, int col, boolean isHorizontal, JButton[][] grid) {
@@ -236,7 +270,6 @@ public class BattleshipGame extends Object {
                 }
             }
             }
-
             return true;
         }
 
@@ -262,12 +295,12 @@ public class BattleshipGame extends Object {
                 if (row + playerShipLength[shipNum] > grid.length) {
                     return false;
                 }
-                else if (playerGrid[row][col].getText().equals("X")){
+                else if (grid[row][col].getText().equals("X")){
                     return false;
                 }
                 else {
                     for (int x = row; x < (row + playerShipLength[shipNum]); x++){
-                        if (playerGrid[x][col].getText() == "X") {
+                        if (grid[x][col].getText() == "X") {
                             return false;
                         }
                 }
@@ -279,8 +312,43 @@ public class BattleshipGame extends Object {
 
     }
 
-    public void playerShipTurn() {
+    public void updatePlayerShips(JButton[][] playerGrid) {
 
+        for (int x = 0; x < playerGrid.length; x++) {
+            for (int y = 0; y < playerGrid[x].length; y++) {
+                if (playerGrid[x][y].getText() == "X") {
+                    this.playerShips[x][y] = "X";
+                }
+            }
+        }
+    }
+
+    public void updateComputerShips(JButton[][] computerGrid) {
+
+        for (int x = 0; x < computerGrid.length; x++) {
+            for (int y = 0; y < computerGrid[x].length; y++) {
+                if (computerGrid[x][y].getText() == "X") {
+                    this.playerShips[x][y] = "X";
+                }
+            }
+        }
+    }
+
+    public void playerShipTurn(int rowClicked, int colClicked) {
+
+        if (computerShips[rowClicked][colClicked] == "X") {
+            this.isHit = true;
+        }
+        else {
+            this.isHit = false;
+        }
+
+        this.playerGuesses[rowClicked][colClicked] = "!";
+        this.rowGuessed = rowClicked;
+        this.colGuessed = colClicked;
+        this.updateView();
+        this.rowGuessed = 0;
+        this.colGuessed = 0;
     }
 
     public void computerShipTurn() {
@@ -303,8 +371,28 @@ public class BattleshipGame extends Object {
 
     }
 
+    public int getRowGuessed() {
+        return this.rowGuessed;
+    }
+    
+    public int getColGuessed() {
+        return this.colGuessed;
+    }
+
+    public int getShipNum() {
+        return this.shipNum;
+    }
+
+    public boolean getNewGame() {
+        return this.isNewGame;
+    }
+
     public boolean validateGuess() {
         return true;
+    }
+
+    public boolean getValidPosition() {
+        return isValidPosition;
     }
 
     public int getPlayerShipsSunk() {
@@ -361,6 +449,9 @@ public class BattleshipGame extends Object {
 
     public boolean getHitStatus() {
         return this.isHit;
+    }
+    public boolean getDeploymentStatus(){
+        return this.isDeploymentFinished;
     }
 
     public void setGameStatus(boolean status) {

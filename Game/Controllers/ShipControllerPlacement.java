@@ -56,202 +56,245 @@ public class ShipControllerPlacement implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        System.out.println("Here");
+        if (this.model.getDeploymentStatus() == false) {
 
-        JButton rawButtonClicked = (JButton) e.getSource();
-        this.alignment = alignmentField.getText().toUpperCase();
+            JButton rawButtonClicked = (JButton) e.getSource();
+            this.alignment = alignmentField.getText().toUpperCase();
 
-        for (int x = 0; x < computerGrid.length; x++) {
-            for (int y = 0; y < computerGrid[x].length; y++) {
-                computerGrid[x][y].setEnabled(false);
-            }
-        }
-
-        // Identify the coloumn and row
-        for (int row = 0; row < playerGrid.length; row++) {
-
-            for (int col = 0; col < playerGrid[row].length; col++) {
-
-                if (playerGrid[row][col] == rawButtonClicked) {
-                    rowClicked = row;
-                    columnClicked = col;
-                    break;
+            for (int x = 0; x < computerGrid.length; x++) {
+                for (int y = 0; y < computerGrid[x].length; y++) {
+                    computerGrid[x][y].setEnabled(false);
                 }
             }
-        }
+
+            // Identify the coloumn and row
+            for (int row = 0; row < playerGrid.length; row++) {
+
+                for (int col = 0; col < playerGrid[row].length; col++) {
+
+                    if (playerGrid[row][col] == rawButtonClicked) {
+                        rowClicked = row;
+                        columnClicked = col;
+                        break;
+                    }
+                }
+            }
 
 
-        if (alignment.equalsIgnoreCase("L")) {
-            isHorizontal = true;
-            deployShipsPlayer();
-        } else if (alignment.equalsIgnoreCase("U")) {
-            isHorizontal = false;
-            deployShipsPlayer();
-        } else {
-            alignmentField.setText("Position 1");
-        }
-        
+            if (alignment.equalsIgnoreCase("L")) {
+                isHorizontal = true;
+                this.model.deployPlayerShips(playerGrid, computerGrid, rowClicked, columnClicked, isHorizontal);
+                // deployShipsPlayer();
+            } else if (alignment.equalsIgnoreCase("U")) {
+                isHorizontal = false;
+                this.model.deployPlayerShips(playerGrid, computerGrid, rowClicked, columnClicked, isHorizontal);
+                // deployShipsPlayer();
+            } else {
+                alignmentField.selectAll();
+            }
 
+            // if(this.model.getShipNum() == 5) {
+            //     for (int x = 0; x < playerGrid.length; x++) {
+            //         for (int y = 0; y < playerGrid[x].length; y++) {
+            //             playerGrid[x][y].setEnabled(false);
+            //         }
+            //     }
+
+            //     for (int x = 0; x < computerGrid.length; x++) {
+            //         for (int y = 0; y < computerGrid[x].length; y++) {
+            //             computerGrid[x][y].setEnabled(true);
+            //         }
+            //     }
+            // }
     }
 
-    public void deployShipsPlayer() {
+        else if (this.model.getGameTurn() == "Player") {
 
-        if (shipNum != 5) {
+            JButton buttonGuessed = (JButton) e.getSource();
+
+            for (int row = 0; row < computerGrid.length; row++) {
+
+                for (int col = 0; col < computerGrid[row].length; col++) {
+
+                    if (computerGrid[row][col] == buttonGuessed) {
+                        rowClicked = row;
+                        columnClicked = col;
+                        break;
+                    }
+                }
+            }
+
+            this.model.playerShipTurn(rowClicked, columnClicked);
+
+        }
+
+        else if (this.model.getGameTurn() == "Computer") {
             
-            if (this.isHorizontal == true) {
-
-                if (this.isValidPlacement(isComputer, rowClicked, columnClicked, isHorizontal, playerGrid)) {
-
-                    for (int i = 0; i < shipLength[shipNum]; i++) {
-                        playerGrid[rowClicked][columnClicked+i].setText("X");
-                    }
-                    shipNum++;
-
-                } else {
-                    this.alignmentField.setText("That is not a valid placement!");
-                }
-
-            } else if (this.isHorizontal == false) {
-
-                if (this.isValidPlacement(isComputer, rowClicked, columnClicked, isHorizontal, playerGrid)) {
-
-                    for (int i = 0; i < shipLength[shipNum]; i++) {
-
-                        playerGrid[rowClicked+i][columnClicked].setText("X");
-                    }
-                    shipNum++;
-
-                } else {
-                    this.alignmentField.setText("That is not a valid placement!");
-                }
-
-            }
-
         }
 
-        else {
-            System.out.println("Ships deployed!");
-            deployShipsComputer();
-        }
+    }
+
+    
+    //MOVED ALL METHODS BELOW TO MODEL; REMOVE WHEN GAME FINALIZED
+
+    // public void deployShipsPlayer() {
+
+    //     if (shipNum != 5) {
+            
+    //         if (this.isHorizontal == true) {
+
+    //             if (this.isValidPlacement(isComputer, rowClicked, columnClicked, isHorizontal, playerGrid)) {
+
+    //                 for (int i = 0; i < shipLength[shipNum]; i++) {
+    //                     playerGrid[rowClicked][columnClicked+i].setText("X");
+    //                 }
+    //                 shipNum++;
+
+    //             } else {
+    //                 this.alignmentField.setText("That is not a valid placement!");
+    //             }
+
+    //         } else if (this.isHorizontal == false) {
+
+    //             if (this.isValidPlacement(isComputer, rowClicked, columnClicked, isHorizontal, playerGrid)) {
+
+    //                 for (int i = 0; i < shipLength[shipNum]; i++) {
+
+    //                     playerGrid[rowClicked+i][columnClicked].setText("X");
+    //                 }
+    //                 shipNum++;
+
+    //             } else {
+    //                 this.alignmentField.setText("That is not a valid placement!");
+    //             }
+
+    //         }
+
+    //     }
+
+    //     else {
+    //         System.out.println("Ships deployed!");
+    //         deployShipsComputer();
+    //     }
         
 
-    }
+    // }
 
-    public void deployShipsComputer() {
+    // public void deployShipsComputer() {
 
-        this.isComputer = true;
+    //     this.isComputer = true;
 
-        System.out.println(isHorizontal);
+    //     System.out.println(isHorizontal);
 
-        while (computerShipNum != 5) {
+    //     while (computerShipNum != 5) {
 
-            this.isHorizontal = randomBoolean.nextBoolean();
-            computerRow = (int) (Math.random() * (computerGrid.length));
-            computerCol = (int) (Math.random() * (computerGrid[0].length));
+    //         this.isHorizontal = randomBoolean.nextBoolean();
+    //         computerRow = (int) (Math.random() * (computerGrid.length));
+    //         computerCol = (int) (Math.random() * (computerGrid[0].length));
 
-            if (this.isHorizontal == true) {
+    //         if (this.isHorizontal == true) {
 
-                if (this.isValidPlacement(isComputer, computerRow, computerCol, isHorizontal, computerGrid)) {
+    //             if (this.isValidPlacement(isComputer, computerRow, computerCol, isHorizontal, computerGrid)) {
 
-                    for (int i = 0; i < computerShipLength[computerShipNum]; i++) {
-                        computerGrid[computerRow][computerCol+i].setText("X");
-                    }
-                    computerShipNum++;
+    //                 for (int i = 0; i < computerShipLength[computerShipNum]; i++) {
+    //                     computerGrid[computerRow][computerCol+i].setText("X");
+    //                 }
+    //                 computerShipNum++;
 
-                }
+    //             }
 
-            } else if (this.isHorizontal == false) {
+    //         } else if (this.isHorizontal == false) {
 
-                if (this.isValidPlacement(isComputer, computerRow, computerCol, isHorizontal, computerGrid)) {
+    //             if (this.isValidPlacement(isComputer, computerRow, computerCol, isHorizontal, computerGrid)) {
 
-                    for (int i = 0; i < computerShipLength[computerShipNum]; i++) {
+    //                 for (int i = 0; i < computerShipLength[computerShipNum]; i++) {
 
-                        computerGrid[computerRow+i][computerCol].setText("X");
-                    }
-                    computerShipNum++;
+    //                     computerGrid[computerRow+i][computerCol].setText("X");
+    //                 }
+    //                 computerShipNum++;
 
-                } 
+    //             } 
 
-            }
-        }
+    //         }
+    //     }
 
-    }
+    // }
 
-    public boolean isValidPlacement(boolean isComp, int row, int col, boolean isHorizontal, JButton[][] grid) {
+    // public boolean isValidPlacement(boolean isComp, int row, int col, boolean isHorizontal, JButton[][] grid) {
 
-        if (isComp) {
+    //     if (isComp) {
 
-            if (isHorizontal == true) {
-                if (col + computerShipLength[computerShipNum] > grid.length) {
-                    return false;
-                }
-                else if (grid[row][col].getText().equals("X")){
-                    return false;
-                }
-                else {
-                    for (int x = col; x < (col + computerShipLength[computerShipNum]); x++){
-                        if (grid[row][x].getText().equals("X")) {
-                            return false;
-                        }
-                    }
-            }
+    //         if (isHorizontal == true) {
+    //             if (col + computerShipLength[computerShipNum] > grid.length) {
+    //                 return false;
+    //             }
+    //             else if (grid[row][col].getText().equals("X")){
+    //                 return false;
+    //             }
+    //             else {
+    //                 for (int x = col; x < (col + computerShipLength[computerShipNum]); x++){
+    //                     if (grid[row][x].getText().equals("X")) {
+    //                         return false;
+    //                     }
+    //                 }
+    //         }
 
-            } else if (isHorizontal == false) {
-                if (row + computerShipLength[computerShipNum] > grid.length) {
-                    return false;
-                }
-                else if (grid[row][col].getText().equals("X")){
-                    return false;
-                }
-                else {
-                    for (int x = row; x < (row + computerShipLength[computerShipNum]); x++){
-                        if (grid[x][col].getText() == "X") {
-                            return false;
-                        }
-                }
-            }
-            }
+    //         } else if (isHorizontal == false) {
+    //             if (row + computerShipLength[computerShipNum] > grid.length) {
+    //                 return false;
+    //             }
+    //             else if (grid[row][col].getText().equals("X")){
+    //                 return false;
+    //             }
+    //             else {
+    //                 for (int x = row; x < (row + computerShipLength[computerShipNum]); x++){
+    //                     if (grid[x][col].getText() == "X") {
+    //                         return false;
+    //                     }
+    //             }
+    //         }
+    //         }
 
-            return true;
-        }
+    //         return true;
+    //     }
 
-        else {
+    //     else {
 
-            if (isHorizontal == true) {
-                if (col + shipLength[shipNum] > grid.length) {
-                    return false;
-                }
-                else if (grid[row][col].getText().equals("X")){
-                    return false;
-                }
-                else {
-                    for (int x = col; x < (col + shipLength[shipNum]); x++){
-                        if (grid[row][x].getText().equals("X")) {
-                            return false;
-                        }
-                    }
-            }
+    //         if (isHorizontal == true) {
+    //             if (col + shipLength[shipNum] > grid.length) {
+    //                 return false;
+    //             }
+    //             else if (grid[row][col].getText().equals("X")){
+    //                 return false;
+    //             }
+    //             else {
+    //                 for (int x = col; x < (col + shipLength[shipNum]); x++){
+    //                     if (grid[row][x].getText().equals("X")) {
+    //                         return false;
+    //                     }
+    //                 }
+    //         }
 
-            } else if (isHorizontal == false) {
+    //         } else if (isHorizontal == false) {
 
-                if (row + shipLength[shipNum] > grid.length) {
-                    return false;
-                }
-                else if (grid[row][col].getText().equals("X")){
-                    return false;
-                }
-                else {
-                    for (int x = row; x < (row + shipLength[shipNum]); x++){
-                        if (grid[x][col].getText() == "X") {
-                            return false;
-                        }
-                }
-            }
-        }
-            return true;
+    //             if (row + shipLength[shipNum] > grid.length) {
+    //                 return false;
+    //             }
+    //             else if (grid[row][col].getText().equals("X")){
+    //                 return false;
+    //             }
+    //             else {
+    //                 for (int x = row; x < (row + shipLength[shipNum]); x++){
+    //                     if (grid[x][col].getText() == "X") {
+    //                         return false;
+    //                     }
+    //             }
+    //         }
+    //     }
+    //         return true;
 
-        }
+    //     }
 
-    }  
+    // }  
 
 }
