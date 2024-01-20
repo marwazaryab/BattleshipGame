@@ -136,7 +136,7 @@ public class BattleshipGUI extends JPanel {
         this.add(gamePanel);
         // TODO make sure all variables are declared at the top of the method
 
-        JPanel alignmentPanel = new JPanel(); 
+        JPanel alignmentPanel = new JPanel();
         alignmentPanel.add(alignmentLabel);
         alignmentPanel.add(alignment);
         alignmentLabel.setForeground(Color.WHITE);
@@ -290,63 +290,91 @@ public class BattleshipGUI extends JPanel {
 
             case GAME:
 
-            if (this.model.getNewGame() == true) {
+                if (this.model.getNewGame() == true) {
 
-                this.titleContentsPanel.setVisible(false);
-                this.playerGrid = new JButton[this.model.getComputerGuesses().length][this.model
-                        .getComputerGuesses().length];
-                this.computerGrid = new JButton[this.model.getComputerGuesses().length][this.model
-                        .getComputerGuesses().length];
+                    this.titleContentsPanel.setVisible(false);
+                    this.playerGrid = new JButton[this.model.getComputerGuesses().length][this.model
+                            .getComputerGuesses().length];
+                    this.computerGrid = new JButton[this.model.getComputerGuesses().length][this.model
+                            .getComputerGuesses().length];
 
-                        this.gameView();
-                        this.registerShipController();
-                this.parentFrame = (JFrame) this.getTopLevelAncestor();
-                this.parentFrame.pack();
+                    this.gameView();
+                    this.registerShipController();
+                    this.parentFrame = (JFrame) this.getTopLevelAncestor();
+                    this.parentFrame.pack();
 
-                this.validateOutput.setText("Welcome " + this.model.getPlayerName() + 
-                    "!. Please start by choosing an alignment for ship " + (this.model.getShipNum()+1)
-                        + " and then placing it on the left grid");
-            }
-
-            else if (this.model.getDeploymentStatus() == false) {
-
-                if (this.model.getValidPosition() == true) {
-                    this.validateOutput.setText("Please place ship " + (this.model.getShipNum()+1));
-
+                    this.validateOutput.setText("Welcome " + this.model.getPlayerName() +
+                            "!. Please start by choosing an alignment for ship " + (this.model.getShipNum() + 1)
+                            + " and then placing it on the left grid");
                 }
 
-                else if (this.model.getValidPosition() == false) {
-                    this.validateOutput.setText("That is not a valid position! Please reselect a position");
+                else if (this.model.getDeploymentStatus() == false) {
 
-                }
+                    if (this.model.getValidPosition() == true) {
+                        this.validateOutput.setText("Please place ship " + (this.model.getShipNum() + 1));
 
-                if (this.model.getShipNum() == 5) {
-                    this.validateOutput.setText("Player ships deployed! Click once more to deploy computer ships.");
-                }
-            }
-
-            else {
-                if (this.model.getGameTurn() == "Player") {
-                    if (this.model.getRowGuessed() == 0 || this.model.getColGuessed() == 0) {
-                        this.validateOutput.setText(this.model.getPlayerName() + "'s turn: ");
                     }
+
+                    else if (this.model.getValidPosition() == false) {
+                        this.validateOutput.setText("That is not a valid position! Please reselect a position");
+
+                    }
+
+                    if (this.model.getShipNum() == 5) {
+                        this.validateOutput.setText("Player ships deployed! Click once on computer grid to deploy computer ships.");
+                    }
+                }
+
+                else {
+                    if (this.model.getPlayerHits() < 14) {
+
+                        if (this.model.getGameTurn() == "Player") {
+                            if (this.model.getPlayerRowGuessed() == 0 || this.model.getPlayerColGuessed() == 0) {
+                                this.validateOutput.setText(this.model.getPlayerName() + "'s turn: ");
+                            } else {
+                                if (this.model.getHitStatus() == true) {
+                                    this.validateOutput.setText(this.model.getPlayerName() + "'s turn: "
+                                            + this.model.getPlayerName() + " guessed ("
+                                            + this.model.getPlayerRowGuessed() + ", " + this.model.getPlayerColGuessed()
+                                            + ") and hit a ship!");
+                                    this.computerGrid[this.model.getPlayerRowGuessed()][this.model.getPlayerColGuessed()].setText("O");
+                                } else {
+                                    this.validateOutput.setText(this.model.getPlayerName() + "'s turn: "
+                                            + this.model.getPlayerName() + " guessed ("
+                                            + this.model.getPlayerRowGuessed() + ", " + this.model.getPlayerColGuessed()
+                                            + ") and missed!");
+                                    this.computerGrid[this.model.getPlayerRowGuessed()][this.model.getPlayerColGuessed()].setText("!");
+
+                                }
+                            }
+                        }
+
+                        if (this.model.getGameTurn() == "Computer") {
+
+                            if (this.model.getHitStatus() == true) {
+                                this.validateOutput.setText("Computer's turn: the computer guessed (" 
+                                + this.model.getCompRowGuessed() + ", " + this.model.getCompColGuessed()
+                                + ") and hit a ship!");
+                            }
+                            else {
+                                this.validateOutput.setText("Computer's turn: the computer guessed (" 
+                                + this.model.getCompRowGuessed() + ", " + this.model.getCompColGuessed()
+                                + ") and missed!");
+                            }
+                        }
+                    }
+
                     else {
-                        if (this.model.getHitStatus() == true) {
-                            this.validateOutput.setText(this.model.getPlayerName() + "'s turn: " + this.model.getPlayerName() + " guessed (" 
-                            + this.model.getRowGuessed() + ", " + this.model.getColGuessed() + ") and hit a ship!");
+                        if (this.model.getPlayerHits() == 14) {
+                            this.validateOutput.setText("Game Ended! The winner is " + this.model.getPlayerName());
+                            this.model.disableGrid(playerGrid);
                         }
                         else {
-                            this.validateOutput.setText(this.model.getPlayerName() + "'s turn: " + this.model.getPlayerName() + " guessed (" 
-                            + this.model.getRowGuessed() + ", " + this.model.getColGuessed() + ") and missed!");
+                            this.validateOutput.setText("Game Ended! The winner is Computer!");
+                            this.model.disableGrid(computerGrid);
                         }
                     }
                 }
-
-                if (this.model.getGameTurn() == "Computer") {
-
-                }
-            }
-
                 break;
 
             default:

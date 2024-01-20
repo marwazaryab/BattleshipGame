@@ -93,19 +93,19 @@ public class ShipControllerPlacement implements ActionListener {
                 alignmentField.selectAll();
             }
 
-            // if(this.model.getShipNum() == 5) {
-            //     for (int x = 0; x < playerGrid.length; x++) {
-            //         for (int y = 0; y < playerGrid[x].length; y++) {
-            //             playerGrid[x][y].setEnabled(false);
-            //         }
-            //     }
+            if (this.model.getShipNum() == 5) {
+                for (int x = 0; x < playerGrid.length; x++) {
+                    for (int y = 0; y < playerGrid[x].length; y++) {
+                        playerGrid[x][y].setEnabled(false);
+                    }
+                }
 
-            //     for (int x = 0; x < computerGrid.length; x++) {
-            //         for (int y = 0; y < computerGrid[x].length; y++) {
-            //             computerGrid[x][y].setEnabled(true);
-            //         }
-            //     }
-            // }
+                for (int x = 0; x < computerGrid.length; x++) {
+                    for (int y = 0; y < computerGrid[x].length; y++) {
+                        computerGrid[x][y].setEnabled(true);
+                    }
+                }
+            }
     }
 
         else if (this.model.getGameTurn() == "Player") {
@@ -128,14 +128,10 @@ public class ShipControllerPlacement implements ActionListener {
 
         }
 
-        else if (this.model.getGameTurn() == "Computer") {
-            
-        }
-
     }
 
-    
-    //MOVED ALL METHODS BELOW TO MODEL; REMOVE WHEN GAME FINALIZED
+
+    //TODO - REMOVE METHODS BELOW ONCE GAME HAS BEEN FULLY FINALIZED (METHODS MOVED TO MODEL)
 
     // public void deployShipsPlayer() {
 

@@ -17,11 +17,15 @@ public class BattleshipGame extends Object {
     private int playerRemainingShips;
     private int playerGuessHighScore;
     private int computerShipNum;
-    private int computerRow;
-    private int computerCol;
+    private int computerShipRow;
+    private int computerShipCol;
     private int shipNum;
-    private int rowGuessed;
-    private int colGuessed;
+    private int playerRowGuessed;
+    private int playerColGuessed;
+    private int compRowGuessed;
+    private int compColGuessed;
+    private int playerHits;
+    private int computerHits;
     private double playerTimeHighScore;
     private String[][] playerGuesses;
     private String[][] computerGuesses;
@@ -34,7 +38,6 @@ public class BattleshipGame extends Object {
     private boolean isGameEnded;
     private boolean isHit;
     private boolean isCompShipHorizontal;
-    private boolean isPlayerShipHorizontal;
     private boolean isComputerDeploy;
     private boolean isDeploymentFinished;
     private boolean isValidPosition;
@@ -163,7 +166,7 @@ public class BattleshipGame extends Object {
                         this.isValidPosition = false;
                     }
     
-                } else if (this.isPlayerShipHorizontal == false) {
+                } else if (isHorizontal == false) {
     
                     if (this.isValidPlacement(isComputerDeploy, rowClicked, columnClicked, isHorizontal, playerGrid)) {
     
@@ -201,15 +204,15 @@ public class BattleshipGame extends Object {
         while (computerShipNum < 5) {
 
             this.isCompShipHorizontal = randomDirection.nextBoolean();
-            computerRow = (int) (Math.random() * (computerGrid.length));
-            computerCol = (int) (Math.random() * (computerGrid[0].length));
+            computerShipRow = (int) (Math.random() * (computerGrid.length));
+            computerShipCol = (int) (Math.random() * (computerGrid[0].length));
 
             if (this.isCompShipHorizontal == true) {
 
-                if (this.isValidPlacement(isComputerDeploy, computerRow, computerCol, isCompShipHorizontal, computerGrid)) {
+                if (this.isValidPlacement(isComputerDeploy, computerShipRow, computerShipCol, isCompShipHorizontal, computerGrid)) {
 
                     for (int i = 0; i < computerShipLength[computerShipNum]; i++) {
-                        computerGrid[computerRow][computerCol+i].setText("X");
+                        computerGrid[computerShipRow][computerShipCol+i].setText("X");
                     }
                     computerShipNum++;
 
@@ -217,11 +220,11 @@ public class BattleshipGame extends Object {
 
             } else if (this.isCompShipHorizontal == false) {
 
-                if (this.isValidPlacement(isComputerDeploy, computerRow, computerCol, isCompShipHorizontal, computerGrid)) {
+                if (this.isValidPlacement(isComputerDeploy, computerShipRow, computerShipCol, isCompShipHorizontal, computerGrid)) {
 
                     for (int i = 0; i < computerShipLength[computerShipNum]; i++) {
 
-                        computerGrid[computerRow+i][computerCol].setText("X");
+                        computerGrid[computerShipRow+i][computerShipCol].setText("X");
                     }
                     computerShipNum++;
 
@@ -328,31 +331,60 @@ public class BattleshipGame extends Object {
         for (int x = 0; x < computerGrid.length; x++) {
             for (int y = 0; y < computerGrid[x].length; y++) {
                 if (computerGrid[x][y].getText() == "X") {
-                    this.playerShips[x][y] = "X";
+                    this.computerShips[x][y] = "X";
                 }
             }
         }
+
     }
 
     public void playerShipTurn(int rowClicked, int colClicked) {
 
         if (computerShips[rowClicked][colClicked] == "X") {
             this.isHit = true;
+            this.playerHits++;
+            System.out.println("Hit a computer shpi"); 
+
         }
         else {
             this.isHit = false;
         }
 
         this.playerGuesses[rowClicked][colClicked] = "!";
-        this.rowGuessed = rowClicked;
-        this.colGuessed = colClicked;
+        this.playerRowGuessed = rowClicked;
+        this.playerColGuessed = colClicked;
         this.updateView();
-        this.rowGuessed = 0;
-        this.colGuessed = 0;
+        this.playerRowGuessed = 0;
+        this.playerColGuessed = 0;
+        this.currentTurn = "Computer";
+        this.computerShipTurn();
     }
 
     public void computerShipTurn() {
 
+        this.compRowGuessed = (int) (Math.random() * (playerShips.length));
+        this.compColGuessed = (int) (Math.random() * (playerShips.length));
+
+        if (playerShips[compRowGuessed][compColGuessed] == "X") {
+            this.isHit = true;
+            this.computerHits++;
+        }
+        else {
+            this.isHit = false;
+        }
+
+        this.computerGuesses[compRowGuessed][compColGuessed] = "!";
+        this.updateView();
+        this.currentTurn = "Player";
+    }
+
+    public void disableGrid(JButton [][] grid) {
+        
+        for (int x = 0; x < grid.length; x++) {
+            for (int y = 0; y < grid[x].length; y++) {
+                grid[x][y].setEnabled(false);
+            }
+        }
     }
 
     public void startTimer() {
@@ -371,12 +403,20 @@ public class BattleshipGame extends Object {
 
     }
 
-    public int getRowGuessed() {
-        return this.rowGuessed;
+    public int getPlayerRowGuessed() {
+        return this.playerRowGuessed;
     }
     
-    public int getColGuessed() {
-        return this.colGuessed;
+    public int getPlayerColGuessed() {
+        return this.playerColGuessed;
+    }
+
+    public int getCompRowGuessed() {
+        return this.compRowGuessed;
+    }
+
+    public int getCompColGuessed() {
+        return this.compColGuessed;
     }
 
     public int getShipNum() {
@@ -393,6 +433,14 @@ public class BattleshipGame extends Object {
 
     public boolean getValidPosition() {
         return isValidPosition;
+    }
+
+    public int getPlayerHits() {
+        return this.playerHits;
+    }
+
+    public int getComputerHits() {
+        return this.computerHits;
     }
 
     public int getPlayerShipsSunk() {
