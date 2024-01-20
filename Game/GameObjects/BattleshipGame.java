@@ -78,10 +78,10 @@ public class BattleshipGame extends Object {
 
             case "Easy":
                 this.view.setPanelState(PANEL_STATES.GAME);
-                playerGuesses = new String[10][10];
-                computerGuesses = new String[10][10];
-                playerShips = new String[10][10];
-                computerShips = new String[10][10];
+                playerGuesses = new String[15][15];
+                computerGuesses = new String[15][15];
+                playerShips = new String[15][15];
+                computerShips = new String[15][15];
                 this.view.setGridSize(10);
                 this.isNewGame = true;
                 this.updateView();
@@ -106,11 +106,11 @@ public class BattleshipGame extends Object {
             case "Hard":
                 view.setPanelState(PANEL_STATES.GAME);
 
-                playerGuesses = new String[30][30];
-                computerGuesses = new String[30][30];
-                playerShips = new String[30][30];
-                computerShips = new String[30][30];
-                this.view.setGridSize(30);
+                playerGuesses = new String[25][25];
+                computerGuesses = new String[25][25];
+                playerShips = new String[25][25];
+                computerShips = new String[25][25];
+                this.view.setGridSize(25);
                 this.isNewGame = true;
                 this.updateView();
                 this.isNewGame = false;
@@ -379,7 +379,7 @@ public class BattleshipGame extends Object {
     }
 
     public void disableGrid(JButton [][] grid) {
-        
+
         for (int x = 0; x < grid.length; x++) {
             for (int y = 0; y < grid[x].length; y++) {
                 grid[x][y].setEnabled(false);
