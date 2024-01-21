@@ -128,6 +128,10 @@ public class ShipControllerPlacement implements ActionListener {
 
         }
 
+        else {
+            this.model.computerShipTurn();
+        }
+
     }
 
 

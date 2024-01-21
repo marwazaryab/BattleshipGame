@@ -357,7 +357,6 @@ public class BattleshipGame extends Object {
         this.playerRowGuessed = 0;
         this.playerColGuessed = 0;
         this.currentTurn = "Computer";
-        this.computerShipTurn();
     }
 
     public void computerShipTurn() {

@@ -188,6 +188,8 @@ public class BattleshipGUI extends JPanel {
         JPanel fullRightPanel = new JPanel();
         JPanel topNumberPanel1 = new JPanel();
         JPanel topNumberPanel2 = new JPanel();
+        JPanel topPanelLeft = new JPanel();
+        JPanel gapPanel = new JPanel();
 
         JButton emptyButton = new JButton();
         emptyButton.setPreferredSize(new Dimension(30,30));
@@ -207,7 +209,8 @@ public class BattleshipGUI extends JPanel {
         BoxLayout bottomLayout = new BoxLayout(outputPanel, BoxLayout.Y_AXIS);
         BoxLayout leftPanelLayout = new BoxLayout(fullLeftPanel, BoxLayout.Y_AXIS);
         BoxLayout rightPanelLayout = new BoxLayout(fullRightPanel, BoxLayout.Y_AXIS);
-        GridLayout topNumberLayout = new GridLayout(1, this.getGridSize()+1);
+        GridLayout topNumberLayout1 = new GridLayout(1, this.getGridSize()+1);
+        GridLayout topNumberLayout2 = new GridLayout(1, this.getGridSize()+1);
 
         // set layouts
         gamePanel.setLayout(gameLayout);
@@ -219,8 +222,8 @@ public class BattleshipGUI extends JPanel {
         outputPanel.setLayout(bottomLayout);
         fullLeftPanel.setLayout(leftPanelLayout);
         fullRightPanel.setLayout(rightPanelLayout);
-        topNumberPanel1.setLayout(topNumberLayout);
-        topNumberPanel2.setLayout(topNumberLayout);
+        topNumberPanel1.setLayout(topNumberLayout1);
+        topNumberPanel2.setLayout(topNumberLayout2);
         // timerPanel.setLayout(timerLayout);
         
         // set layouts for game grid
@@ -316,8 +319,11 @@ public class BattleshipGUI extends JPanel {
         }
 
         //making top numbers for left grid
-        topNumberPanel1.add(emptyButton);
+        // topPanelLeft.add(topNumberPanel1);
+        // topPanelLeft.setBackground(Color.black);
+        // gapPanel.setBackground(Color.black);
         topNumberPanel1.setBackground(Color.black);
+        topNumberPanel1.add(emptyButton);
         for (int x = 0; x < this.getGridSize(); x++) {
             JButton numButton = new JButton(x + "");
             numButton.setForeground(Color.white);
@@ -424,7 +430,7 @@ public class BattleshipGUI extends JPanel {
                     this.parentFrame.pack();
 
                     this.validateOutput.setText("Welcome " + this.model.getPlayerName() +
-                            "!. Please start by choosing an alignment for ship " + (this.model.getShipNum() + 1)
+                            "! Please start by choosing an alignment for ship " + (this.model.getShipNum() + 1)
                             + " and then placing it on the left grid");
                 }
 
@@ -456,13 +462,13 @@ public class BattleshipGUI extends JPanel {
                                     this.validateOutput.setText(this.model.getPlayerName() + "'s turn: "
                                             + this.model.getPlayerName() + " guessed ("
                                             + this.model.getPlayerRowGuessed() + ", " + this.model.getPlayerColGuessed()
-                                            + ") and hit a ship!");
+                                            + ") and hit a ship! Click the grid for computer's turn!");
                                     this.computerGrid[this.model.getPlayerRowGuessed()][this.model.getPlayerColGuessed()].setText("O");
                                 } else {
                                     this.validateOutput.setText(this.model.getPlayerName() + "'s turn: "
                                             + this.model.getPlayerName() + " guessed ("
                                             + this.model.getPlayerRowGuessed() + ", " + this.model.getPlayerColGuessed()
-                                            + ") and missed!");
+                                            + ") and missed! Click the grid for computer's turn!");
                                     this.computerGrid[this.model.getPlayerRowGuessed()][this.model.getPlayerColGuessed()].setText("!");
 
                                 }
@@ -487,12 +493,11 @@ public class BattleshipGUI extends JPanel {
                     else {
                         if (this.model.getPlayerHits() == 14) {
                             this.validateOutput.setText("Game Ended! The winner is " + this.model.getPlayerName());
-                            this.model.disableGrid(playerGrid);
                         }
                         else {
                             this.validateOutput.setText("Game Ended! The winner is Computer!");
-                            this.model.disableGrid(computerGrid);
                         }
+                        this.model.disableGrid(computerGrid);
                     }
                 }
                 break;
