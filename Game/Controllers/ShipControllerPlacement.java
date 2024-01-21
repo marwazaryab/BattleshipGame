@@ -22,7 +22,6 @@ public class ShipControllerPlacement implements ActionListener {
     private String alignment; 
     private boolean isComputer; 
     private JTextField alignmentField;
-    private int shipNum;
     private Random randomBoolean;
 
     int computerRow;
@@ -39,17 +38,15 @@ public class ShipControllerPlacement implements ActionListener {
      * @param shipNum   number of ship
      * @param alignment if horizontal or vertical
      */
-    public ShipControllerPlacement(JButton[][] player, JButton[][] computer, BattleshipGame data, JLabel shipNum,
+    public ShipControllerPlacement(JButton[][] player, JButton[][] computer, BattleshipGame data,
             JTextField alignment) {
         this.playerGrid = player;
         this.computerGrid = computer;
         this.model = data;
-        // this.shipNum = Integer.parseInt(shipNum.getText());
         this.shipLength = new int[] {5,3,3,2,1};
         this.computerShipLength = new int[] {5,3,3,2,1};
         this.isComputer = false;
         this.alignmentField = alignment;
-        this.shipNum = 0;
         this.randomBoolean = new Random();
     }
 
