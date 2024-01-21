@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.xml.bind.ValidationEvent;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.concurrent.TimeUnit;
 
 import Game.Controllers.ButtonController;
@@ -42,7 +44,6 @@ public class BattleshipGUI extends JPanel {
     private JLabel playerShipsSunk = new JLabel("Player Ships Sunk: ");
     private JLabel playerGuess = new JLabel("Player Guess: ");
     private JLabel computerGuess = new JLabel("Computer Guess: ");
-    private JLabel timer = new JLabel("Timer: ");
     private JLabel title = new JLabel();
     private JLabel validateOutput = new JLabel("fawfaw"); //
 
@@ -52,6 +53,11 @@ public class BattleshipGUI extends JPanel {
     private JButton[][] computerGrid;
     private PANEL_STATES currentState = PANEL_STATES.TITLE;
     private int gridSize;
+
+    private JLabel timer = new JLabel();
+    private Timer time;
+    private int timeElaspedSeconds;
+    private long startTime;
 
     private JFrame parentFrame;
 
@@ -68,7 +74,25 @@ public class BattleshipGUI extends JPanel {
         this.model.setGUI(this);
         this.update();
         this.registerButtonController();
+
+        startTime = System.currentTimeMillis();
+        time = new Timer(1000, timeListener);
+        time.start();
+
     }
+
+    public int timePassed(){
+        long currentTime = System.currentTimeMillis();  
+        return timeElaspedSeconds = (int)((currentTime-startTime) / 1000);
+
+
+    }
+
+    ActionListener timeListener = new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+            timer.setText("Time: " + timePassed());
+        }
+    };
 
     public void setPanelState(PANEL_STATES state) {
         this.currentState = state;
