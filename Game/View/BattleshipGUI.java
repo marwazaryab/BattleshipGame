@@ -35,6 +35,7 @@ public class BattleshipGUI extends JPanel {
     private JButton easy = new JButton("Easy");
     private JButton medium = new JButton("Medium");
     private JButton hard = new JButton("Hard");
+    private JButton restart = new JButton("Restart");
 
     private JTextField nameField = new JTextField();
 
@@ -66,6 +67,11 @@ public class BattleshipGUI extends JPanel {
 
     private JFrame parentFrame;
 
+    private Color navyBlue = new Color(5, 1, 23);
+    private Color gray = new Color(115, 147, 179);
+
+    public boolean isRestart = false;
+
     public enum PANEL_STATES {
         TITLE,
         GAME,
@@ -86,10 +92,9 @@ public class BattleshipGUI extends JPanel {
 
     }
 
-    public int timePassed(){
-        long currentTime = System.currentTimeMillis();  
-        return timeElaspedSeconds = (int)((currentTime-startTime) / 1000);
-
+    public int timePassed() {
+        long currentTime = System.currentTimeMillis();
+        return timeElaspedSeconds = (int) ((currentTime - startTime) / 1000);
 
     }
 
@@ -111,9 +116,6 @@ public class BattleshipGUI extends JPanel {
 
         ImageIcon icon = new ImageIcon("title.jpg");
         title.setIcon(icon);
-
-        Color navyBlue = new Color(5, 1, 23);
-        Color gray = new Color(115, 147, 179);
 
         bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.X_AXIS));
@@ -283,7 +285,8 @@ public class BattleshipGUI extends JPanel {
         timerPanel.setBackground(Color.black);
         // timerPanel.add(alignmentPanel);
         timerPanel.add(timer);
-        timerPanel.add(exit);
+
+        timerPanel.add(restart);
 
         // holds the feedback label
         feedbackPanel.add(validateOutput);
@@ -303,7 +306,7 @@ public class BattleshipGUI extends JPanel {
             for (int y = 0; y < this.getGridSize(); y++) {
                 playerGrid[x][y] = new JButton();
                 playerGrid[x][y].setPreferredSize(new Dimension(30, 30));
-                playerGrid[x][y].setBackground(Color.BLUE);
+                playerGrid[x][y].setBackground(new Color(30, 144, 255));
                 playerGrid[x][y].setBorder(BorderFactory.createLineBorder(Color.black));
             }
         }
@@ -313,7 +316,7 @@ public class BattleshipGUI extends JPanel {
             for (int y = 0; y < this.getGridSize(); y++) {
                 computerGrid[x][y] = new JButton();
                 computerGrid[x][y].setPreferredSize(new Dimension(30, 30));
-                computerGrid[x][y].setBackground(Color.BLUE);
+                computerGrid[x][y].setBackground(new Color(0, 0, 205));
                 computerGrid[x][y].setBorder(BorderFactory.createLineBorder(Color.black));
             }
         }
@@ -443,11 +446,23 @@ public class BattleshipGUI extends JPanel {
     public void update() {
 
         switch (currentState) {
+
+            
             case TITLE:
+                this.gamePanel.setVisible(false);
+                this.titleContentsPanel.setVisible(true);
+                
+                if (this.isRestart == true) {
+                    this.parentFrame = (JFrame) this.getTopLevelAncestor();
+                    this.parentFrame.pack();
+                    
+                }
+                
                 this.titleView();
                 break;
 
             case GAME:
+                this.gamePanel.setVisible(true);
 
                 if (this.model.getNewGame() == true) {
 
@@ -584,12 +599,13 @@ public class BattleshipGUI extends JPanel {
     public void registerButtonController() {
 
         ButtonController bController2 = new ButtonController(this.easy, this.medium, this.hard, this.exit, this.model,
-                this.nameField);
+                this.nameField, this.restart);
 
         exit.addActionListener(bController2);
         easy.addActionListener(bController2);
         medium.addActionListener(bController2);
         hard.addActionListener(bController2);
+        restart.addActionListener(bController2);
     }
 
     public void setGridSize(int i) {

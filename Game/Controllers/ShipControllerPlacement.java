@@ -18,9 +18,7 @@ public class ShipControllerPlacement implements ActionListener {
     private int rowClicked; 
     private int columnClicked; 
     private boolean isHorizontal = false; 
-    private int [] shipLength;
     private String alignment; 
-    private boolean isComputer; 
     private JTextField alignmentField;
     private Random randomBoolean;
 
@@ -43,9 +41,7 @@ public class ShipControllerPlacement implements ActionListener {
         this.playerGrid = player;
         this.computerGrid = computer;
         this.model = data;
-        this.shipLength = new int[] {5,3,3,2,1};
         this.computerShipLength = new int[] {5,3,3,2,1};
-        this.isComputer = false;
         this.alignmentField = alignment;
         this.randomBoolean = new Random();
     }
