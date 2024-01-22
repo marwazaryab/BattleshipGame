@@ -212,7 +212,8 @@ public class BattleshipGame extends Object {
                 if (this.isValidPlacement(isComputerDeploy, computerShipRow, computerShipCol, isCompShipHorizontal, computerGrid)) {
 
                     for (int i = 0; i < computerShipLength[computerShipNum]; i++) {
-                        computerGrid[computerShipRow][computerShipCol+i].setText("X");
+                        // computerGrid[computerShipRow][computerShipCol+i].setText("X");
+                        computerShips[computerShipRow][computerShipCol+i] = "X";
                     }
                     computerShipNum++;
 
@@ -224,7 +225,11 @@ public class BattleshipGame extends Object {
 
                     for (int i = 0; i < computerShipLength[computerShipNum]; i++) {
 
-                        computerGrid[computerShipRow+i][computerShipCol].setText("X");
+                        // computerGrid[computerShipRow+i][computerShipCol].setText("X");
+                        computerShips[computerShipRow+i][computerShipCol] = "X";
+
+                        
+
                     }
                     computerShipNum++;
 
