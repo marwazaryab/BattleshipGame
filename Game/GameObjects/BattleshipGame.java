@@ -1,5 +1,7 @@
 package Game.GameObjects;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.util.*;
 
 import javax.swing.JButton;
@@ -46,6 +48,7 @@ public class BattleshipGame extends Object {
     private boolean isNewGame;
     private Random randomDirection;
 
+
     public BattleshipGame() {
         super();
         this.shipNum = 0;
@@ -86,7 +89,7 @@ public class BattleshipGame extends Object {
                 computerGuesses = new String[15][15];
                 playerShips = new String[15][15];
                 computerShips = new String[15][15];
-                this.view.setGridSize(10);
+                this.view.setGridSize(15);
                 this.isNewGame = true;
                 this.updateView();
                 this.isNewGame = false;
@@ -150,6 +153,7 @@ public class BattleshipGame extends Object {
                 computerGuesses[x][y] = "O";
             }
         }
+
     }
 
     public void deployPlayerShips(JButton[][] playerGrid, JButton[][] computerGrid, int rowClicked, int columnClicked,
@@ -361,10 +365,22 @@ public class BattleshipGame extends Object {
         this.setComputerRemainingShips(0);
         this.setPlayerGuessHighScore(0);
         this.setPlayerTimeHighScore(0);
-
-        setGridValues();
-
+        this.shipNum = 0;
+        this.playerShipsSunk = 0;
+        this.computerShipsSunk = 0;
+        this.computerRemainingShips = 0;
+        this.playerRemainingShips = 0;
+        this.playerGuessHighScore = 0;
+        this.playerTimeHighScore = 0;
+        this.isCompShipHorizontal = false;
+        this.randomDirection = new Random();
+        this.isComputerDeploy = false;
+        this.isDeploymentFinished = false;
+        this.computerShipNum = 0;
+        this.numPlayerGuesses = 0;
+        this.numCompGuesses = 0;
         this.view.setPanelState(PANEL_STATES.TITLE);
+
         this.updateView();
 
     }
