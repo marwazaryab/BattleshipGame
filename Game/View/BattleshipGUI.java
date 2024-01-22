@@ -61,6 +61,9 @@ public class BattleshipGUI extends JPanel {
 
     private JFrame parentFrame;
 
+    private Color navyBlue = new Color(5, 1, 23);
+    private Color gray = new Color(115, 147, 179);
+
     public enum PANEL_STATES {
         TITLE,
         GAME,
@@ -81,10 +84,9 @@ public class BattleshipGUI extends JPanel {
 
     }
 
-    public int timePassed(){
-        long currentTime = System.currentTimeMillis();  
-        return timeElaspedSeconds = (int)((currentTime-startTime) / 1000);
-
+    public int timePassed() {
+        long currentTime = System.currentTimeMillis();
+        return timeElaspedSeconds = (int) ((currentTime - startTime) / 1000);
 
     }
 
@@ -106,9 +108,6 @@ public class BattleshipGUI extends JPanel {
 
         ImageIcon icon = new ImageIcon("title.jpg");
         title.setIcon(icon);
-
-        Color navyBlue = new Color(5, 1, 23);
-        Color gray = new Color(115, 147, 179);
 
         bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.X_AXIS));
@@ -176,6 +175,7 @@ public class BattleshipGUI extends JPanel {
         alignmentLabel.setFont(f);
         alignment.setFont(f);
         validateOutput.setFont(new Font("Century Gothic", Font.BOLD, 18));
+
 
         name.setFont(new Font("Century Gothic", Font.BOLD, 20));
         computerName.setFont(new Font("Century Gothic", Font.BOLD, 20));
@@ -291,7 +291,7 @@ public class BattleshipGUI extends JPanel {
             for (int y = 0; y < this.getGridSize(); y++) {
                 playerGrid[x][y] = new JButton();
                 playerGrid[x][y].setPreferredSize(new Dimension(30, 30));
-                playerGrid[x][y].setBackground(Color.BLUE);
+                playerGrid[x][y].setBackground(new Color(30, 144, 255));
                 playerGrid[x][y].setBorder(BorderFactory.createLineBorder(Color.black));
             }
         }
@@ -301,7 +301,7 @@ public class BattleshipGUI extends JPanel {
             for (int y = 0; y < this.getGridSize(); y++) {
                 computerGrid[x][y] = new JButton();
                 computerGrid[x][y].setPreferredSize(new Dimension(30, 30));
-                computerGrid[x][y].setBackground(Color.BLUE);
+                computerGrid[x][y].setBackground(new Color(0, 0, 205));
                 computerGrid[x][y].setBorder(BorderFactory.createLineBorder(Color.black));
             }
         }

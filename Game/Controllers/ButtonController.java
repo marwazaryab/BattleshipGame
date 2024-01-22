@@ -51,6 +51,9 @@ public class ButtonController implements ActionListener {
             case "Exit":
                 System.exit(0);
                 break;
+
+            case "Restart":
+            //TODO fill out
                 
             default: 
                 break;
