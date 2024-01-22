@@ -61,7 +61,8 @@ public class BattleshipGUI extends JPanel {
     private JTextField alignment = new JTextField(10);
 
     //labels
-    private JLabel name = new JLabel("Welcome Player 1! Please enter your name: ");
+    private JLabel userPrompt = new JLabel("Welcome Player 1! Please enter your name: ");
+    private JLabel name = new JLabel();
     private JLabel computerName = new JLabel("Computer");
     private JLabel currentTurn = new JLabel("Turn: ");
     private JLabel computerShipsSunk = new JLabel("Ships Sunk: ");
@@ -159,7 +160,7 @@ public class BattleshipGUI extends JPanel {
         medium.setFont(new Font("Montserrat", Font.BOLD, 70));
         hard.setFont(new Font("Montserrat", Font.BOLD, 70));
         exit.setFont(new Font("Montserrat", Font.BOLD, 70));
-        name.setFont(new Font("Montserrat", Font.BOLD, 30));
+        userPrompt.setFont(new Font("Montserrat", Font.BOLD, 30));
         nameField.setFont(new Font("Montserrat", Font.BOLD, 30));
 
         easy.setBackground(navyBlue);
@@ -175,14 +176,14 @@ public class BattleshipGUI extends JPanel {
         exit.setForeground(gray);
 
         namePanel.setBackground(navyBlue);
-        name.setForeground(gray);
+        userPrompt.setForeground(gray);
 
         buttonsPanel.add(easy);
         buttonsPanel.add(medium);
         buttonsPanel.add(hard);
         buttonsPanel.add(exit);
 
-        namePanel.add(name);
+        namePanel.add(userPrompt);
         namePanel.add(nameField);
 
         bottomPanel.add(namePanel);
@@ -239,11 +240,12 @@ public class BattleshipGUI extends JPanel {
         playerShipsRemaining.setForeground(Color.white);
         computerShipsRemaining.setForeground(Color.white);
 
-        exit.setBackground(Color.blue);
-        exit.setForeground(Color.white);
-        exit.setBorder(BorderFactory.createLineBorder(Color.black));
-        exit.setPreferredSize(new Dimension(50, 40));
-        exit.setFont(f); 
+
+        // exit.setBackground(Color.blue);
+        // exit.setForeground(Color.white);
+        // exit.setBorder(BorderFactory.createLineBorder(Color.black));
+        // exit.setPreferredSize(new Dimension(50, 40));
+        // exit.setFont(f); 
  
 
         emptyButton.setPreferredSize(new Dimension(30, 30));
@@ -477,6 +479,8 @@ public class BattleshipGUI extends JPanel {
                     computerGridPanel.removeAll();
                     this.parentFrame = (JFrame) this.getTopLevelAncestor();
                     this.parentFrame.pack();
+                    revalidate();
+                    repaint();
 
                 }
 
