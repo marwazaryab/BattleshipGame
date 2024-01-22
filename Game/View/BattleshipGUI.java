@@ -34,6 +34,7 @@ public class BattleshipGUI extends JPanel {
     private JButton easy = new JButton("Easy");
     private JButton medium = new JButton("Medium");
     private JButton hard = new JButton("Hard");
+    private JButton restart = new JButton("Restart");
 
     private JTextField nameField = new JTextField();
 
@@ -63,6 +64,8 @@ public class BattleshipGUI extends JPanel {
 
     private Color navyBlue = new Color(5, 1, 23);
     private Color gray = new Color(115, 147, 179);
+
+    public boolean isRestart = false;
 
     public enum PANEL_STATES {
         TITLE,
@@ -176,7 +179,6 @@ public class BattleshipGUI extends JPanel {
         alignment.setFont(f);
         validateOutput.setFont(new Font("Century Gothic", Font.BOLD, 18));
 
-
         name.setFont(new Font("Century Gothic", Font.BOLD, 20));
         computerName.setFont(new Font("Century Gothic", Font.BOLD, 20));
         name.setText(this.model.getPlayerName());
@@ -271,7 +273,8 @@ public class BattleshipGUI extends JPanel {
         timerPanel.setBackground(Color.black);
         // timerPanel.add(alignmentPanel);
         timerPanel.add(timer);
-        timerPanel.add(exit);
+
+        timerPanel.add(restart);
 
         // holds the feedback label
         feedbackPanel.add(validateOutput);
@@ -429,11 +432,23 @@ public class BattleshipGUI extends JPanel {
     public void update() {
 
         switch (currentState) {
+
+            
             case TITLE:
+                this.gamePanel.setVisible(false);
+                this.titleContentsPanel.setVisible(true);
+                
+                if (this.isRestart == true) {
+                    this.parentFrame = (JFrame) this.getTopLevelAncestor();
+                    this.parentFrame.pack();
+                    
+                }
+                
                 this.titleView();
                 break;
 
             case GAME:
+                this.gamePanel.setVisible(true);
 
                 if (this.model.getNewGame() == true) {
 
@@ -553,12 +568,13 @@ public class BattleshipGUI extends JPanel {
     public void registerButtonController() {
 
         ButtonController bController2 = new ButtonController(this.easy, this.medium, this.hard, this.exit, this.model,
-                this.nameField);
+                this.nameField, this.restart);
 
         exit.addActionListener(bController2);
         easy.addActionListener(bController2);
         medium.addActionListener(bController2);
         hard.addActionListener(bController2);
+        restart.addActionListener(bController2);
     }
 
     public void setGridSize(int i) {

@@ -19,7 +19,7 @@ public class ButtonController implements ActionListener {
     private JTextField field;
 
 
-    public ButtonController (JButton easyButton, JButton mediumButton, JButton hardButton, JButton exit, BattleshipGame data, JTextField f) {
+    public ButtonController (JButton easyButton, JButton mediumButton, JButton hardButton, JButton exit, BattleshipGame data, JTextField f, JButton titleScreen) {
         this.easy = easyButton;
         this.medium = mediumButton;
         this.hard = hardButton;
@@ -53,7 +53,7 @@ public class ButtonController implements ActionListener {
                 break;
 
             case "Restart":
-            //TODO fill out
+                this.model.restart();
                 
             default: 
                 break;

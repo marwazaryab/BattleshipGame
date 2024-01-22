@@ -33,8 +33,8 @@ public class BattleshipGame extends Object {
     private String[][] computerShips;
     private String currentTurn;
     private String playerName;
-    private int[] playerShipLength = new int[] {5, 3, 3, 2, 1};
-    private int[] computerShipLength = new int[] {5, 3, 3, 2, 1};
+    private int[] playerShipLength = new int[] { 5, 3, 3, 2, 1 };
+    private int[] computerShipLength = new int[] { 5, 3, 3, 2, 1 };
     private boolean isGameEnded;
     private boolean isHit;
     private boolean isCompShipHorizontal;
@@ -43,7 +43,7 @@ public class BattleshipGame extends Object {
     private boolean isValidPosition;
     private boolean isNewGame;
     private Random randomDirection;
-    
+
     public BattleshipGame() {
         super();
         this.shipNum = 0;
@@ -148,50 +148,49 @@ public class BattleshipGame extends Object {
         }
     }
 
-    public void deployPlayerShips(JButton [][] playerGrid, JButton[][] computerGrid, int rowClicked, int columnClicked, boolean isHorizontal) {
+    public void deployPlayerShips(JButton[][] playerGrid, JButton[][] computerGrid, int rowClicked, int columnClicked,
+            boolean isHorizontal) {
 
-            if (shipNum < 5) {
-                
-                if (isHorizontal == true) {
-    
-                    if (this.isValidPlacement(isComputerDeploy, rowClicked, columnClicked, isHorizontal, playerGrid)) {
-    
-                        for (int i = 0; i < playerShipLength[shipNum]; i++) {
-                            playerGrid[rowClicked][columnClicked+i].setText("X");
-                        }
-                        this.isValidPosition = true;
-                        shipNum++;
-    
-                    } else {
-                        this.isValidPosition = false;
+        if (shipNum < 5) {
+
+            if (isHorizontal == true) {
+
+                if (this.isValidPlacement(isComputerDeploy, rowClicked, columnClicked, isHorizontal, playerGrid)) {
+
+                    for (int i = 0; i < playerShipLength[shipNum]; i++) {
+                        playerGrid[rowClicked][columnClicked + i].setText("X");
                     }
-    
-                } else if (isHorizontal == false) {
-    
-                    if (this.isValidPlacement(isComputerDeploy, rowClicked, columnClicked, isHorizontal, playerGrid)) {
-    
-                        for (int i = 0; i < playerShipLength[shipNum]; i++) {
-                            
-                            playerGrid[rowClicked+i][columnClicked].setText("X");
-                        }
-                        this.isValidPosition = true;
-                        shipNum++;
-    
-                    } else {
-                        this.isValidPosition = false;
-                    }
-    
+                    this.isValidPosition = true;
+                    shipNum++;
+
+                } else {
+                    this.isValidPosition = false;
                 }
 
-                this.updateView();
+            } else if (isHorizontal == false) {
+
+                if (this.isValidPlacement(isComputerDeploy, rowClicked, columnClicked, isHorizontal, playerGrid)) {
+
+                    for (int i = 0; i < playerShipLength[shipNum]; i++) {
+
+                        playerGrid[rowClicked + i][columnClicked].setText("X");
+                    }
+                    this.isValidPosition = true;
+                    shipNum++;
+
+                } else {
+                    this.isValidPosition = false;
+                }
+
             }
-    
-            else {
-                updatePlayerShips(playerGrid);
-                deployShipsComputer(computerGrid);
-            }
-            
-    
+
+            this.updateView();
+        }
+
+        else {
+            updatePlayerShips(playerGrid);
+            deployShipsComputer(computerGrid);
+        }
 
     }
 
@@ -209,11 +208,12 @@ public class BattleshipGame extends Object {
 
             if (this.isCompShipHorizontal == true) {
 
-                if (this.isValidPlacement(isComputerDeploy, computerShipRow, computerShipCol, isCompShipHorizontal, computerGrid)) {
+                if (this.isValidPlacement(isComputerDeploy, computerShipRow, computerShipCol, isCompShipHorizontal,
+                        computerGrid)) {
 
                     for (int i = 0; i < computerShipLength[computerShipNum]; i++) {
                         // computerGrid[computerShipRow][computerShipCol+i].setText("X");
-                        computerShips[computerShipRow][computerShipCol+i] = "X";
+                        computerShips[computerShipRow][computerShipCol + i] = "X";
                     }
                     computerShipNum++;
 
@@ -221,19 +221,18 @@ public class BattleshipGame extends Object {
 
             } else if (this.isCompShipHorizontal == false) {
 
-                if (this.isValidPlacement(isComputerDeploy, computerShipRow, computerShipCol, isCompShipHorizontal, computerGrid)) {
+                if (this.isValidPlacement(isComputerDeploy, computerShipRow, computerShipCol, isCompShipHorizontal,
+                        computerGrid)) {
 
                     for (int i = 0; i < computerShipLength[computerShipNum]; i++) {
 
                         // computerGrid[computerShipRow+i][computerShipCol].setText("X");
-                        computerShips[computerShipRow+i][computerShipCol] = "X";
-
-                        
+                        computerShips[computerShipRow + i][computerShipCol] = "X";
 
                     }
                     computerShipNum++;
 
-                } 
+                }
 
             }
         }
@@ -251,32 +250,28 @@ public class BattleshipGame extends Object {
             if (isHorizontal == true) {
                 if (col + computerShipLength[computerShipNum] > grid.length) {
                     return false;
-                }
-                else if (grid[row][col].getText().equals("X")){
+                } else if (grid[row][col].getText().equals("X")) {
                     return false;
-                }
-                else {
-                    for (int x = col; x < (col + computerShipLength[computerShipNum]); x++){
+                } else {
+                    for (int x = col; x < (col + computerShipLength[computerShipNum]); x++) {
                         if (grid[row][x].getText().equals("X")) {
                             return false;
                         }
                     }
-            }
+                }
 
             } else if (isHorizontal == false) {
                 if (row + computerShipLength[computerShipNum] > grid[0].length) {
                     return false;
-                }
-                else if (grid[row][col].getText().equals("X")){
+                } else if (grid[row][col].getText().equals("X")) {
                     return false;
-                }
-                else {
-                    for (int x = row; x < (row + computerShipLength[computerShipNum]); x++){
+                } else {
+                    for (int x = row; x < (row + computerShipLength[computerShipNum]); x++) {
                         if (grid[x][col].getText() == "X") {
                             return false;
                         }
+                    }
                 }
-            }
             }
             return true;
         }
@@ -286,34 +281,30 @@ public class BattleshipGame extends Object {
             if (isHorizontal == true) {
                 if (col + playerShipLength[shipNum] > grid.length) {
                     return false;
-                }
-                else if (grid[row][col].getText().equals("X")){
+                } else if (grid[row][col].getText().equals("X")) {
                     return false;
-                }
-                else {
-                    for (int x = col; x < (col + playerShipLength[shipNum]); x++){
+                } else {
+                    for (int x = col; x < (col + playerShipLength[shipNum]); x++) {
                         if (grid[row][x].getText().equals("X")) {
                             return false;
                         }
                     }
-            }
+                }
 
             } else if (isHorizontal == false) {
 
                 if (row + playerShipLength[shipNum] > grid.length) {
                     return false;
-                }
-                else if (grid[row][col].getText().equals("X")){
+                } else if (grid[row][col].getText().equals("X")) {
                     return false;
-                }
-                else {
-                    for (int x = row; x < (row + playerShipLength[shipNum]); x++){
+                } else {
+                    for (int x = row; x < (row + playerShipLength[shipNum]); x++) {
                         if (grid[x][col].getText() == "X") {
                             return false;
                         }
+                    }
                 }
             }
-        }
             return true;
 
         }
@@ -343,15 +334,45 @@ public class BattleshipGame extends Object {
 
     }
 
+    //TODO fill this out
+    public void isShipSunk(){
+      
+
+    }
+
+    public void setPlayerRemainingShips(int num) {
+        this.playerRemainingShips = num;
+    }
+
+    public void setComputerRemainingShips(int num) {
+        this.computerRemainingShips = num;
+    }
+
+    public void restart() {
+        this.view.isRestart = true;
+        this.setPlayerName(null);
+        this.setPlayerShipsSunk(0);
+        this.setComputerShipsSunk(0);
+        this.setPlayerRemainingShips(0);
+        this.setComputerRemainingShips(0);
+        this.setPlayerGuessHighScore(0);
+        this.setPlayerTimeHighScore(0);
+
+        setGridValues();
+
+        this.view.setPanelState(PANEL_STATES.TITLE);
+        this.updateView();
+
+    }
+
     public void playerShipTurn(int rowClicked, int colClicked) {
 
         if (computerShips[rowClicked][colClicked] == "X") {
             this.isHit = true;
             this.playerHits++;
-            System.out.println("Hit a computer shpi"); 
+            System.out.println("Hit a computer ship");
 
-        }
-        else {
+        } else {
             this.isHit = false;
         }
 
@@ -372,17 +393,15 @@ public class BattleshipGame extends Object {
         if (playerShips[compRowGuessed][compColGuessed] == "X") {
             this.isHit = true;
             this.computerHits++;
-        }
-        else {
+        } else {
             this.isHit = false;
         }
-
         this.computerGuesses[compRowGuessed][compColGuessed] = "!";
         this.updateView();
         this.currentTurn = "Player";
     }
 
-    public void disableGrid(JButton [][] grid) {
+    public void disableGrid(JButton[][] grid) {
 
         for (int x = 0; x < grid.length; x++) {
             for (int y = 0; y < grid[x].length; y++) {
@@ -410,7 +429,7 @@ public class BattleshipGame extends Object {
     public int getPlayerRowGuessed() {
         return this.playerRowGuessed;
     }
-    
+
     public int getPlayerColGuessed() {
         return this.playerColGuessed;
     }
@@ -502,7 +521,8 @@ public class BattleshipGame extends Object {
     public boolean getHitStatus() {
         return this.isHit;
     }
-    public boolean getDeploymentStatus(){
+
+    public boolean getDeploymentStatus() {
         return this.isDeploymentFinished;
     }
 
@@ -528,6 +548,14 @@ public class BattleshipGame extends Object {
 
     public void setGameTurn(String turn) {
         this.currentTurn = turn;
+    }
+
+    public void setPlayerShipsSunk(int num) {
+        this.playerShipsSunk = num;
+    }
+
+    public void setComputerShipsSunk(int num) {
+        this.computerShipsSunk = num;
     }
 
 }
