@@ -26,6 +26,8 @@ public class BattleshipGame extends Object {
     private int compColGuessed;
     private int playerHits;
     private int computerHits;
+    private int numPlayerGuesses;
+    private int numCompGuesses;
     private double playerTimeHighScore;
     private String[][] playerGuesses;
     private String[][] computerGuesses;
@@ -58,6 +60,8 @@ public class BattleshipGame extends Object {
         this.isComputerDeploy = false;
         this.isDeploymentFinished = false;
         this.computerShipNum = 0;
+        this.numPlayerGuesses = 0;
+        this.numCompGuesses = 0;
     }
 
     public void setGUI(BattleshipGUI gui) {
@@ -150,7 +154,7 @@ public class BattleshipGame extends Object {
 
     public void deployPlayerShips(JButton [][] playerGrid, JButton[][] computerGrid, int rowClicked, int columnClicked, boolean isHorizontal) {
 
-            if (shipNum < 5) {
+            if (shipNum < playerShipLength.length) {
                 
                 if (isHorizontal == true) {
     
@@ -201,7 +205,7 @@ public class BattleshipGame extends Object {
 
         System.out.println(isCompShipHorizontal);
 
-        while (computerShipNum < 5) {
+        while (computerShipNum < computerShipLength.length) {
 
             this.isCompShipHorizontal = randomDirection.nextBoolean();
             computerShipRow = (int) (Math.random() * (computerGrid.length));
@@ -212,7 +216,7 @@ public class BattleshipGame extends Object {
                 if (this.isValidPlacement(isComputerDeploy, computerShipRow, computerShipCol, isCompShipHorizontal, computerGrid)) {
 
                     for (int i = 0; i < computerShipLength[computerShipNum]; i++) {
-                        computerGrid[computerShipRow][computerShipCol+i].setText("X");
+                        // computerGrid[computerShipRow][computerShipCol+i].setText("X");
                     }
                     computerShipNum++;
 
@@ -224,7 +228,7 @@ public class BattleshipGame extends Object {
 
                     for (int i = 0; i < computerShipLength[computerShipNum]; i++) {
 
-                        computerGrid[computerShipRow+i][computerShipCol].setText("X");
+                        // computerGrid[computerShipRow+i][computerShipCol].setText("X");
                     }
                     computerShipNum++;
 
@@ -353,6 +357,7 @@ public class BattleshipGame extends Object {
         this.playerGuesses[rowClicked][colClicked] = "!";
         this.playerRowGuessed = rowClicked;
         this.playerColGuessed = colClicked;
+        this.numPlayerGuesses++;
         this.updateView();
         this.playerRowGuessed = 0;
         this.playerColGuessed = 0;
@@ -372,6 +377,7 @@ public class BattleshipGame extends Object {
             this.isHit = false;
         }
 
+        this.numCompGuesses++;
         this.computerGuesses[compRowGuessed][compColGuessed] = "!";
         this.updateView();
         this.currentTurn = "Player";
@@ -400,6 +406,14 @@ public class BattleshipGame extends Object {
 
     public void printResults() {
 
+    }
+
+    public int getNumPlayerGuesses() {
+        return this.numPlayerGuesses;
+    }
+
+    public int getNumCompGuesses() {
+        return this.numCompGuesses;
     }
 
     public int getPlayerRowGuessed() {

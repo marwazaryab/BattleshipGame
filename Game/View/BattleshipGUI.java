@@ -28,7 +28,8 @@ public class BattleshipGUI extends JPanel {
     private JPanel statsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
     private JPanel playerGridPanel = new JPanel();
     private JPanel computerGridPanel = new JPanel();
-    JPanel titleContentsPanel = new JPanel();
+    private JPanel titleContentsPanel = new JPanel();
+    private JPanel alignmentPanel = new JPanel();
 
     private JButton exit = new JButton("Exit");
     private JButton easy = new JButton("Easy");
@@ -45,9 +46,13 @@ public class BattleshipGUI extends JPanel {
     private JLabel playerGuess = new JLabel("Player Guess: ");
     private JLabel computerGuess = new JLabel("Computer Guess: ");
     private JLabel title = new JLabel();
-    private JLabel validateOutput = new JLabel("fawfaw"); //
+    private JLabel validateOutput = new JLabel(); 
+    private JLabel numPlayerGuesses = new JLabel("Player Guesses: ");
+    private JLabel numCompGuesses = new JLabel("Computer Guesses: ");
+    private JLabel playerShipsRemaining = new JLabel("Player Ships Reamaining: ");
+    private JLabel computerShipsReamining = new JLabel("Computer Ships Reamaining: ");
 
-    private JLabel alignmentLabel = new JLabel("Alignment: Left(L) or Up(U)");
+    private JLabel alignmentLabel = new JLabel("Alignment: Right(R) or Down(D)");
     private JTextField alignment = new JTextField(10);
     private JButton[][] playerGrid;
     private JButton[][] computerGrid;
@@ -160,7 +165,6 @@ public class BattleshipGUI extends JPanel {
         this.add(gamePanel);
         // TODO make sure all variables are declared at the top of the method
 
-        JPanel alignmentPanel = new JPanel();
         alignmentPanel.add(alignmentLabel);
         alignmentPanel.add(alignment);
         alignmentLabel.setForeground(Color.WHITE);
@@ -176,6 +180,10 @@ public class BattleshipGUI extends JPanel {
         alignmentLabel.setFont(f);
         alignment.setFont(f);
         validateOutput.setFont(new Font("Century Gothic", Font.BOLD, 18));
+        numPlayerGuesses.setFont(f);
+        numCompGuesses.setFont(f);
+        playerShipsRemaining.setFont(f);
+        computerShipsReamining.setFont(f);
 
         name.setFont(new Font("Century Gothic", Font.BOLD, 20));
         computerName.setFont(new Font("Century Gothic", Font.BOLD, 20));
@@ -193,6 +201,10 @@ public class BattleshipGUI extends JPanel {
         alignmentLabel.setForeground(Color.white);
         alignment.setForeground(Color.BLACK);
         validateOutput.setForeground(Color.white);
+        numPlayerGuesses.setForeground(Color.white);
+        numCompGuesses.setForeground(Color.white);
+        playerShipsRemaining.setForeground(Color.white);
+        computerShipsReamining.setForeground(Color.white);
 
         exit.setBackground(Color.blue);
         exit.setForeground(Color.white);
@@ -389,8 +401,9 @@ public class BattleshipGUI extends JPanel {
 
         // ships sunks and player guess
         playerStats.setBackground(Color.BLACK);
-        playerStats.add(playerShipsSunk);
-        playerStats.add(playerGuess);
+        playerStats.add(computerShipsSunk);
+        playerStats.add(numPlayerGuesses);
+        playerStats.add(playerShipsRemaining);
 
         // computer panel visuals
         computerPanel.setPreferredSize(new Dimension(this.getGridSize() * 30, 50));
@@ -400,8 +413,9 @@ public class BattleshipGUI extends JPanel {
 
         // ships sunk and computer guess
         computerStats.setBackground(Color.black);
-        computerStats.add(computerShipsSunk);
-        computerStats.add(computerGuess);
+        computerStats.add(playerShipsSunk);
+        computerStats.add(numCompGuesses);
+        computerStats.add(computerShipsReamining);
 
         // full left panel
         fullLeftPanel.add(topNumberPanel1);
@@ -438,6 +452,7 @@ public class BattleshipGUI extends JPanel {
                 if (this.model.getNewGame() == true) {
 
                     this.titleContentsPanel.setVisible(false);
+                    this.alignmentPanel.setVisible(true);
                     this.playerGrid = new JButton[this.model.getComputerGuesses().length][this.model
                             .getComputerGuesses().length];
                     this.computerGrid = new JButton[this.model.getComputerGuesses().length][this.model
@@ -445,12 +460,13 @@ public class BattleshipGUI extends JPanel {
 
                     this.gameView();
                     this.registerShipController();
+                    
+                    this.validateOutput.setText("Welcome " + this.model.getPlayerName() +
+                    "! Please start by choosing an alignment for ship " + (this.model.getShipNum() + 1)
+                    + " and then placing it on the left grid");
+
                     this.parentFrame = (JFrame) this.getTopLevelAncestor();
                     this.parentFrame.pack();
-
-                    this.validateOutput.setText("Welcome " + this.model.getPlayerName() +
-                            "! Please start by choosing an alignment for ship " + (this.model.getShipNum() + 1)
-                            + " and then placing it on the left grid");
                 }
 
                 else if (this.model.getDeploymentStatus() == false) {
@@ -472,10 +488,20 @@ public class BattleshipGUI extends JPanel {
                 }
 
                 else {
-                    if (this.model.getPlayerHits() < 14) {
+
+                    this.alignmentPanel.setVisible(false);
+                    this.parentFrame.pack();
+                    this.numPlayerGuesses.setText("Player Guesses: ".concat(Integer.toString(this.model.getNumPlayerGuesses())));
+                    this.numCompGuesses.setText("Computer Guesses: ".concat(Integer.toString(this.model.getNumCompGuesses())));
+                    this.playerShipsSunk.setText("Ships Sunk: ".concat(Integer.toString(this.model.getPlayerShipsSunk())));
+                    this.computerShipsSunk.setText("Ships Sunk: ".concat(Integer.toString(this.model.getComputerShipsSunk())));
+                    this.playerShipsRemaining.setText("Ships Left: ".concat(Integer.toString(this.model.getPlayerRemainingShips())));
+                    this.computerShipsReamining.setText("Ships Left: ".concat(Integer.toString(this.model.getComputerRemainingShips())));
+
+                    if (this.model.getPlayerHits() < 14 || this.model.getComputerHits() < 14) {
 
                         if (this.model.getGameTurn() == "Player") {
-                            if (this.model.getPlayerRowGuessed() == 0 || this.model.getPlayerColGuessed() == 0) {
+                            if (this.model.getPlayerRowGuessed() == 0 && this.model.getPlayerColGuessed() == 0) {
                                 this.validateOutput.setText(this.model.getPlayerName() + "'s turn: ");
                             } else {
                                 if (this.model.getHitStatus() == true) {
@@ -502,14 +528,19 @@ public class BattleshipGUI extends JPanel {
                             if (this.model.getHitStatus() == true) {
                                 this.validateOutput.setText("Computer's turn: the computer guessed ("
                                         + this.model.getCompRowGuessed() + ", " + this.model.getCompColGuessed()
-                                        + ") and hit a ship!");
+                                        + ") and hit a ship! Please do your turn!");
+                                this.playerGrid[this.model.getCompRowGuessed()][this.model
+                                        .getCompColGuessed()].setText("O");
                             } else {
                                 this.validateOutput.setText("Computer's turn: the computer guessed ("
                                         + this.model.getCompRowGuessed() + ", " + this.model.getCompColGuessed()
-                                        + ") and missed!");
+                                        + ") and missed! Please do your turn!");
+                                this.playerGrid[this.model.getCompRowGuessed()][this.model
+                                        .getCompColGuessed()].setText("!");
                             }
                         }
                     }
+                    
 
                     else {
                         if (this.model.getPlayerHits() == 14) {

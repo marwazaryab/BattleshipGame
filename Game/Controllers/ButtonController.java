@@ -34,17 +34,33 @@ public class ButtonController implements ActionListener {
         switch (buttonText) {
 
             case "Easy":
-                this.model.setPlayerName(this.field.getText());
+
+                if (this.field.getText().length() == 0) {
+                    this.model.setPlayerName("Player 1");
+                }
+                else {
+                    this.model.setPlayerName(this.field.getText());
+                }
                 this.model.createGrid(buttonText);
                 break;
         
             case "Medium":
-                this.model.setPlayerName(this.field.getText());
+                if (this.field.getText().length() == 0) {
+                    this.model.setPlayerName("Player 1");
+                }
+                else {
+                    this.model.setPlayerName(this.field.getText());
+                }                
                 this.model.createGrid(buttonText);
                 break;
 
             case "Hard":
-                this.model.setPlayerName(this.field.getText());
+                if (this.field.getText().length() == 0) {
+                    this.model.setPlayerName("Player 1");
+                }
+                else {
+                    this.model.setPlayerName(this.field.getText());
+                }                
                 this.model.createGrid(buttonText);
                 break;
 

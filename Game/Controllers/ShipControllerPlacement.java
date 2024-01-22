@@ -78,11 +78,11 @@ public class ShipControllerPlacement implements ActionListener {
             }
 
 
-            if (alignment.equalsIgnoreCase("L")) {
+            if (alignment.equalsIgnoreCase("R")) {
                 isHorizontal = true;
                 this.model.deployPlayerShips(playerGrid, computerGrid, rowClicked, columnClicked, isHorizontal);
                 // deployShipsPlayer();
-            } else if (alignment.equalsIgnoreCase("U")) {
+            } else if (alignment.equalsIgnoreCase("D")) {
                 isHorizontal = false;
                 this.model.deployPlayerShips(playerGrid, computerGrid, rowClicked, columnClicked, isHorizontal);
                 // deployShipsPlayer();
