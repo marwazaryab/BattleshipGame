@@ -74,10 +74,12 @@ public class BattleshipGUI extends JPanel {
     private JLabel validateOutput = new JLabel();
     private JLabel numPlayerGuesses = new JLabel("Player Guesses: ");
     private JLabel numCompGuesses = new JLabel("Computer Guesses: ");
-    private JLabel playerShipsRemaining = new JLabel("Ships Left: ");
-    private JLabel computerShipsRemaining = new JLabel("Ships Left: ");
+    private JLabel playerShipsRemaining = new JLabel("Player Ships Left: ");
+    private JLabel computerShipsRemaining = new JLabel("Computer Ships Left: ");
     private JLabel alignmentLabel = new JLabel("Alignment: Right(R) or Down(D)");
     private JLabel timer = new JLabel();
+    private JLabel missLabel = new JLabel("! - Miss");
+    private JLabel hitLabel = new JLabel("O - Miss");
 
     //grids
     private JButton[][] playerGrid;
@@ -417,9 +419,9 @@ public class BattleshipGUI extends JPanel {
 
         // ships sunks and player guess
         playerStats.setBackground(Color.BLACK);
-        playerStats.add(computerShipsSunk);
+        // playerStats.add(computerShipsSunk);
         playerStats.add(numPlayerGuesses);
-        playerStats.add(playerShipsRemaining);
+        playerStats.add(computerShipsRemaining);
 
         // computer panel visuals
         computerPanel.setPreferredSize(new Dimension(this.getGridSize() * 30, 50));
@@ -429,9 +431,9 @@ public class BattleshipGUI extends JPanel {
 
         // ships sunk and computer guess
         computerStats.setBackground(Color.black);
-        computerStats.add(playerShipsSunk);
+        // computerStats.add(playerShipsSunk);
         computerStats.add(numCompGuesses);
-        computerStats.add(computerShipsRemaining);
+        computerStats.add(playerShipsRemaining);
 
         // full left panel
         fullLeftPanel.add(topNumberPanel1);
@@ -538,19 +540,19 @@ public class BattleshipGUI extends JPanel {
                             .setText("Player Guesses: ".concat(Integer.toString(this.model.getNumPlayerGuesses())));
                     this.numCompGuesses
                             .setText("Computer Guesses: ".concat(Integer.toString(this.model.getNumCompGuesses())));
-                    this.playerShipsSunk
-                            .setText("Ships Sunk: ".concat(Integer.toString(this.model.getPlayerShipsSunk())));
-                    this.computerShipsSunk
-                            .setText("Ships Sunk: ".concat(Integer.toString(this.model.getComputerShipsSunk())));
+                    // this.playerShipsSunk
+                    //         .setText("Ships Sunk: ".concat(Integer.toString(this.model.getPlayerShipsSunk())));
+                    // this.computerShipsSunk
+                    //         .setText("Ships Sunk: ".concat(Integer.toString(this.model.getComputerShipsSunk())));
                     this.playerShipsRemaining
-                            .setText("Ships Left: ".concat(Integer.toString(this.model.getPlayerRemainingShips())));
+                            .setText("Player Ships Left: ".concat(Integer.toString(this.model.getPlayerRemainingShips())));
                     this.computerShipsRemaining
-                            .setText("Ships Left: ".concat(Integer.toString(this.model.getComputerRemainingShips())));
+                            .setText("Computer Ships Left: ".concat(Integer.toString(this.model.getComputerRemainingShips())));
 
-                    if (this.model.getPlayerHits() < 14 ) {
+                    if (this.model.getGameStatus() == false) {
 
                         if (this.model.getGameTurn() == "Player") {
-                            if (this.model.getPlayerRowGuessed() == 0 && this.model.getPlayerColGuessed() == 0) {
+                            if (this.model.getNumPlayerGuesses() == 0) {
                                 this.validateOutput.setText(this.model.getPlayerName() + "'s turn: ");
                             } else {
                                 if (this.model.getHitStatus() == true) {
@@ -584,6 +586,11 @@ public class BattleshipGUI extends JPanel {
                                 this.validateOutput.setText("Computer's turn: the computer guessed ("
                                         + this.model.getCompRowGuessed() + ", " + this.model.getCompColGuessed()
                                         + ") and hit a ship! Please do your turn!");
+                                        if (this.model.getShipSunk() == true) {
+                                            this.validateOutput.setText("Computer's turn: the computer guessed ("
+                                                + this.model.getCompRowGuessed() + ", " + this.model.getCompColGuessed()
+                                                + ") and sunk a ship! Please do your turn!");
+                                        }
                                 this.playerGrid[this.model.getCompRowGuessed()][this.model
                                         .getCompColGuessed()].setText("O");
                             } else {
@@ -597,11 +604,7 @@ public class BattleshipGUI extends JPanel {
                     }
 
                     else {
-                        if (this.model.getPlayerHits() == 14) {
-                            this.validateOutput.setText("Game Ended! The winner is " + this.model.getPlayerName());
-                        } else {
-                            this.validateOutput.setText("Game Ended! The winner is Computer!");
-                        }
+                        this.validateOutput.setText("Game Ended! The winner is " + this.model.getWinner());
                         this.model.disableGrid(computerGrid);
                     }
                 }
