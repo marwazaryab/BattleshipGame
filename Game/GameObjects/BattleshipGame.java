@@ -585,38 +585,36 @@ public class BattleshipGame extends Object {
     }
 
     public void computerShipTurn() {
+        Random random = new Random();
+        boolean guessHorizontal = random.nextBoolean();
 
-        // Make a random guess
-        this.compRowGuessed = (int) (Math.random() * (playerShips.length));
-        this.compColGuessed = (int) (Math.random() * (playerShips.length));
-        boolean isPreviousHit = this.getHitStatus();
 
         // If the ship hasn't been hit yet
-        if (!isPreviousHit) {
+        if (!this.getHitStatus()) {
             // Make a random guess again
             this.compRowGuessed = (int) (Math.random() * (playerShips.length));
             this.compColGuessed = (int) (Math.random() * (playerShips.length));
 
-            if (playerShips[compRowGuessed][compColGuessed] != "O") {
-                this.isHit = true;
-                if (this.computerGuesses[compRowGuessed][compColGuessed] != "!") {
-    
-                    String shipHit = playerShips[compRowGuessed][compColGuessed];
-                    this.computerHits++;
-                    this.playerShips[compRowGuessed][compColGuessed] = "O";
-                    this.hasShipSunk(shipHit);
-                }
-            } else {
-                this.isHit = false;
-            }
-    
         } else { // Otherwise if the ship has been hit before
 
-            
-
+            if (guessHorizontal == true) {
+                this.compColGuessed++;
+            } else {
+                this.compRowGuessed++;
+            }
 
         }
 
+        if (playerShips[compRowGuessed][compColGuessed] != "O") {
+            this.isHit = true;
+            if (this.computerGuesses[compRowGuessed][compColGuessed] != "!") {
+
+                String shipHit = playerShips[compRowGuessed][compColGuessed];
+                this.computerHits++;
+                this.playerShips[compRowGuessed][compColGuessed] = "O";
+                this.hasShipSunk(shipHit);
+            }
+        }
 
         this.numCompGuesses++;
         this.computerGuesses[compRowGuessed][compColGuessed] = "!";
