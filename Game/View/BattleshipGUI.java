@@ -217,7 +217,7 @@ public class BattleshipGUI extends JPanel {
 
         endgamePanel.setLayout(new BorderLayout());
         endGameButtonsPanel.setLayout(new BoxLayout(endGameButtonsPanel, BoxLayout.X_AXIS));
-        
+
         endgamePanel.setBackground(darkBlue);
         labelsPanel.setBackground(darkBlue);
 
@@ -248,7 +248,7 @@ public class BattleshipGUI extends JPanel {
 
         // TODO MAKEIT CENTER ALING
         if (this.model.getWinner().equals(this.model.getPlayerName())) {
-            winnerLabel.setText("    PLAYER 1 WINS");
+            winnerLabel.setText("     PLAYER 1 WINS");
         } else {
             winnerLabel.setText("    COMPUTER WINS");
 
@@ -707,12 +707,12 @@ public class BattleshipGUI extends JPanel {
                 this.gamePanel.setVisible(false);
                 this.titleContentsPanel.setVisible(false);
                 this.endgamePanel.setVisible(true);
+                this.endGameView();
                 this.parentFrame = (JFrame) this.getTopLevelAncestor();
                 this.parentFrame.pack();
                 revalidate();
                 repaint();
 
-                this.endGameView();
                 break;
 
             default:
@@ -756,6 +756,7 @@ public class BattleshipGUI extends JPanel {
         restart.addActionListener(buttonController);
         endGame.addActionListener(buttonController);
         statsButton.addActionListener(buttonController);
+        endExit.addActionListener(buttonController);
     }
 
     public void setGridSize(int i) {
