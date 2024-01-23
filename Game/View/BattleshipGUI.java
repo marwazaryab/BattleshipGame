@@ -1,6 +1,7 @@
 package Game.View;
 
 import javax.imageio.plugins.jpeg.JPEGHuffmanTable;
+import javax.print.attribute.standard.DocumentName;
 import javax.swing.*;
 import javax.xml.bind.ValidationEvent;
 
@@ -36,6 +37,8 @@ public class BattleshipGUI extends JPanel {
     private JLabel thankYouLabel = new JLabel("THANK YOU FOR PLAYING!!! <3");
 
     private JButton endGame = new JButton("End Game");
+
+    private JButton endExit = new JButton("Exit");
 
     // game view instance variables
     private JPanel gamePanel = new JPanel();
@@ -117,6 +120,8 @@ public class BattleshipGUI extends JPanel {
     // colors
     private Color navyBlue = new Color(5, 1, 23);
     private Color gray = new Color(115, 147, 179);
+    private Color lightBlue = new Color(0, 0, 205);
+    private Color darkBlue = new Color(30, 144, 255);
 
     // booleans
     public boolean isRestart = false;
@@ -212,16 +217,40 @@ public class BattleshipGUI extends JPanel {
 
         endgamePanel.setLayout(new BorderLayout());
         endGameButtonsPanel.setLayout(new BoxLayout(endGameButtonsPanel, BoxLayout.X_AXIS));
-        // labelsPanel.setLayout(new BoxLayout(endGameButtonsPanel, BoxLayout.Y_AXIS));
+        
+        endgamePanel.setBackground(darkBlue);
+        labelsPanel.setBackground(darkBlue);
 
+        winnerLabel.setFont(new Font("Century Gothic", Font.BOLD, 40));
+        creditsLabel.setFont(new Font("Century Gothic", Font.BOLD, 20));
+        thankYouLabel.setFont(new Font("Century Gothic", Font.BOLD, 20));
+        creditsLabel.setForeground(navyBlue);
+        thankYouLabel.setForeground(navyBlue);
+
+        winnerLabel.setForeground(navyBlue);
+
+        endExit.setFont(new Font("Century Gothic", Font.BOLD, 43));
+        statsButton.setFont(new Font("Century Gothic", Font.BOLD, 43));
+        restart.setFont(new Font("Century Gothic", Font.BOLD, 43));
+
+        endExit.setBackground(navyBlue);
+        statsButton.setBackground(navyBlue);
+        restart.setBackground(navyBlue);
+
+        endExit.setForeground(gray);
+        statsButton.setForeground(gray);
+        restart.setForeground(gray);
+
+        
         endGameButtonsPanel.add(restart);
         endGameButtonsPanel.add(statsButton);
-        endGameButtonsPanel.add(exit);
+        endGameButtonsPanel.add(endExit);
 
+        // TODO MAKEIT CENTER ALING
         if (this.model.getWinner().equals(this.model.getPlayerName())) {
-            winnerLabel.setText("PLAYER 1 WINS");
+            winnerLabel.setText("    PLAYER 1 WINS");
         } else {
-            winnerLabel.setText("COMPUTER WINS");
+            winnerLabel.setText("    COMPUTER WINS");
 
         }
 
@@ -232,9 +261,8 @@ public class BattleshipGUI extends JPanel {
         endgamePanel.add(labelsPanel, BorderLayout.CENTER);
         endgamePanel.add(endGameButtonsPanel, BorderLayout.SOUTH);
 
-        endgamePanel.setPreferredSize(new Dimension(200,200));
+        endgamePanel.setPreferredSize(new Dimension(400, 300));
         this.add(endgamePanel);
-
 
     }
 
@@ -246,6 +274,14 @@ public class BattleshipGUI extends JPanel {
         alignmentPanel.add(alignment);
         alignmentLabel.setForeground(Color.WHITE);
         alignmentPanel.setBackground(Color.black);
+
+        restart.setFont(new Font("Century Gothic", Font.BOLD, 40));
+        endGame.setFont(new Font("Century Gothic", Font.BOLD, 40));
+
+        restart.setBackground(navyBlue);
+        restart.setForeground(gray);
+        endGame.setForeground(gray);
+        endGame.setBackground(navyBlue);
 
         computerShipsSunk.setFont(f);
         playerShipsSunk.setFont(f);
@@ -374,7 +410,7 @@ public class BattleshipGUI extends JPanel {
             for (int y = 0; y < this.getGridSize(); y++) {
                 playerGrid[x][y] = new JButton();
                 playerGrid[x][y].setPreferredSize(new Dimension(30, 30));
-                playerGrid[x][y].setBackground(new Color(30, 144, 255));
+                playerGrid[x][y].setBackground(darkBlue);
                 playerGrid[x][y].setBorder(BorderFactory.createLineBorder(Color.black));
             }
         }
@@ -384,7 +420,7 @@ public class BattleshipGUI extends JPanel {
             for (int y = 0; y < this.getGridSize(); y++) {
                 computerGrid[x][y] = new JButton();
                 computerGrid[x][y].setPreferredSize(new Dimension(30, 30));
-                computerGrid[x][y].setBackground(new Color(0, 0, 205));
+                computerGrid[x][y].setBackground(lightBlue);
                 computerGrid[x][y].setBorder(BorderFactory.createLineBorder(Color.black));
             }
         }
@@ -517,6 +553,7 @@ public class BattleshipGUI extends JPanel {
             case TITLE:
                 this.gamePanel.setVisible(false);
                 this.titleContentsPanel.setVisible(true);
+                this.endgamePanel.setVisible(false);
                 this.titleView();
 
                 if (this.isRestart == true) {
