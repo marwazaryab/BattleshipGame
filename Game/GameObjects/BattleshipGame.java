@@ -64,7 +64,7 @@ public class BattleshipGame extends Object {
     private boolean isSunk;
     private Random randomDirection;
     private int currentRound;
-    private int[] playerHighScores;
+    private int[] playerHighScores = new int[100];
     private int highScoreIndex;
 
     public BattleshipGame() {
@@ -816,8 +816,6 @@ public class BattleshipGame extends Object {
         outputFile.println("---------------------------- GAME ANALYSIS ----------------------------");
         outputFile.println("WINNER STATUS:");
 
-        outputFile.printf(currentTurn, computerGuesses);
-
         outputFile.println("Current Round: " + this.getCurrentRound());
 
         if (this.getWinner().equals(this.getPlayerName())) {
@@ -826,10 +824,16 @@ public class BattleshipGame extends Object {
             outputFile.println("WINNER STATUS: COMPUTER WON");
         }
 
-        outputFile.println("Number of Guesses Player: " + this.getPlayerHits());
+        outputFile.println("Number of Guesses (Player): " + this.getPlayerHits());
+        outputFile.println("Number of Guesses (Computer): " + this.getComputerHits());
         outputFile.println("Timer End: " + this.view.timePassed());
-        outputFile.println("Player Highschore: " + this.playerGuessHighScore);
-        outputFile.println("Player Highschore: " + this.playerTimeHighScore);
+
+
+        outputFile.println("Player Highscore: " + this.playerGuessHighScore);
+        this.sortPlayerGuessHighScore(playerHighScores);
+        this.printArrayFile(outputFile, playerHighScores);
+
+        
         outputFile.println("Number of guesses Computer: " + this.getComputerHits());
         this.sortPlayerGuessHighScore(this.playerHighScores);
 
@@ -842,7 +846,10 @@ public class BattleshipGame extends Object {
         // highscore
         // ships sunk
         // time
+
         // current rounds
+
+        outputFile.close();
 
     }
 
@@ -862,6 +869,12 @@ public class BattleshipGame extends Object {
                 position--;
             }
             array[position] = current;
+        }
+    }
+
+    public void printArrayFile(PrintWriter outputFile, int[]array){
+        for(int i = 0; i < array.length; i++){
+            outputFile.println(array[i]);
         }
     }
 
