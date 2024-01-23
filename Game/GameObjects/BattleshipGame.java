@@ -7,6 +7,7 @@
 
 //all imports 
 package Game.GameObjects;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.io.PrintWriter;
@@ -17,12 +18,13 @@ import Game.Util.Prompt;
 import Game.View.BattleshipGUI;
 import Game.View.BattleshipGUI.PANEL_STATES;
 
-/** 
- * BattleshipGame class; contains data (methods and variables) for the Battleship game 
+/**
+ * BattleshipGame class; contains data (methods and variables) for the
+ * Battleship game
  */
 public class BattleshipGame extends Object {
 
-    //instance variables
+    // instance variables
     private BattleshipGUI view;
     private Timer time;
     private int playerShipsSunk;
@@ -50,8 +52,8 @@ public class BattleshipGame extends Object {
     private String currentTurn;
     private String playerName;
     private String winner;
-    private int[] playerShipLength = new int[] {5, 3, 3, 2, 1 };
-    private int[] computerShipLength = new int[] {5, 3, 3, 2, 1 };
+    private int[] playerShipLength = new int[] { 5, 3, 3, 2, 1 };
+    private int[] computerShipLength = new int[] { 5, 3, 3, 2, 1 };
     private boolean isGameEnded;
     private boolean isHit;
     private boolean isCompShipHorizontal;
@@ -61,7 +63,9 @@ public class BattleshipGame extends Object {
     private boolean isNewGame;
     private boolean isSunk;
     private Random randomDirection;
-
+    private int currentRound;
+    private int[] playerHighScores;
+    private int highScoreIndex;
 
     public BattleshipGame() {
         super();
@@ -476,8 +480,7 @@ public class BattleshipGame extends Object {
 
     }
 
-    public void hasShipSunk(String shipHit){
-      
+    public void hasShipSunk(String shipHit) {
 
         if (currentTurn == "Player") {
 
@@ -490,11 +493,11 @@ public class BattleshipGame extends Object {
                         isSunk = true;
                     }
                 }
-                
+
                 if (isSunk == false) {
                     break;
                 }
-            } 
+            }
 
             if (isSunk == true) {
                 computerRemainingShips--;
@@ -519,7 +522,7 @@ public class BattleshipGame extends Object {
                 if (isSunk == false) {
                     break;
                 }
-            } 
+            }
 
             if (isSunk == true) {
                 playerRemainingShips--;
@@ -631,8 +634,7 @@ public class BattleshipGame extends Object {
         if (computerRemainingShips == 0) {
             this.winner = this.getPlayerName();
             this.isGameEnded = true;
-        }
-        else if (playerRemainingShips == 0) {
+        } else if (playerRemainingShips == 0) {
             this.winner = "Computer";
             this.isGameEnded = true;
         }
@@ -667,7 +669,7 @@ public class BattleshipGame extends Object {
         return this.winner;
     }
 
-    public boolean getShipSunk () {
+    public boolean getShipSunk() {
         return this.isSunk;
     }
 
@@ -790,11 +792,8 @@ public class BattleshipGame extends Object {
     public void setPlayerGuessHighScore(int score) {
         this.playerGuessHighScore = score;
         highScoreIndex++;
+        playerHighScores[highScoreIndex] = score;
 
-
-            playerHighscores[highScoreIndex] = score;
-
-        
     }
 
     public void setPlayerTimeHighScore(double score) {
@@ -833,7 +832,7 @@ public class BattleshipGame extends Object {
 
         outputFile.println("Current Round: " + this.getCurrentRound());
 
-        if (this.isPlayerWinner()) {
+        if (this.getWinner().equals(this.getPlayerName())) {
             outputFile.println("WINNER STATUS: PLAYER 1 WON");
         } else {
             outputFile.println("WINNER STATUS: COMPUTER WON");
@@ -844,13 +843,11 @@ public class BattleshipGame extends Object {
         outputFile.println("Player Highschore: " + this.playerGuessHighScore);
         outputFile.println("Player Highschore: " + this.playerTimeHighScore);
         outputFile.println("Number of guesses Computer: " + this.getComputerHits());
-        this.sortPlayerGuessHighScore(this.playerHighscores);
+        this.sortPlayerGuessHighScore(this.playerHighScores);
 
-        for(int i = 0; i < playerHighscores.length; i ++){
-            outputFile.println(playerHighscores[i]);
+        for (int i = 0; i < playerHighScores.length; i++) {
+            outputFile.println(playerHighScores[i]);
         }
-        
-
 
         // winner or not
         // number of guesses
@@ -861,7 +858,7 @@ public class BattleshipGame extends Object {
 
     }
 
-        /**
+    /**
      * Sort using the insert sort algorithm
      * 
      * @param array to be sorted
