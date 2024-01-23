@@ -143,6 +143,9 @@ public class BattleshipGUI extends JPanel {
         this.model.setGUI(this);
         this.update();
         this.registerButtonController();
+        startTime = System.currentTimeMillis();
+        time = new Timer(0, timeListener);
+        time.start();
 
     }
 
@@ -241,7 +244,6 @@ public class BattleshipGUI extends JPanel {
         statsButton.setForeground(gray);
         restart.setForeground(gray);
 
-        
         endGameButtonsPanel.add(restart);
         endGameButtonsPanel.add(statsButton);
         endGameButtonsPanel.add(endExit);
@@ -387,10 +389,6 @@ public class BattleshipGUI extends JPanel {
         timerPanel.add(timer);
         timerPanel.add(restart);
         timerPanel.add(endGame);
-
-        // if(this.model.getGameStatus()){
-        // timerPanel
-        // }
 
         timerPanel.add(missLabel);
         timerPanel.add(hitLabel);
@@ -574,11 +572,8 @@ public class BattleshipGUI extends JPanel {
 
             case GAME:
 
-                startTime = System.currentTimeMillis();
-                time = new Timer(0, timeListener);
-                time.start();
-
                 this.gamePanel.setVisible(true);
+                this.endGame.setVisible(false);
 
                 if (this.model.getNewGame() == true) {
 
@@ -697,6 +692,8 @@ public class BattleshipGUI extends JPanel {
                     }
 
                     else {
+
+                        endGame.setVisible(true);
                         this.validateOutput.setText("Game Ended! The winner is " + this.model.getWinner());
                         this.model.disableGrid(computerGrid);
                     }

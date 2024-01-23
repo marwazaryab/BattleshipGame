@@ -541,19 +541,19 @@ public class BattleshipGame extends Object {
         this.computerRemainingShips = num;
     }
 
+    // TODO if we have time add a time highscore
+
     public void restart() {
 
         currentRound++;
 
+        this.isGameEnded = false;
         this.view.isRestart = true;
         this.setPlayerName(null);
         this.shipNum = 0;
-        this.playerShipsSunk = 0;
-        this.computerShipsSunk = 0;
-        this.computerRemainingShips = 0;
-        this.playerRemainingShips = 0;
-        this.playerGuessHighScore = 0;
-        this.playerTimeHighScore = 0;
+        this.computerRemainingShips = 5;
+        this.playerRemainingShips = 5;
+        this.playerGuessHighScore = this.getPlayerGuessHighScore();
         this.isCompShipHorizontal = false;
         this.randomDirection = new Random();
         this.isComputerDeploy = false;
@@ -634,6 +634,11 @@ public class BattleshipGame extends Object {
         if (computerRemainingShips == 0) {
             this.winner = this.getPlayerName();
             this.isGameEnded = true;
+
+            if (this.getNumPlayerGuesses() > this.getPlayerGuessHighScore()) {
+                this.setPlayerGuessHighScore(this.getNumPlayerGuesses());
+            }
+
         } else if (playerRemainingShips == 0) {
             this.winner = "Computer";
             this.isGameEnded = true;
@@ -820,20 +825,23 @@ public class BattleshipGame extends Object {
         if (this.getWinner().equals(this.getPlayerName())) {
             outputFile.printf("%-30s", "\tWINNER STATUS: PLAYER 1 WON");
         } else {
-            outputFile.printf("%-30s","\tWINNER STATUS: COMPUTER WON");
+            outputFile.printf("%-30s", "\tWINNER STATUS: COMPUTER WON");
         }
 
         outputFile.println("\nNumber of Guesses (Player): " + this.getPlayerHits());
         outputFile.println("Number of Guesses (Computer): " + this.getComputerHits());
-        outputFile.println("Timer End: " + this.view.timePassed()+" seconds");
+        outputFile.println("Timer End: " + this.view.timePassed() + " seconds");
 
-        outputFile.println("Player Highscore list: " + this.playerGuessHighScore);
+        outputFile.println("Player Highscore list: ");
         this.sortPlayerGuessHighScore(playerHighScores);
         this.printArrayFile(outputFile, playerHighScores);
 
         outputFile.close();
 
     }
+
+
+    // TODO ask Mr. Burns if the sorting it good
 
     /**
      * Sort using the insert sort algorithm
