@@ -25,57 +25,60 @@ import Game.View.BattleshipGUI.PANEL_STATES;
 public class BattleshipGame extends Object {
 
     // instance variables
-    private BattleshipGUI view;
-    private Timer time;
-    private int playerShipsSunk;
-    private int computerShipsSunk;
-    private int computerRemainingShips;
-    private int playerRemainingShips;
-    private int playerGuessHighScore;
+    private BattleshipGUI view; // the view of the Battleship game
+
+    private int playerShipsSunk; // The number of ships that the player has sunk
+    private int computerShipsSunk; // The number of ships that the computer has sunk
+    private int computerRemainingShips; // The number of ships that the computer has remaining
+    private int playerRemainingShips; // The number of ships that the player has remaining
+    private int playerGuessHighScore; // The highscore of the player; depends on the number of guesses it takes to
+                                      // finish the program
     private int computerShipNum;
     private int computerShipRow;
     private int computerShipCol;
     private int shipNum;
-    private int playerRowGuessed;
-    private int playerColGuessed;
-    private int compRowGuessed;
-    private int compColGuessed;
-    private int playerHits;
-    private int computerHits;
-    private int numPlayerGuesses;
-    private int numCompGuesses;
-    private double playerTimeHighScore;
-    private String[][] playerGuesses;
-    private String[][] computerGuesses;
-    private String[][] playerShips;
-    private String[][] computerShips;
-    private String currentTurn;
-    private String playerName;
-    private String winner = "";
-    private int[] playerShipLength = new int[] { 5, 3, 3, 2, 1 };
-    private int[] computerShipLength = new int[] { 5, 3, 3, 2, 1 };
-    private boolean isGameEnded;
-    private boolean isHit;
-    private boolean isCompShipHorizontal;
-    private boolean isComputerDeploy;
-    private boolean isDeploymentFinished;
-    private boolean isValidPosition;
-    private boolean isNewGame;
-    private boolean isSunk;
-    private Random randomDirection;
-    private int currentRound;
-    private int[] playerHighScores = new int[100];
-    private int highScoreIndex;
+    private int playerRowGuessed; // The row of the grid that the player has guessed
+    private int playerColGuessed; // The column of the grid that the player has guessed
+    private int compRowGuessed; // The row of the grid that the computer has guessed
+    private int compColGuessed; // The column of the grid that the computer has guessed
+    private int playerHits; // The amount of hits the player has gotten
+    private int computerHits; // The amount of hits the computer has done
+    private int numPlayerGuesses; // The amount of guesses the player has made
+    private int numCompGuesses; // The amount of guesses the computer has made
+    private String[][] playerGuesses; // An array of the players guesses
+    private String[][] computerGuesses; // An array of the computers guesses
+    private String[][] playerShips; // An array of where the players ships are
+    private String[][] computerShips; // An array of where the computers ships are
+    private String currentTurn; // The current players turn
+    private String playerName; // The name of the player
+    private String winner = ""; // The winner of the game
+    private int[] gridShipLength = new int[] { 5, 3, 3, 2, 1 }; // an array of the ships length
+    private boolean isGameEnded; // Boolean value that is true when the game is ended
+    private boolean isHit; // Boolean value that is true when a ship has been hit
+    private boolean isCompShipHorizontal; // Boolean value that is true when the computers ship is horizontal
+    private boolean isComputerDeploy; // Boolean value that is true when the computers ships ar all deployed
+    private boolean isDeploymentFinished; // Boolean value that is true when the deployment of both ships are done
+    private boolean isValidPosition; // Boolean value that is true when there a guess is valid
+    private boolean isNewGame; // Boolean value that is true when a new game can start
+    private boolean isSunk; // Boolean value that determines when a ship has been sunk
+    private Random randomDirection; // A random object to make a random direction when deploying computer ships
+    private int currentRound; // The current round of the game (first game, second game etc)
+    private int[] playerHighScores = new int[100]; // An array of the players high scores
+    private int highScoreIndex; // An index of the players high scores
 
+    /**
+     * BattleshipGame Constructor -- sets instance variable values
+     */
     public BattleshipGame() {
-        super();
+        super(); // Calls the parent constructor
+
+        // Set all default values
         this.shipNum = 0;
         this.playerShipsSunk = 0;
         this.computerShipsSunk = 0;
         this.computerRemainingShips = 0;
         this.playerRemainingShips = 0;
         this.playerGuessHighScore = 0;
-        this.playerTimeHighScore = 0;
         this.isCompShipHorizontal = false;
         this.randomDirection = new Random();
         this.isComputerDeploy = false;
@@ -90,31 +93,50 @@ public class BattleshipGame extends Object {
 
     }
 
+    /**
+     * Set the GUI
+     * 
+     * @param gui
+     */
     public void setGUI(BattleshipGUI gui) {
         this.view = gui;
     }
 
+    /**
+     * Updates the view
+     */
     public void updateView() {
         this.view.update();
     }
 
+    /**
+     * @author Mohib and Marwa
+     *         A method that creates a 2D array grid
+     * @param difficulty the difficulty level -- changes the grid size depending
+     *                   what what difficulty it is
+     */
     public void createGrid(String difficulty) {
 
+        // Switch case statement for the different difficulty levels
         switch (difficulty) {
 
+            // If the level is 'Easy'
             case "Easy":
-                this.view.setPanelState(PANEL_STATES.GAME);
+                this.view.setPanelState(PANEL_STATES.GAME); // sets the state of the panel
+
+                // Create new 15 by 15 arrays
                 playerGuesses = new String[15][15];
                 computerGuesses = new String[15][15];
                 playerShips = new String[15][15];
                 computerShips = new String[15][15];
                 this.view.setGridSize(15);
                 this.isNewGame = true;
-                this.updateView();
+                this.updateView(); // update the view to reflect the new grid
                 this.isNewGame = false;
 
                 break;
 
+            // If the level is 'Medium'
             case "Medium":
                 this.view.setPanelState(PANEL_STATES.GAME);
 
@@ -129,6 +151,7 @@ public class BattleshipGame extends Object {
 
                 break;
 
+            // If the level is 'Hard'
             case "Hard":
                 view.setPanelState(PANEL_STATES.GAME);
 
@@ -147,11 +170,16 @@ public class BattleshipGame extends Object {
                 break;
         }
 
-        setGridValues();
+        this.setGridValues(); // Call the method to set the values of the grids
     }
 
+    /**
+     * @author Mohib
+     *         A method to set the values of the player and computer grids
+     */
     public void setGridValues() {
 
+        // For loop to loop through the array and set the value of it to 'O'
         for (int x = 0; x < playerShips.length; x++) {
             for (int y = 0; y < playerShips[x].length; y++) {
                 playerShips[x][y] = "O";
@@ -175,37 +203,53 @@ public class BattleshipGame extends Object {
 
     }
 
+    /**
+     * @author Marwa and Mohib
+     *         A method to deploy the player ships before the guessing starts
+     * @param playerGrid    the players grid
+     * @param computerGrid  the computers grid
+     * @param rowClicked    the row that the player clicked
+     * @param columnClicked the column that the player clicked
+     * @param isHorizontal  if the player selected horizontal or not
+     */
     public void deployPlayerShips(JButton[][] playerGrid, JButton[][] computerGrid, int rowClicked, int columnClicked,
             boolean isHorizontal) {
 
-        if (shipNum < playerShipLength.length) {
+        // If the ship number is less than the length of the grid array
+        if (shipNum < gridShipLength.length) {
 
+            // If the player wants the ship to be horizontal
             if (isHorizontal == true) {
 
+                // If the ship placement is valid -- uses a method to check
                 if (this.isValidPlacement(isComputerDeploy, rowClicked, columnClicked, isHorizontal, playerGrid)) {
 
-                    for (int i = 0; i < playerShipLength[shipNum]; i++) {
-                        playerGrid[rowClicked][columnClicked + i].setText("X");
-                        playerShips[rowClicked][columnClicked + i] = "X";
+                    // Loop through the array until it hits the row and column clicked
+                    for (int i = 0; i < gridShipLength[shipNum]; i++) {
+                        playerGrid[rowClicked][columnClicked + i].setText("X"); // set the text "X" so the player can
+                                                                                // see where their ship is
+                        playerShips[rowClicked][columnClicked + i] = "X"; // Set the internal array to be 'X'
                     }
-                    this.updatePlayerShips(playerGrid, shipNum);
+                    this.updatePlayerShips(playerGrid, shipNum); // Call the update player ships method
                     this.isValidPosition = true;
-                    shipNum++;
+                    shipNum++; // increment the number of ship
 
                 } else {
-                    this.isValidPosition = false;
+                    this.isValidPosition = false; // Otherwise set the position to be invalid
                 }
 
-            } else if (isHorizontal == false) {
+            } else if (isHorizontal == false) { // If the player wants the ship to be vertical
 
+                // If the ship placement is valid -- uses a method to determine it
                 if (this.isValidPlacement(isComputerDeploy, rowClicked, columnClicked, isHorizontal, playerGrid)) {
 
-                    for (int i = 0; i < playerShipLength[shipNum]; i++) {
-
-                        playerGrid[rowClicked + i][columnClicked].setText("X");
+                    // Loop through the items in the array
+                    for (int i = 0; i < gridShipLength[shipNum]; i++) {
+                        playerGrid[rowClicked + i][columnClicked].setText("X"); // Set the text as 'X' so the player can
+                                                                                // see
                         playerShips[rowClicked + i][columnClicked] = "X";
                     }
-                    this.updatePlayerShips(playerGrid, shipNum);
+                    this.updatePlayerShips(playerGrid, shipNum); // Update the players ships
                     this.isValidPosition = true;
                     shipNum++;
 
@@ -217,20 +261,23 @@ public class BattleshipGame extends Object {
 
             }
 
-            this.updateView();
+            this.updateView(); // Update the view to reflect the changes
         }
 
         else {
-            deployShipsComputer(computerGrid);
+            deployShipsComputer(computerGrid); // Deploy the computers ships using a method
         }
 
     }
 
+    /**
+     * @author Marwa and Mohib
+     *         A method that deploys the computers ships randomly
+     * @param computerGrid the grid of the computer
+     */
     public void deployShipsComputer(JButton[][] computerGrid) {
 
-        this.isComputerDeploy = true;
-
-        while (computerShipNum < computerShipLength.length) {
+        while (computerShipNum < gridShipLength.length) {
 
             this.isCompShipHorizontal = randomDirection.nextBoolean();
             computerShipRow = (int) (Math.random() * (computerGrid.length));
@@ -241,7 +288,7 @@ public class BattleshipGame extends Object {
                 if (this.isValidPlacement(isComputerDeploy, computerShipRow, computerShipCol, isCompShipHorizontal,
                         computerGrid)) {
 
-                    for (int i = 0; i < computerShipLength[computerShipNum]; i++) {
+                    for (int i = 0; i < gridShipLength[computerShipNum]; i++) {
                         computerGrid[computerShipRow][computerShipCol + i].setText("X");
                         computerShips[computerShipRow][computerShipCol + i] = "X";
                     }
@@ -256,7 +303,7 @@ public class BattleshipGame extends Object {
                 if (this.isValidPlacement(isComputerDeploy, computerShipRow, computerShipCol, isCompShipHorizontal,
                         computerGrid)) {
 
-                    for (int i = 0; i < computerShipLength[computerShipNum]; i++) {
+                    for (int i = 0; i < gridShipLength[computerShipNum]; i++) {
 
                         computerGrid[computerShipRow + i][computerShipCol].setText("X");
                         computerShips[computerShipRow + i][computerShipCol] = "X";
@@ -276,48 +323,75 @@ public class BattleshipGame extends Object {
         this.updateView();
     }
 
+    /**
+     * @author Mohib
+     *         A method that checks if the ship placement is valid
+     * @param isComp       boolean value to check if it is the computers turn
+     * @param row          row being checked
+     * @param col          column being checked
+     * @param isHorizontal true if the ship is horizontal
+     * @param grid         the grid being checked
+     * @return
+     */
     public boolean isValidPlacement(boolean isComp, int row, int col, boolean isHorizontal, JButton[][] grid) {
 
+        // If it is the computers turn
         if (isComp) {
 
+            // If the ship is horizontal
             if (isHorizontal == true) {
-                if (col + computerShipLength[computerShipNum] > grid.length) {
-                    return false;
+
+                // If the col and the length of the ship is greater than the length of the grid
+                if (col + gridShipLength[computerShipNum] > grid.length) {
+                    return false; // it is not a valid placement
+
+                    // If there is already a ship placed
                 } else if (grid[row][col].getText().equals("X")) {
-                    return false;
-                } else {
-                    for (int x = col; x < (col + computerShipLength[computerShipNum]); x++) {
+                    return false; // It is not a valid placement
+
+                } else { // Otherwise if it is intersecting a ship
+                    for (int x = col; x < (col + gridShipLength[computerShipNum]); x++) {
                         if (grid[row][x].getText().equals("X")) {
-                            return false;
+                            return false; // It is onot a valid placement
                         }
                     }
                 }
 
+                // if the ship is vertical
             } else if (isHorizontal == false) {
-                if (row + computerShipLength[computerShipNum] > grid[0].length) {
+
+                // if the ship goes outside of the grid
+                if (row + gridShipLength[computerShipNum] > grid[0].length) {
                     return false;
+
+                    // If the ship is on another ship
                 } else if (grid[row][col].getText().equals("X")) {
                     return false;
                 } else {
-                    for (int x = row; x < (row + computerShipLength[computerShipNum]); x++) {
+
+                    // If the ship is interfering with another ship
+                    for (int x = row; x < (row + gridShipLength[computerShipNum]); x++) {
                         if (grid[x][col].getText() == "X") {
                             return false;
                         }
                     }
                 }
             }
+
+            // If everything there is not true then it is a valid placement
             return true;
         }
 
         else {
 
+            // Do the same check for the player
             if (isHorizontal == true) {
-                if (col + playerShipLength[shipNum] > grid.length) {
+                if (col + gridShipLength[shipNum] > grid.length) {
                     return false;
                 } else if (grid[row][col].getText().equals("X")) {
                     return false;
                 } else {
-                    for (int x = col; x < (col + playerShipLength[shipNum]); x++) {
+                    for (int x = col; x < (col + gridShipLength[shipNum]); x++) {
                         if (grid[row][x].getText().equals("X")) {
                             return false;
                         }
@@ -326,12 +400,12 @@ public class BattleshipGame extends Object {
 
             } else if (isHorizontal == false) {
 
-                if (row + playerShipLength[shipNum] > grid.length) {
+                if (row + gridShipLength[shipNum] > grid.length) {
                     return false;
                 } else if (grid[row][col].getText().equals("X")) {
                     return false;
                 } else {
-                    for (int x = row; x < (row + playerShipLength[shipNum]); x++) {
+                    for (int x = row; x < (row + gridShipLength[shipNum]); x++) {
                         if (grid[x][col].getText() == "X") {
                             return false;
                         }
@@ -516,16 +590,14 @@ public class BattleshipGame extends Object {
 
     }
 
-    public void setPlayerRemainingShips(int num) {
-        this.playerRemainingShips = num;
-    }
 
-    public void setComputerRemainingShips(int num) {
-        this.computerRemainingShips = num;
-    }
 
     // TODO if we have time add a time highscore
 
+    /**
+     * @author Marwa
+     *         A method that restarts all of the values
+     */
     public void restart() {
 
         currentRound++;
@@ -584,10 +656,13 @@ public class BattleshipGame extends Object {
         this.currentTurn = "Computer";
     }
 
+    /**
+     * @author Marwa
+     *         A method that
+     */
     public void computerShipTurn() {
         Random random = new Random();
         boolean guessHorizontal = random.nextBoolean();
-
 
         // If the ship hasn't been hit yet
         if (!this.getHitStatus()) {
@@ -623,6 +698,9 @@ public class BattleshipGame extends Object {
         this.currentTurn = "Player";
     }
 
+    /**
+     * A method to check the status of the game
+     */
     public void checkGameStatus() {
 
         if (computerRemainingShips == 0) {
@@ -639,6 +717,11 @@ public class BattleshipGame extends Object {
         }
     }
 
+    /**
+     * 
+     * A method to disable a grid
+     * @param grid to the disabled
+     */
     public void disableGrid(JButton[][] grid) {
 
         for (int x = 0; x < grid.length; x++) {
@@ -648,9 +731,87 @@ public class BattleshipGame extends Object {
         }
     }
 
-    public void startTimer() {
+    /**
+     * @author Marwa
+     *         A method that outputs all the stats to a seperate file
+     */
+    public void outputStats() {
+
+        PrintWriter outputFile = Prompt.getPrintWriter(); // Get the output file from the static Prompt Class
+
+        // Format all the info
+        outputFile.println("---------------------- GAME ANALYSIS ----------------------");
+
+        outputFile.printf("%-30s", "Current Round: " + this.getCurrentRound());
+
+        // Change the winner status based on who won the game
+        if (this.getWinner().equals(this.getPlayerName())) {
+            outputFile.printf("%-30s", "\tWINNER STATUS: PLAYER 1 WON");
+        } else {
+            outputFile.printf("%-30s", "\tWINNER STATUS: COMPUTER WON");
+        }
+
+        outputFile.println("\nNumber of Guesses (Player): " + this.getPlayerHits());
+        outputFile.println("Number of Guesses (Computer): " + this.getComputerHits());
+        outputFile.println("Timer End: " + this.view.timePassed() + " seconds");
+
+        outputFile.println("Player Highscore list: ");
+        this.sortPlayerGuessHighScore(playerHighScores);
+        this.printArrayFile(outputFile, playerHighScores);
+
+        outputFile.close();
 
     }
+
+    // TODO ask Mr. Burns if the sorting it good
+
+    /**
+     * @author Marwa
+     *         Sort using the insert sort algorithm
+     * @param array to be sorted
+     */
+    public void sortPlayerGuessHighScore(int[] array) {
+
+        for (int x = 1; x < array.length; x++) {
+            int current = array[x];
+            int position = x;
+
+            while (position > 0 && array[position - 1] > current) {
+                array[position] = array[position - 1];
+                position--;
+            }
+            array[position] = current;
+        }
+    }
+
+    /**
+     * @author Marwa
+     *         A method to print the highscore array to the output file
+     * @param outputFile
+     * @param array
+     */
+    public void printArrayFile(PrintWriter outputFile, int[] array) {
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] != 0) {
+                outputFile.println(array[i]);
+            }
+        }
+    }
+
+    /**
+     * @author Marwa
+     *         A method to end the game
+     */
+    public void end() {
+        this.view.setPanelState(PANEL_STATES.END);  // switch the enum state
+        this.updateView();
+
+    }
+
+
+
+
+    // ------------------------------------------ ACCESSOR METHODS ------------------------------------------
 
     public String getWinner() {
         return this.winner;
@@ -728,10 +889,6 @@ public class BattleshipGame extends Object {
         return this.playerGuessHighScore;
     }
 
-    public double getPlayerTimeHighScore() {
-        return this.playerTimeHighScore;
-    }
-
     public String getPlayerName() {
         return this.playerName;
     }
@@ -768,23 +925,35 @@ public class BattleshipGame extends Object {
         return this.isDeploymentFinished;
     }
 
+    //------------------------------------------ SETTOR METHODS ------------------------------------------
+
+    /**
+     * @author Marwa
+     * A method to set the high score of the player
+     * @param score to add
+     */
+    public void setPlayerGuessHighScore(int score) {
+        this.playerGuessHighScore = score;
+        highScoreIndex++;
+        playerHighScores[highScoreIndex] = score; // add to the array
+
+    }
+
+    public void setPlayerRemainingShips(int num) {
+        this.playerRemainingShips = num;
+    }
+
+    public void setComputerRemainingShips(int num) {
+        this.computerRemainingShips = num;
+    } 
+
+    
     public void setGameStatus(boolean status) {
         this.isGameEnded = status;
     }
 
     public void setHitStatus(boolean status) {
         this.isHit = status;
-    }
-
-    public void setPlayerGuessHighScore(int score) {
-        this.playerGuessHighScore = score;
-        highScoreIndex++;
-        playerHighScores[highScoreIndex] = score;
-
-    }
-
-    public void setPlayerTimeHighScore(double score) {
-        this.playerTimeHighScore = score;
     }
 
     public void setPlayerName(String name) {
@@ -805,68 +974,6 @@ public class BattleshipGame extends Object {
 
     public int getCurrentRound() {
         return this.currentRound;
-    }
-
-    public void outputStats() {
-
-        // TODO use format tools
-
-        PrintWriter outputFile = Prompt.getPrintWriter();
-        outputFile.println("---------------------- GAME ANALYSIS ----------------------");
-
-        outputFile.printf("%-30s", "Current Round: " + this.getCurrentRound());
-
-        if (this.getWinner().equals(this.getPlayerName())) {
-            outputFile.printf("%-30s", "\tWINNER STATUS: PLAYER 1 WON");
-        } else {
-            outputFile.printf("%-30s", "\tWINNER STATUS: COMPUTER WON");
-        }
-
-        outputFile.println("\nNumber of Guesses (Player): " + this.getPlayerHits());
-        outputFile.println("Number of Guesses (Computer): " + this.getComputerHits());
-        outputFile.println("Timer End: " + this.view.timePassed() + " seconds");
-
-        outputFile.println("Player Highscore list: ");
-        this.sortPlayerGuessHighScore(playerHighScores);
-        this.printArrayFile(outputFile, playerHighScores);
-
-        outputFile.close();
-
-    }
-
-    // TODO ask Mr. Burns if the sorting it good
-
-    /**
-     * Sort using the insert sort algorithm
-     * 
-     * @param array to be sorted
-     */
-    public void sortPlayerGuessHighScore(int[] array) {
-
-        for (int x = 1; x < array.length; x++) {
-            int current = array[x];
-            int position = x;
-
-            while (position > 0 && array[position - 1] > current) {
-                array[position] = array[position - 1];
-                position--;
-            }
-            array[position] = current;
-        }
-    }
-
-    public void printArrayFile(PrintWriter outputFile, int[] array) {
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] != 0) {
-                outputFile.println(array[i]);
-            }
-        }
-    }
-
-    public void end() {
-        this.view.setPanelState(PANEL_STATES.END);
-        this.updateView();
-
     }
 
 }
