@@ -6,6 +6,10 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.*;
 
+/**
+ * Prompt Class
+ * A class to get a printwriter 
+ */
 public class Prompt {
 
     private static final Scanner in = new Scanner(System.in); // static scanner - used for input
