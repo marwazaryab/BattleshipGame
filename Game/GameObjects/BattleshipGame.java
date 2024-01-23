@@ -52,7 +52,8 @@ public class BattleshipGame extends Object {
     private String currentTurn; // The current players turn
     private String playerName; // The name of the player
     private String winner = ""; // The winner of the game
-    private int[] gridShipLength = new int[] { 5, 3, 3, 2, 1 }; // an array of the ships length
+    private int[] playerShipLength = new int[] { 5, 3, 3, 2, 1 }; // an array of the ships length
+    private int[] computerShipsLength = new int[] { 5, 3, 3, 2, 1 }; // an array of the ships length
     private boolean isGameEnded; // Boolean value that is true when the game is ended
     private boolean hasPlayerHit; // Boolean value that is true when a player lands a hit
     private boolean hasCompHit; // Boolean value that is true when the computer lands a hit
@@ -214,7 +215,7 @@ public class BattleshipGame extends Object {
             boolean isHorizontal) {
 
         // If the ship number is less than the length of the grid array
-        if (shipNum < gridShipLength.length) {
+        if (shipNum < playerShipLength.length) {
 
             // If the player wants the ship to be horizontal
             if (isHorizontal == true) {
@@ -223,7 +224,7 @@ public class BattleshipGame extends Object {
                 if (this.isValidPlacement(isComputerDeploy, rowClicked, columnClicked, isHorizontal, playerGrid)) {
 
                     // Loop through the array until it hits the row and column clicked
-                    for (int i = 0; i < gridShipLength[shipNum]; i++) {
+                    for (int i = 0; i < playerShipLength[shipNum]; i++) {
                         playerGrid[rowClicked][columnClicked + i].setText("X"); // set the text "X" so the player can
                                                                                 // see where their ship is
                         playerShips[rowClicked][columnClicked + i] = "X"; // Set the internal array to be 'X'
@@ -242,7 +243,7 @@ public class BattleshipGame extends Object {
                 if (this.isValidPlacement(isComputerDeploy, rowClicked, columnClicked, isHorizontal, playerGrid)) {
 
                     // Loop through the items in the array
-                    for (int i = 0; i < gridShipLength[shipNum]; i++) {
+                    for (int i = 0; i < playerShipLength[shipNum]; i++) {
                         playerGrid[rowClicked + i][columnClicked].setText("X"); // Set the text as 'X' so the player can
                                                                                 // see
                         playerShips[rowClicked + i][columnClicked] = "X";
@@ -275,7 +276,9 @@ public class BattleshipGame extends Object {
      */
     public void deployShipsComputer(JButton[][] computerGrid) {
 
-        while (computerShipNum < gridShipLength.length) {
+        this.isComputerDeploy = true;
+
+        while (computerShipNum < computerShipsLength.length) {
 
             this.isCompShipHorizontal = randomDirection.nextBoolean();
             computerShipRow = (int) (Math.random() * (computerGrid.length));
@@ -286,7 +289,7 @@ public class BattleshipGame extends Object {
                 if (this.isValidPlacement(isComputerDeploy, computerShipRow, computerShipCol, isCompShipHorizontal,
                         computerGrid)) {
 
-                    for (int i = 0; i < gridShipLength[computerShipNum]; i++) {
+                    for (int i = 0; i < computerShipsLength[computerShipNum]; i++) {
                         computerGrid[computerShipRow][computerShipCol + i].setText("X");
                         computerShips[computerShipRow][computerShipCol + i] = "X";
                     }
@@ -301,7 +304,7 @@ public class BattleshipGame extends Object {
                 if (this.isValidPlacement(isComputerDeploy, computerShipRow, computerShipCol, isCompShipHorizontal,
                         computerGrid)) {
 
-                    for (int i = 0; i < gridShipLength[computerShipNum]; i++) {
+                    for (int i = 0; i < computerShipsLength[computerShipNum]; i++) {
 
                         computerGrid[computerShipRow + i][computerShipCol].setText("X");
                         computerShips[computerShipRow + i][computerShipCol] = "X";
@@ -334,13 +337,13 @@ public class BattleshipGame extends Object {
     public boolean isValidPlacement(boolean isComp, int row, int col, boolean isHorizontal, JButton[][] grid) {
 
         // If it is the computers turn
-        if (isComp) {
+        if (isComp == true) {
 
             // If the ship is horizontal
             if (isHorizontal == true) {
 
                 // If the col and the length of the ship is greater than the length of the grid
-                if (col + gridShipLength[computerShipNum] > grid.length) {
+                if (col + computerShipsLength[computerShipNum] > grid.length) {
                     return false; // it is not a valid placement
 
                     // If there is already a ship placed
@@ -348,7 +351,7 @@ public class BattleshipGame extends Object {
                     return false; // It is not a valid placement
 
                 } else { // Otherwise if it is intersecting a ship
-                    for (int x = col; x < (col + gridShipLength[computerShipNum]); x++) {
+                    for (int x = col; x < (col + computerShipsLength[computerShipNum]); x++) {
                         if (grid[row][x].getText().equals("X")) {
                             return false; // It is onot a valid placement
                         }
@@ -359,7 +362,7 @@ public class BattleshipGame extends Object {
             } else if (isHorizontal == false) {
 
                 // if the ship goes outside of the grid
-                if (row + gridShipLength[computerShipNum] > grid[0].length) {
+                if (row + computerShipsLength[computerShipNum] > grid[0].length) {
                     return false;
 
                     // If the ship is on another ship
@@ -368,7 +371,7 @@ public class BattleshipGame extends Object {
                 } else {
 
                     // If the ship is interfering with another ship
-                    for (int x = row; x < (row + gridShipLength[computerShipNum]); x++) {
+                    for (int x = row; x < (row + computerShipsLength[computerShipNum]); x++) {
                         if (grid[x][col].getText() == "X") {
                             return false;
                         }
@@ -384,12 +387,13 @@ public class BattleshipGame extends Object {
 
             // Do the same check for the player
             if (isHorizontal == true) {
-                if (col + gridShipLength[shipNum] > grid.length) {
+                System.out.println(shipNum);
+                if (col + playerShipLength[shipNum] > grid.length) {
                     return false;
                 } else if (grid[row][col].getText().equals("X")) {
                     return false;
                 } else {
-                    for (int x = col; x < (col + gridShipLength[shipNum]); x++) {
+                    for (int x = col; x < (col + playerShipLength[shipNum]); x++) {
                         if (grid[row][x].getText().equals("X")) {
                             return false;
                         }
@@ -398,12 +402,12 @@ public class BattleshipGame extends Object {
 
             } else if (isHorizontal == false) {
 
-                if (row + gridShipLength[shipNum] > grid.length) {
+                if (row + playerShipLength[shipNum] > grid.length) {
                     return false;
                 } else if (grid[row][col].getText().equals("X")) {
                     return false;
                 } else {
-                    for (int x = row; x < (row + gridShipLength[shipNum]); x++) {
+                    for (int x = row; x < (row + playerShipLength[shipNum]); x++) {
                         if (grid[x][col].getText() == "X") {
                             return false;
                         }
