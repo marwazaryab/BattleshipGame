@@ -813,28 +813,23 @@ public class BattleshipGame extends Object {
         // TODO use format tools
 
         PrintWriter outputFile = Prompt.getPrintWriter();
-        outputFile.println("---------------------------- GAME ANALYSIS ----------------------------");
+        outputFile.println("---------------------- GAME ANALYSIS ----------------------");
 
-        outputFile.println("Current Round: " + this.getCurrentRound());
+        outputFile.printf("%-30s", "Current Round: " + this.getCurrentRound());
 
         if (this.getWinner().equals(this.getPlayerName())) {
-            outputFile.println("WINNER STATUS: PLAYER 1 WON");
+            outputFile.printf("%-30s", "\tWINNER STATUS: PLAYER 1 WON");
         } else {
-            outputFile.println("WINNER STATUS: COMPUTER WON");
+            outputFile.printf("%-30s","\tWINNER STATUS: COMPUTER WON");
         }
 
-        outputFile.println("Number of Guesses (Player): " + this.getPlayerHits());
+        outputFile.println("\nNumber of Guesses (Player): " + this.getPlayerHits());
         outputFile.println("Number of Guesses (Computer): " + this.getComputerHits());
-        outputFile.println("Timer End: " + this.view.timePassed());
+        outputFile.println("Timer End: " + this.view.timePassed()+" seconds");
 
-
-        outputFile.println("Player Highscore: " + this.playerGuessHighScore);
+        outputFile.println("Player Highscore list: " + this.playerGuessHighScore);
         this.sortPlayerGuessHighScore(playerHighScores);
         this.printArrayFile(outputFile, playerHighScores);
-
-        
-        outputFile.println("Number of guesses Computer: " + this.getComputerHits());
-        this.sortPlayerGuessHighScore(this.playerHighScores);
 
         outputFile.close();
 
@@ -859,9 +854,9 @@ public class BattleshipGame extends Object {
         }
     }
 
-    public void printArrayFile(PrintWriter outputFile, int[]array){
-        for(int i = 0; i < array.length; i++){
-            if(array[i] != 0){
+    public void printArrayFile(PrintWriter outputFile, int[] array) {
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] != 0) {
                 outputFile.println(array[i]);
             }
         }

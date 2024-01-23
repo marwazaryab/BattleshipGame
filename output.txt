@@ -1,0 +1,6 @@
+---------------------- GAME ANALYSIS ----------------------
+Current Round: 1              	WINNER STATUS: COMPUTER WON  
+Number of Guesses (Player): 0
+Number of Guesses (Computer): 0
+Timer End: 1 seconds
+Player Highscore list: 0
