@@ -814,7 +814,6 @@ public class BattleshipGame extends Object {
 
         PrintWriter outputFile = Prompt.getPrintWriter();
         outputFile.println("---------------------------- GAME ANALYSIS ----------------------------");
-        outputFile.println("WINNER STATUS:");
 
         outputFile.println("Current Round: " + this.getCurrentRound());
 
@@ -836,18 +835,6 @@ public class BattleshipGame extends Object {
         
         outputFile.println("Number of guesses Computer: " + this.getComputerHits());
         this.sortPlayerGuessHighScore(this.playerHighScores);
-
-        for (int i = 0; i < playerHighScores.length; i++) {
-            outputFile.println(playerHighScores[i]);
-        }
-
-        // winner or not
-        // number of guesses
-        // highscore
-        // ships sunk
-        // time
-
-        // current rounds
 
         outputFile.close();
 
@@ -874,7 +861,9 @@ public class BattleshipGame extends Object {
 
     public void printArrayFile(PrintWriter outputFile, int[]array){
         for(int i = 0; i < array.length; i++){
-            outputFile.println(array[i]);
+            if(array[i] != 0){
+                outputFile.println(array[i]);
+            }
         }
     }
 
