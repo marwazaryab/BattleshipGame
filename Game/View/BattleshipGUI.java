@@ -20,12 +20,12 @@ public class BattleshipGUI extends JPanel {
     private BattleshipImageComponent battleship = new BattleshipImageComponent("icon.jpg");
     private ButtonController bController;
 
-    //title view instance variables
+    // title view instance variables
     private JPanel titleContentsPanel = new JPanel();
     private JPanel buttonsPanel = new JPanel();
     private JPanel bottomPanel = new JPanel();
     private JPanel namePanel = new JPanel();
-    
+
     private JButton statsButton = new JButton("Stats");
     private JPanel endgamePanel = new JPanel();
     private JPanel endGameButtonsPanel = new JPanel();
@@ -35,9 +35,9 @@ public class BattleshipGUI extends JPanel {
     private JLabel creditsLabel = new JLabel("- MARWA & MOHIB");
     private JLabel thankYouLabel = new JLabel("THANK YOU FOR PLAYING!!! <3");
 
+    private JButton endGame = new JButton("End Game");
 
-
-    //game view instance variables
+    // game view instance variables
     private JPanel gamePanel = new JPanel();
     private JPanel userPanel = new JPanel();
     private JPanel outputPanel = new JPanel();
@@ -60,8 +60,8 @@ public class BattleshipGUI extends JPanel {
     private JPanel playerGridPanel = new JPanel();
     private JPanel computerGridPanel = new JPanel();
     private JPanel gapPanel = new JPanel();
-    
-    //buttons
+
+    // buttons
     private JButton exit = new JButton("Exit");
     private JButton easy = new JButton("Easy");
     private JButton medium = new JButton("Medium");
@@ -69,11 +69,11 @@ public class BattleshipGUI extends JPanel {
     private JButton restart = new JButton("Restart");
     private JButton emptyButton = new JButton();
 
-    //textfields
+    // textfields
     private JTextField nameField = new JTextField();
     private JTextField alignment = new JTextField(10);
 
-    //labels
+    // labels
     private JLabel userPrompt = new JLabel("Welcome Player 1! Please enter your name: ");
     private JLabel name = new JLabel();
     private JLabel computerName = new JLabel("Computer");
@@ -93,39 +93,38 @@ public class BattleshipGUI extends JPanel {
     private JLabel missLabel = new JLabel("! - Miss");
     private JLabel hitLabel = new JLabel("O - Hit");
 
-    //grids
+    // grids
     private JButton[][] playerGrid;
     private JButton[][] computerGrid;
 
-    //states
+    // states
     private PANEL_STATES currentState;
 
-
-    //ints
+    // ints
     private int gridSize;
-    
-    //timer variables
+
+    // timer variables
     private Timer time;
     private long startTime;
     private int timeElaspedSeconds;
 
-    //parent frame
+    // parent frame
     private JFrame parentFrame;
 
-    //image icon
+    // image icon
     private ImageIcon icon = new ImageIcon("title.jpg");
 
-    //colors
+    // colors
     private Color navyBlue = new Color(5, 1, 23);
     private Color gray = new Color(115, 147, 179);
 
-    //booleans
+    // booleans
     public boolean isRestart = false;
 
-    //fonts
+    // fonts
     Font f = new Font("Century Gothic", Font.BOLD, 14);
 
-    //enums
+    // enums
     public enum PANEL_STATES {
         TITLE,
         GAME,
@@ -160,7 +159,6 @@ public class BattleshipGUI extends JPanel {
 
     public void titleView() {
 
-     
         title.setIcon(icon);
 
         bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
@@ -208,23 +206,21 @@ public class BattleshipGUI extends JPanel {
 
     }
 
-
-    public void endGameView(){
+    public void endGameView() {
 
         this.setPanelState(PANEL_STATES.END);
 
         endgamePanel.setLayout(new BorderLayout());
         endGameButtonsPanel.setLayout(new BoxLayout(endGameButtonsPanel, BoxLayout.X_AXIS));
-        labelsPanel.setLayout(new BoxLayout(endGameButtonsPanel, BoxLayout.Y_AXIS));
+        // labelsPanel.setLayout(new BoxLayout(endGameButtonsPanel, BoxLayout.Y_AXIS));
 
         endGameButtonsPanel.add(restart);
         endGameButtonsPanel.add(statsButton);
         endGameButtonsPanel.add(exit);
 
-
-        if(this.model.getWinner().equals(this.model.getPlayerName())){
+        if (this.model.getWinner().equals(this.model.getPlayerName())) {
             winnerLabel.setText("PLAYER 1 WINS");
-        } else{
+        } else {
             winnerLabel.setText("COMPUTER WINS");
 
         }
@@ -236,7 +232,9 @@ public class BattleshipGUI extends JPanel {
         endgamePanel.add(labelsPanel, BorderLayout.CENTER);
         endgamePanel.add(endGameButtonsPanel, BorderLayout.SOUTH);
 
+        endgamePanel.setPreferredSize(new Dimension(200,200));
         this.add(endgamePanel);
+
 
     }
 
@@ -292,8 +290,7 @@ public class BattleshipGUI extends JPanel {
         // exit.setForeground(Color.white);
         // exit.setBorder(BorderFactory.createLineBorder(Color.black));
         // exit.setPreferredSize(new Dimension(50, 40));
-        // exit.setFont(f); 
- 
+        // exit.setFont(f);
 
         emptyButton.setPreferredSize(new Dimension(30, 30));
         emptyButton.setForeground(Color.white);
@@ -353,6 +350,12 @@ public class BattleshipGUI extends JPanel {
         // timerPanel.add(alignmentPanel);
         timerPanel.add(timer);
         timerPanel.add(restart);
+        timerPanel.add(endGame);
+
+        // if(this.model.getGameStatus()){
+        // timerPanel
+        // }
+
         timerPanel.add(missLabel);
         timerPanel.add(hitLabel);
 
@@ -364,7 +367,7 @@ public class BattleshipGUI extends JPanel {
         outputPanel.add(feedbackPanel);
         outputPanel.add(timerPanel);
         outputPanel.setBackground(Color.black);
-         
+
         // make player grid
         System.out.println(this.getGridSize());
         for (int x = 0; x < this.getGridSize(); x++) {
@@ -458,7 +461,6 @@ public class BattleshipGUI extends JPanel {
             numButton.setBorder(BorderFactory.createLineBorder(Color.black));
             topNumberPanel2.add(numButton);
         }
-
 
         // player panel visuals
         playerPanel.setPreferredSize(new Dimension(this.getGridSize() * 30, 50));
@@ -590,13 +592,17 @@ public class BattleshipGUI extends JPanel {
                     this.numCompGuesses
                             .setText("Computer Guesses: ".concat(Integer.toString(this.model.getNumCompGuesses())));
                     // this.playerShipsSunk
-                    //         .setText("Ships Sunk: ".concat(Integer.toString(this.model.getPlayerShipsSunk())));
+                    // .setText("Ships Sunk:
+                    // ".concat(Integer.toString(this.model.getPlayerShipsSunk())));
                     // this.computerShipsSunk
-                    //         .setText("Ships Sunk: ".concat(Integer.toString(this.model.getComputerShipsSunk())));
+                    // .setText("Ships Sunk:
+                    // ".concat(Integer.toString(this.model.getComputerShipsSunk())));
                     this.playerShipsRemaining
-                            .setText("Player Ships Left: ".concat(Integer.toString(this.model.getPlayerRemainingShips())));
+                            .setText("Player Ships Left: "
+                                    .concat(Integer.toString(this.model.getPlayerRemainingShips())));
                     this.computerShipsRemaining
-                            .setText("Computer Ships Left: ".concat(Integer.toString(this.model.getComputerRemainingShips())));
+                            .setText("Computer Ships Left: "
+                                    .concat(Integer.toString(this.model.getComputerRemainingShips())));
 
                     if (this.model.getGameStatus() == false) {
 
@@ -609,12 +615,13 @@ public class BattleshipGUI extends JPanel {
                                             + this.model.getPlayerName() + " guessed ("
                                             + this.model.getPlayerRowGuessed() + ", " + this.model.getPlayerColGuessed()
                                             + ") and hit a ship! Click the grid for computer's turn!");
-                                            if (this.model.getShipSunk() == true) {
-                                                this.validateOutput.setText(this.model.getPlayerName() + "'s turn: "
-                                                    + this.model.getPlayerName() + " guessed ("
-                                                    + this.model.getPlayerRowGuessed() + ", " + this.model.getPlayerColGuessed()
-                                                    + ") and sunk a ship! Click the grid for computer's turn!");
-                                            }
+                                    if (this.model.getShipSunk() == true) {
+                                        this.validateOutput.setText(this.model.getPlayerName() + "'s turn: "
+                                                + this.model.getPlayerName() + " guessed ("
+                                                + this.model.getPlayerRowGuessed() + ", "
+                                                + this.model.getPlayerColGuessed()
+                                                + ") and sunk a ship! Click the grid for computer's turn!");
+                                    }
                                     this.computerGrid[this.model.getPlayerRowGuessed()][this.model
                                             .getPlayerColGuessed()].setText("O");
                                 } else {
@@ -635,11 +642,11 @@ public class BattleshipGUI extends JPanel {
                                 this.validateOutput.setText("Computer's turn: the computer guessed ("
                                         + this.model.getCompRowGuessed() + ", " + this.model.getCompColGuessed()
                                         + ") and hit a ship! Please do your turn!");
-                                        if (this.model.getShipSunk() == true) {
-                                            this.validateOutput.setText("Computer's turn: the computer guessed ("
-                                                + this.model.getCompRowGuessed() + ", " + this.model.getCompColGuessed()
-                                                + ") and sunk a ship! Please do your turn!");
-                                        }
+                                if (this.model.getShipSunk() == true) {
+                                    this.validateOutput.setText("Computer's turn: the computer guessed ("
+                                            + this.model.getCompRowGuessed() + ", " + this.model.getCompColGuessed()
+                                            + ") and sunk a ship! Please do your turn!");
+                                }
                                 this.playerGrid[this.model.getCompRowGuessed()][this.model
                                         .getCompColGuessed()].setText("O");
                             } else {
@@ -660,9 +667,16 @@ public class BattleshipGUI extends JPanel {
                 break;
 
             case END:
-                endGameView();
+                this.gamePanel.setVisible(false);
+                this.titleContentsPanel.setVisible(false);
+                this.endgamePanel.setVisible(true);
+                this.parentFrame = (JFrame) this.getTopLevelAncestor();
+                this.parentFrame.pack();
+                revalidate();
+                repaint();
+
+                this.endGameView();
                 break;
-            
 
             default:
                 break;
@@ -694,14 +708,16 @@ public class BattleshipGUI extends JPanel {
 
     public void registerButtonController() {
 
-        ButtonController buttonController = new ButtonController(this.easy, this.medium, this.hard, this.exit, this.model,
-                this.nameField, this.restart);
+        ButtonController buttonController = new ButtonController(this.easy, this.medium, this.hard, this.exit,
+                this.model,
+                this.nameField, this.restart, this.endGame);
 
         exit.addActionListener(buttonController);
         easy.addActionListener(buttonController);
         medium.addActionListener(buttonController);
         hard.addActionListener(buttonController);
         restart.addActionListener(buttonController);
+        endGame.addActionListener(buttonController);
         statsButton.addActionListener(buttonController);
     }
 

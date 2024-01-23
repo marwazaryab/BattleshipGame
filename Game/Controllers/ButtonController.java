@@ -19,7 +19,7 @@ public class ButtonController implements ActionListener {
     private JTextField field;
 
 
-    public ButtonController (JButton easyButton, JButton mediumButton, JButton hardButton, JButton exit, BattleshipGame data, JTextField f, JButton titleScreen) {
+    public ButtonController (JButton easyButton, JButton mediumButton, JButton hardButton, JButton exit, BattleshipGame data, JTextField f, JButton end, JButton titleScreen) {
         this.easy = easyButton;
         this.medium = mediumButton;
         this.hard = hardButton;

@@ -51,7 +51,7 @@ public class BattleshipGame extends Object {
     private String[][] computerShips;
     private String currentTurn;
     private String playerName;
-    private String winner;
+    private String winner = "";
     private int[] playerShipLength = new int[] { 5, 3, 3, 2, 1 };
     private int[] computerShipLength = new int[] { 5, 3, 3, 2, 1 };
     private boolean isGameEnded;
@@ -653,18 +653,6 @@ public class BattleshipGame extends Object {
 
     }
 
-    public void endGame() {
-
-    }
-
-    public void newGame() {
-
-    }
-
-    public void printResults() {
-
-    }
-
     public String getWinner() {
         return this.winner;
     }
@@ -875,6 +863,12 @@ public class BattleshipGame extends Object {
             }
             array[position] = current;
         }
+    }
+
+    public void end() {
+        this.view.setPanelState(PANEL_STATES.END);
+        this.updateView();
+
     }
 
 }
