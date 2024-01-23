@@ -3,6 +3,12 @@ package Game.Images;
 import javax.swing.*;
 import java.awt.*;
 
+
+/**
+ * @author
+ * BattleshipImageComponent
+ * A class to create an image component
+ */
 public class BattleshipImageComponent extends JComponent {
 
     ImageIcon icon; // Current Icon
@@ -25,25 +31,46 @@ public class BattleshipImageComponent extends JComponent {
         this.setPreferredSize(new Dimension(this.getImageWidth(),this.getImageHeight()));
       }
 
+    /**
+     * Get the width of the image
+     * @return width
+     */
     public int getImageWidth() {
         return this.width;
     }
 
+    /**
+     * Get the height of the image
+     * @return height
+     */
     public int getImageHeight() {
         return this.height;
     }
 
+    /**
+     * Set the width of the image
+     * @param w width
+     */
     public void setImageWidth(int w) {
         this.width = w;
     }
 
+    /**
+     * Set the height of the component
+     * @param h height
+     */
     public void setImageHeight(int h) {
         this.height = h;
     }
 
+    /**
+     * Override the paint component to display the image
+     * @param g graphics object
+     */
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Image pic = icon.getImage();
-        g.drawImage(pic, 0, 0, null);
+        g.drawImage(pic, 0, 0, null); // Draw picture
     }
 }

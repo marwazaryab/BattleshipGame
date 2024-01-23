@@ -8,7 +8,10 @@ import javax.swing.JTextField;
 
 import Game.GameObjects.BattleshipGame;
 
-
+/**
+ * Button Controller Class
+ * @author Marwa Zaryab and Abdul Mustafa Mohib
+ */
 public class ButtonController implements ActionListener {
     
     private JButton exit;
