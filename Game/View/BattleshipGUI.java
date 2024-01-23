@@ -95,6 +95,7 @@ public class BattleshipGUI extends JPanel {
     private JLabel timer = new JLabel();
     private JLabel missLabel = new JLabel("! - Miss");
     private JLabel hitLabel = new JLabel("O - Hit");
+    private JLabel playerHighScore = new JLabel("Player Guess High Score: ");
 
     // grids
     private JButton[][] playerGrid;
@@ -232,7 +233,7 @@ public class BattleshipGUI extends JPanel {
         creditsLabel.setForeground(navyBlue);
         thankYouLabel.setForeground(navyBlue);
 
-        winnerLabel.setForeground(navyBlue);
+        winnerLabel.setForeground(Color.black);
 
         endExit.setFont(new Font("Century Gothic", Font.BOLD, 43));
         statsButton.setFont(new Font("Century Gothic", Font.BOLD, 43));
@@ -304,6 +305,9 @@ public class BattleshipGUI extends JPanel {
         computerShipsRemaining.setFont(f);
         missLabel.setFont(f);
         hitLabel.setFont(f);
+        playerHighScore.setFont(f);
+        restart.setFont(f);
+        endGame.setFont(f);
 
         name.setFont(new Font("Century Gothic", Font.BOLD, 20));
         computerName.setFont(new Font("Century Gothic", Font.BOLD, 20));
@@ -327,6 +331,7 @@ public class BattleshipGUI extends JPanel {
         computerShipsRemaining.setForeground(Color.white);
         missLabel.setForeground(Color.white);
         hitLabel.setForeground(Color.white);
+        playerHighScore.setForeground(Color.white);
 
         // exit.setBackground(Color.blue);
         // exit.setForeground(Color.white);
@@ -390,10 +395,10 @@ public class BattleshipGUI extends JPanel {
         // timer panel visuals
         timerPanel.setBackground(Color.black);
         // timerPanel.add(alignmentPanel);
+        timerPanel.add(playerHighScore);
         timerPanel.add(timer);
         timerPanel.add(restart);
         timerPanel.add(endGame);
-
         timerPanel.add(missLabel);
         timerPanel.add(hitLabel);
 
@@ -407,7 +412,6 @@ public class BattleshipGUI extends JPanel {
         outputPanel.setBackground(Color.black);
 
         // make player grid
-        System.out.println(this.getGridSize());
         for (int x = 0; x < this.getGridSize(); x++) {
             for (int y = 0; y < this.getGridSize(); y++) {
                 playerGrid[x][y] = new JButton();
@@ -588,8 +592,6 @@ public class BattleshipGUI extends JPanel {
                     this.computerGrid = new JButton[this.model.getComputerGuesses().length][this.model
                             .getComputerGuesses().length];
 
-                    System.out.println(this.model.getComputerGuesses().length);
-
                     this.gameView();
                     this.registerShipController();
 
@@ -624,21 +626,19 @@ public class BattleshipGUI extends JPanel {
                     this.alignmentPanel.setVisible(false);
                     this.parentFrame.pack();
                     this.numPlayerGuesses
-                            .setText("Player Guesses: ".concat(Integer.toString(this.model.getNumPlayerGuesses())));
+                            .setText("Player Guesses: "
+                                    .concat(Integer.toString(this.model.getNumPlayerGuesses())));
                     this.numCompGuesses
-                            .setText("Computer Guesses: ".concat(Integer.toString(this.model.getNumCompGuesses())));
-                    // this.playerShipsSunk
-                    // .setText("Ships Sunk:
-                    // ".concat(Integer.toString(this.model.getPlayerShipsSunk())));
-                    // this.computerShipsSunk
-                    // .setText("Ships Sunk:
-                    // ".concat(Integer.toString(this.model.getComputerShipsSunk())));
+                            .setText("Computer Guesses: ".
+                                    concat(Integer.toString(this.model.getNumCompGuesses())));
                     this.playerShipsRemaining
                             .setText("Player Ships Left: "
                                     .concat(Integer.toString(this.model.getPlayerRemainingShips())));
                     this.computerShipsRemaining
                             .setText("Computer Ships Left: "
                                     .concat(Integer.toString(this.model.getComputerRemainingShips())));
+                    this.playerHighScore.setText("Player Guess High Score: "
+                                .concat(Integer.toString(this.model.getPlayerGuessHighScore())));
 
                     if (this.model.getGameStatus() == false) {
 

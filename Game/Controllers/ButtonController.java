@@ -74,9 +74,11 @@ public class ButtonController implements ActionListener {
 
             case "Stats":
                 this.model.outputStats();
+                break;
 
             case "End Game":
                 this.model.end();
+                break;
                 
             default: 
                 break;

@@ -404,12 +404,6 @@ public class BattleshipGame extends Object {
                 break;
         }
 
-        for (int x = 0; x < playerGrid.length; x++) {
-            for (int y = 0; y < playerGrid[x].length; y++) {
-                System.out.print(playerShips[x][y]);
-            }
-            System.out.println();
-        }
     }
 
     public void updateComputerShips(JButton[][] computerGrid, int computerShipNumber) {
@@ -471,12 +465,6 @@ public class BattleshipGame extends Object {
                 break;
         }
 
-        for (int x = 0; x < computerGrid.length; x++) {
-            for (int y = 0; y < computerGrid[x].length; y++) {
-                System.out.print(computerShips[x][y]);
-            }
-            System.out.println();
-        }
 
     }
 
@@ -502,8 +490,6 @@ public class BattleshipGame extends Object {
             if (isSunk == true) {
                 computerRemainingShips--;
             }
-            System.out.println(computerShipsSunk);
-            System.out.println(isSunk);
 
         }
 
@@ -527,8 +513,6 @@ public class BattleshipGame extends Object {
             if (isSunk == true) {
                 playerRemainingShips--;
             }
-            System.out.println(computerShipsSunk);
-            System.out.println(isSunk);
         }
 
     }
@@ -580,7 +564,6 @@ public class BattleshipGame extends Object {
                 this.computerShips[rowClicked][colClicked] = "O";
                 this.hasShipSunk(shipHit);
             }
-            System.out.println("Hit a computer ship");
 
         } else {
             this.isHit = false;
@@ -588,9 +571,7 @@ public class BattleshipGame extends Object {
 
         for (int x = 0; x < computerShips.length; x++) {
             for (int y = 0; y < computerShips[x].length; y++) {
-                System.out.print(computerShips[x][y]);
             }
-            System.out.println();
         }
 
         this.playerGuesses[rowClicked][colClicked] = "!";
