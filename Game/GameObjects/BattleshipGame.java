@@ -55,7 +55,7 @@ public class BattleshipGame extends Object {
     private int[] gridShipLength = new int[] { 5, 3, 3, 2, 1 }; // an array of the ships length
     private boolean isGameEnded; // Boolean value that is true when the game is ended
     private boolean hasPlayerHit; // Boolean value that is true when a player lands a hit
-    private boolean hasCompHit; //Boolean value that is true when the computer lands a hit
+    private boolean hasCompHit; // Boolean value that is true when the computer lands a hit
     private boolean isCompShipHorizontal; // Boolean value that is true when the computers ship is horizontal
     private boolean isComputerDeploy; // Boolean value that is true when the computers ships ar all deployed
     private boolean isDeploymentFinished; // Boolean value that is true when the deployment of both ships are done
@@ -588,8 +588,6 @@ public class BattleshipGame extends Object {
 
     }
 
-
-
     // TODO if we have time add a time highscore
 
     /**
@@ -622,73 +620,90 @@ public class BattleshipGame extends Object {
 
     }
 
+    /**
+     * Marwa and Mohib
+     * 
+     * @param rowClicked the row that the button was clicked
+     * @param colClicked the column that the button was clicked
+     */
     public void playerShipTurn(int rowClicked, int colClicked) {
 
+        // If the button clicked ins't an empty space or a missed ship
         if (computerShips[rowClicked][colClicked] != "O") {
             if (this.playerGuesses[rowClicked][colClicked] != "!") {
-                
-                this.hasPlayerHit = true;
-                String shipHit = computerShips[rowClicked][colClicked];
+
+                this.hasPlayerHit = true; // Then the player hit a ship
+                String shipHit = computerShips[rowClicked][colClicked]; // create a string to represent the ship to pass
+                                                                        // into the method below
                 this.playerHits++;
                 this.computerShips[rowClicked][colClicked] = "O";
-                this.hasShipSunk(shipHit);
+                this.hasShipSunk(shipHit); // Check to see if the ship has been sunk
             }
 
         } else {
-            this.hasPlayerHit = false;
+            this.hasPlayerHit = false; // Otherwise the player did not hit any ship
         }
 
-        this.playerGuesses[rowClicked][colClicked] = "!";
+        this.playerGuesses[rowClicked][colClicked] = "!"; // Update the internal player guesses array
         this.playerRowGuessed = rowClicked;
         this.playerColGuessed = colClicked;
-        this.numPlayerGuesses++;
-        checkGameStatus();
-        this.updateView();
+        this.numPlayerGuesses++; // Increase the number of guesses the player did
+        checkGameStatus(); // Check to see if the game has been updated
+        this.updateView(); // Update the view
+        // Reset values
         this.playerRowGuessed = 0;
         this.playerColGuessed = 0;
-        this.currentTurn = "Computer";
+        this.currentTurn = "Computer"; // Change the turn of the player
     }
 
     /**
      * @author Marwa
-     *         A method that
+     *         A method that allows the computer to make guesses
      */
     public void computerShipTurn() {
 
-        Random random = new Random();
-        boolean guessHorizontal = random.nextBoolean();
+        this.compRowGuessed = (int) (Math.random() * (playerShips.length));
+        this.compColGuessed = (int) (Math.random() * (playerShips.length));
 
-        // If the ship hasn't been hit yet
-        if (!this.getCompHitStatus()) {
-            // Make a random guess again
+        Random random = new Random();
+        boolean guessHorizontal = true;
+
+        if (!this.getShipSunk()) {
+            guessHorizontal = this.computerGuessHorizontal(compRowGuessed, compColGuessed);
+        }
+
+        // If the ship hasn't been hit yet and the last guess did not hit sink a shit
+        if (!this.getCompHitStatus() || this.getShipSunk()) {
+            // Make a random guess
             this.compRowGuessed = (int) (Math.random() * (playerShips.length));
             this.compColGuessed = (int) (Math.random() * (playerShips.length));
 
         } else { // Otherwise if the ship has been hit before
 
             if (guessHorizontal == true) {
-                this.compColGuessed++;
-            } else {
-                this.compRowGuessed++;
+                this.compColGuessed++; // update the column but keep the row the same
+            } else { // otherwise if guessing vertical
+                this.compRowGuessed++; // increment the row but keep the column the same
             }
 
         }
 
+        // If the coordinate guessed is not empty or a missed ship
         if (playerShips[compRowGuessed][compColGuessed] != "O") {
             if (this.computerGuesses[compRowGuessed][compColGuessed] != "!") {
-                
-                this.hasCompHit = true;
-                String shipHit = playerShips[compRowGuessed][compColGuessed];
+
+                this.hasCompHit = true; // Then the computer hit the ship
+                String shipHit = playerShips[compRowGuessed][compColGuessed]; // Create a string of the ship that was
+                                                                              // hit to pass into the method
                 this.computerHits++;
                 this.playerShips[compRowGuessed][compColGuessed] = "O";
-                this.hasShipSunk(shipHit);
-            }
+                this.hasShipSunk(shipHit); // Run this method to check if the ship has been sunken
 
             }
-        else {
-                this.hasCompHit = false;
-            }
-        
+
+        } else {
+            this.hasCompHit = false;
+        }
 
         this.numCompGuesses++;
         this.computerGuesses[compRowGuessed][compColGuessed] = "!";
@@ -698,27 +713,49 @@ public class BattleshipGame extends Object {
     }
 
     /**
+     * @author Marwa
+     *         A method to check to see if the computers next turn should be
+     *         horizontal or not
+     * @param row the row that was guessed
+     * @param col the column that was guessed
+     * @return a boolean value determining whether or not the next move should be
+     *         horizontal
+     */
+    public boolean computerGuessHorizontal(int row, int col) {
+        if (playerShips[row + 1][col].equals("X")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Mohib
      * A method to check the status of the game
      */
     public void checkGameStatus() {
 
+        // If the theres no ships remaining for the computer
         if (computerRemainingShips == 0) {
-            this.winner = this.getPlayerName();
+            this.winner = this.getPlayerName(); // The winner is the player
             this.isGameEnded = true;
 
+            // if the player hits a new highscore
             if (this.getNumPlayerGuesses() > this.getPlayerGuessHighScore()) {
-                this.setPlayerGuessHighScore(this.getNumPlayerGuesses());
+                this.setPlayerGuessHighScore(this.getNumPlayerGuesses()); // Set the highscore of the player
             }
 
+            // If the player has no ships left
         } else if (playerRemainingShips == 0) {
-            this.winner = "Computer";
+            this.winner = "Computer"; // the winner is the computer
             this.isGameEnded = true;
         }
     }
 
     /**
-     * 
+     * Marwa
      * A method to disable a grid
+     * 
      * @param grid to the disabled
      */
     public void disableGrid(JButton[][] grid) {
@@ -802,15 +839,13 @@ public class BattleshipGame extends Object {
      *         A method to end the game
      */
     public void end() {
-        this.view.setPanelState(PANEL_STATES.END);  // switch the enum state
+        this.view.setPanelState(PANEL_STATES.END); // switch the enum state
         this.updateView();
 
     }
 
-
-
-
-    // ------------------------------------------ ACCESSOR METHODS ------------------------------------------
+    // ------------------------------------------ ACCESSOR METHODS
+    // ------------------------------------------
 
     public String getWinner() {
         return this.winner;
@@ -932,11 +967,12 @@ public class BattleshipGame extends Object {
         return this.getPlayerGuesses().length;
     }
 
-    //------------------------------------------ SETTOR METHODS ------------------------------------------
+    // ------------------------------------------ SETTOR METHODS
+    // ------------------------------------------
 
     /**
      * @author Marwa
-     * A method to set the high score of the player
+     *         A method to set the high score of the player
      * @param score to add
      */
     public void setPlayerGuessHighScore(int score) {
@@ -952,9 +988,8 @@ public class BattleshipGame extends Object {
 
     public void setComputerRemainingShips(int num) {
         this.computerRemainingShips = num;
-    } 
+    }
 
-    
     public void setGameStatus(boolean status) {
         this.isGameEnded = status;
     }
