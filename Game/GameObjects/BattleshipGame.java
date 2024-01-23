@@ -46,6 +46,7 @@ public class BattleshipGame extends Object {
     private boolean isDeploymentFinished;
     private boolean isValidPosition;
     private boolean isNewGame;
+    private boolean isSunk;
     private Random randomDirection;
 
 
@@ -65,6 +66,7 @@ public class BattleshipGame extends Object {
         this.computerShipNum = 0;
         this.numPlayerGuesses = 0;
         this.numCompGuesses = 0;
+        this.isSunk = false;
     }
 
     public void setGUI(BattleshipGUI gui) {
@@ -167,7 +169,9 @@ public class BattleshipGame extends Object {
     
                         for (int i = 0; i < playerShipLength[shipNum]; i++) {
                             playerGrid[rowClicked][columnClicked+i].setText("X");
+                            playerShips[rowClicked][columnClicked+i] = "X";
                         }
+                        this.updatePlayerShips(playerGrid, shipNum);
                         this.isValidPosition = true;
                         shipNum++;
     
@@ -182,11 +186,15 @@ public class BattleshipGame extends Object {
                         for (int i = 0; i < playerShipLength[shipNum]; i++) {
                             
                             playerGrid[rowClicked+i][columnClicked].setText("X");
+                            playerShips[rowClicked+i][columnClicked] = "X";
                         }
+                        this.updatePlayerShips(playerGrid, shipNum);
                         this.isValidPosition = true;
                         shipNum++;
     
-                    } else {
+                    } 
+
+                    else {
                         this.isValidPosition = false;
                     }
     
@@ -196,7 +204,6 @@ public class BattleshipGame extends Object {
         }
 
         else {
-            updatePlayerShips(playerGrid);
             deployShipsComputer(computerGrid);
         }
 
@@ -205,8 +212,6 @@ public class BattleshipGame extends Object {
     public void deployShipsComputer(JButton[][] computerGrid) {
 
         this.isComputerDeploy = true;
-
-        System.out.println(isCompShipHorizontal);
 
         while (computerShipNum < computerShipLength.length) {
 
@@ -220,9 +225,11 @@ public class BattleshipGame extends Object {
                         computerGrid)) {
 
                     for (int i = 0; i < computerShipLength[computerShipNum]; i++) {
-                        // computerGrid[computerShipRow][computerShipCol+i].setText("X");
-                        computerShips[computerShipRow][computerShipCol + i] = "X";
+                        computerGrid[computerShipRow][computerShipCol+i].setText("X");
+                        computerShips[computerShipRow][computerShipCol+i] = "X";
                     }
+
+                    updateComputerShips(computerGrid, computerShipNum);
                     computerShipNum++;
 
                 }
@@ -234,10 +241,12 @@ public class BattleshipGame extends Object {
 
                     for (int i = 0; i < computerShipLength[computerShipNum]; i++) {
 
-                        // computerGrid[computerShipRow+i][computerShipCol].setText("X");
-                        computerShips[computerShipRow + i][computerShipCol] = "X";
+                        computerGrid[computerShipRow+i][computerShipCol].setText("X");
+                        computerShips[computerShipRow+i][computerShipCol] = "X";
 
                     }
+
+                    updateComputerShips(computerGrid, computerShipNum);
                     computerShipNum++;
 
                 }
@@ -245,7 +254,6 @@ public class BattleshipGame extends Object {
             }
         }
 
-        updateComputerShips(computerGrid);
         this.isDeploymentFinished = true;
         this.currentTurn = "Player";
         this.updateView();
@@ -313,38 +321,192 @@ public class BattleshipGame extends Object {
                     }
                 }
             }
-            return true;
+
+             return true;
 
         }
 
     }
 
-    public void updatePlayerShips(JButton[][] playerGrid) {
+    public void updatePlayerShips(JButton[][] playerGrid, int shipNumber) {
+
+        switch (shipNumber) {
+
+            case 0:
+                for (int x = 0; x < playerGrid.length; x++) {
+                    for (int y = 0; y < playerGrid[x].length; y++) {
+                        if (playerShips[x][y] == "X") {
+                            this.playerShips[x][y] = "1";
+                        }
+                    }
+                }
+                break;
+
+            case 1:
+
+                for (int x = 0; x < playerGrid.length; x++) {
+                    for (int y = 0; y < playerGrid[x].length; y++) {
+                        if (playerShips[x][y] == "X") {
+                            this.playerShips[x][y] = "2";
+                        }
+                    }
+                }
+                break;
+
+            case 2: 
+
+                for (int x = 0; x < playerGrid.length; x++) {
+                    for (int y = 0; y < playerGrid[x].length; y++) {
+                        if (playerShips[x][y] == "X") {
+                            this.playerShips[x][y] = "3";
+                        }
+                    }
+                }
+                break;
+
+            case 3:
+
+                for (int x = 0; x < playerGrid.length; x++) {
+                    for (int y = 0; y < playerGrid[x].length; y++) {
+                        if (playerShips[x][y] == "X") {
+                            this.playerShips[x][y] = "4";
+                        }
+                    }
+                }
+                break;
+
+            case 4:
+
+                for (int x = 0; x < playerGrid.length; x++) {
+                    for (int y = 0; y < playerGrid[x].length; y++) {
+                        if (playerShips[x][y] == "X") {
+                            this.playerShips[x][y] = "5";
+                        }
+                    }
+                }
+                break;
+        }
 
         for (int x = 0; x < playerGrid.length; x++) {
             for (int y = 0; y < playerGrid[x].length; y++) {
-                if (playerGrid[x][y].getText() == "X") {
-                    this.playerShips[x][y] = "X";
-                }
+                System.out.print(playerShips[x][y]);
             }
-        }
-    }
+            System.out.println();
+        }   
+     }
 
-    public void updateComputerShips(JButton[][] computerGrid) {
+    public void updateComputerShips(JButton[][] computerGrid, int computerShipNumber) {
+
+        switch (computerShipNumber) {
+
+            case 0:
+                for (int x = 0; x < computerGrid.length; x++) {
+                    for (int y = 0; y < computerGrid[x].length; y++) {
+                        if (computerShips[x][y] == "X") {
+                            this.computerShips[x][y] = "1";
+                        }
+                    }
+                }
+                break;
+
+            case 1:
+
+                for (int x = 0; x < computerGrid.length; x++) {
+                    for (int y = 0; y < computerGrid[x].length; y++) {
+                        if (computerShips[x][y] == "X") {
+                            this.computerShips[x][y] = "2";
+                        }
+                    }
+                }
+                break;
+
+            case 2: 
+
+                for (int x = 0; x < computerGrid.length; x++) {
+                    for (int y = 0; y < computerGrid[x].length; y++) {
+                        if (computerShips[x][y] == "X") {
+                            this.computerShips[x][y] = "3";
+                        }
+                    }
+                }
+                break;
+
+            case 3:
+
+                for (int x = 0; x < computerGrid.length; x++) {
+                    for (int y = 0; y < computerGrid[x].length; y++) {
+                        if (computerShips[x][y] == "X") {
+                            this.computerShips[x][y] = "4";
+                        }
+                    }
+                }
+                break;
+
+            case 4:
+
+                for (int x = 0; x < computerGrid.length; x++) {
+                    for (int y = 0; y < computerGrid[x].length; y++) {
+                        if (computerShips[x][y] == "X") {
+                            this.computerShips[x][y] = "5";
+                        }
+                    }
+                }
+                break;
+        }
 
         for (int x = 0; x < computerGrid.length; x++) {
             for (int y = 0; y < computerGrid[x].length; y++) {
-                if (computerGrid[x][y].getText() == "X") {
-                    this.computerShips[x][y] = "X";
-                }
+                System.out.print(computerShips[x][y]);
             }
-        }
+            System.out.println();
+        }   
 
     }
 
-    //TODO fill this out
-    public void isShipSunk(){
+    public void hasShipSunk(String shipHit){
       
+        //basically what im doing is making a specific number for each ship and tryna see if theres other matching number ships
+        // its a quick and efficient way to get ships sunk and it works sooo.. we good!
+
+        if (currentTurn == "Player") {
+
+            for (int x = 0; x < computerShips.length; x++) {
+                for (int y = 0; y < computerShips[x].length; y++) {
+                    if (computerShips[x][y].equals(shipHit)) {
+                        isSunk = false;
+                        break;
+                    }
+                    else {
+                        isSunk = true;
+                    }
+                }
+
+                if (isSunk == false) {
+                    break;
+                }
+            } 
+            System.out.println(isSunk);
+            
+        }
+
+        else {
+
+            for (int x = 0; x < playerShips.length; x++) {
+                for (int y = 0; y < playerShips[x].length; y++) {
+                    if (playerShips[x][y].equals(shipHit)) {
+                        isSunk = false;
+                        break;
+                    }
+                    else {
+                        isSunk = true;
+                    }
+                }
+
+                if (isSunk == false) {
+                    break;
+                }
+            } 
+        }
 
     }
 
@@ -357,6 +519,7 @@ public class BattleshipGame extends Object {
     }
 
     public void restart() {
+
         this.view.isRestart = true;
         this.setPlayerName(null);
         this.setPlayerShipsSunk(0);
@@ -379,6 +542,8 @@ public class BattleshipGame extends Object {
         this.computerShipNum = 0;
         this.numPlayerGuesses = 0;
         this.numCompGuesses = 0;
+        this.playerHits = 0;
+        this.computerHits = 0;
         this.view.setPanelState(PANEL_STATES.TITLE);
 
         this.updateView();
@@ -387,14 +552,27 @@ public class BattleshipGame extends Object {
 
     public void playerShipTurn(int rowClicked, int colClicked) {
 
-        if (computerShips[rowClicked][colClicked] == "X") {
+        if (computerShips[rowClicked][colClicked] != "O") {
             this.isHit = true;
-            this.playerHits++;
-            System.out.println("Hit a computer ship");
+            if (this.playerGuesses[rowClicked][colClicked] != "!") {
 
+                String shipHit = computerShips[rowClicked][colClicked];
+                this.playerHits++;
+                this.computerShips[rowClicked][colClicked] = "O";
+                this.hasShipSunk(shipHit);
+            }
+            System.out.println("Hit a computer ship");
+            
         } else {
             this.isHit = false;
         }
+
+            for (int x = 0; x < computerShips.length; x++) {
+                for (int y = 0; y < computerShips[x].length; y++) {
+                    System.out.print(computerShips[x][y]);
+                }
+                System.out.println();
+            }     
 
         this.playerGuesses[rowClicked][colClicked] = "!";
         this.playerRowGuessed = rowClicked;
@@ -411,9 +589,15 @@ public class BattleshipGame extends Object {
         this.compRowGuessed = (int) (Math.random() * (playerShips.length));
         this.compColGuessed = (int) (Math.random() * (playerShips.length));
 
-        if (playerShips[compRowGuessed][compColGuessed] == "X") {
+        if (playerShips[compRowGuessed][compColGuessed] != "O") {
             this.isHit = true;
-            this.computerHits++;
+            if (this.computerGuesses[compRowGuessed][compColGuessed] != "!") {
+
+                String shipHit = playerShips[compRowGuessed][compColGuessed];
+                this.computerHits++;
+                this.playerShips[compRowGuessed][compColGuessed] = "O";
+                this.hasShipSunk(shipHit);
+            }            
         } else {
             this.isHit = false;
         }
@@ -447,6 +631,10 @@ public class BattleshipGame extends Object {
 
     public void printResults() {
 
+    }
+
+    public boolean getShipSunk () {
+        return this.isSunk;
     }
 
     public int getNumPlayerGuesses() {
