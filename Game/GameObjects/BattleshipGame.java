@@ -1,18 +1,28 @@
-package Game.GameObjects;
+/**
+ * BattleshipGame class
+ * @since 1/23/24
+ * @author Abdul Mustafa Mohib & Marwa Zaryab
+ * A class that contains all data for the Battleship game and updates it accordingly based on game actions 
+ */
 
+//all imports 
+package Game.GameObjects;
 import java.awt.Color;
 import java.awt.Font;
 import java.io.PrintWriter;
 import java.util.*;
-
 import javax.swing.JButton;
 
 import Game.Util.Prompt;
 import Game.View.BattleshipGUI;
 import Game.View.BattleshipGUI.PANEL_STATES;
 
+/** 
+ * BattleshipGame class; contains data (methods and variables) for the Battleship game 
+ */
 public class BattleshipGame extends Object {
 
+    //instance variables
     private BattleshipGUI view;
     private Timer time;
     private int playerShipsSunk;
@@ -39,8 +49,9 @@ public class BattleshipGame extends Object {
     private String[][] computerShips;
     private String currentTurn;
     private String playerName;
-    private int[] playerShipLength = new int[] { 5, 3, 3, 2, 1 };
-    private int[] computerShipLength = new int[] { 5, 3, 3, 2, 1 };
+    private String winner;
+    private int[] playerShipLength = new int[] {5, 3, 3, 2, 1 };
+    private int[] computerShipLength = new int[] {5, 3, 3, 2, 1 };
     private boolean isGameEnded;
     private boolean isHit;
     private boolean isCompShipHorizontal;
@@ -50,9 +61,7 @@ public class BattleshipGame extends Object {
     private boolean isNewGame;
     private boolean isSunk;
     private Random randomDirection;
-    private int currentRound;
-    private int[] playerHighscores;
-    private int highScoreIndex;
+
 
     public BattleshipGame() {
         super();
@@ -72,6 +81,9 @@ public class BattleshipGame extends Object {
         this.numCompGuesses = 0;
         this.isSunk = false;
         this.currentRound = 1;
+        this.computerRemainingShips = 5;
+        this.playerRemainingShips = 5;
+
     }
 
     public void setGUI(BattleshipGUI gui) {
@@ -464,11 +476,8 @@ public class BattleshipGame extends Object {
 
     }
 
-    public void hasShipSunk(String shipHit) {
-
-        // basically what im doing is making a specific number for each ship and tryna
-        // see if theres other matching number ships
-        // its a quick and efficient way to get ships sunk and it works sooo.. we good!
+    public void hasShipSunk(String shipHit){
+      
 
         if (currentTurn == "Player") {
 
@@ -481,11 +490,16 @@ public class BattleshipGame extends Object {
                         isSunk = true;
                     }
                 }
-
+                
                 if (isSunk == false) {
                     break;
                 }
+            } 
+
+            if (isSunk == true) {
+                computerRemainingShips--;
             }
+            System.out.println(computerShipsSunk);
             System.out.println(isSunk);
 
         }
@@ -505,7 +519,13 @@ public class BattleshipGame extends Object {
                 if (isSunk == false) {
                     break;
                 }
+            } 
+
+            if (isSunk == true) {
+                playerRemainingShips--;
             }
+            System.out.println(computerShipsSunk);
+            System.out.println(isSunk);
         }
 
     }
@@ -524,12 +544,6 @@ public class BattleshipGame extends Object {
 
         this.view.isRestart = true;
         this.setPlayerName(null);
-        this.setPlayerShipsSunk(0);
-        this.setComputerShipsSunk(0);
-        this.setPlayerRemainingShips(0);
-        this.setComputerRemainingShips(0);
-        this.setPlayerGuessHighScore(0);
-        this.setPlayerTimeHighScore(0);
         this.shipNum = 0;
         this.playerShipsSunk = 0;
         this.computerShipsSunk = 0;
@@ -580,6 +594,7 @@ public class BattleshipGame extends Object {
         this.playerRowGuessed = rowClicked;
         this.playerColGuessed = colClicked;
         this.numPlayerGuesses++;
+        checkGameStatus();
         this.updateView();
         this.playerRowGuessed = 0;
         this.playerColGuessed = 0;
@@ -606,8 +621,21 @@ public class BattleshipGame extends Object {
 
         this.numCompGuesses++;
         this.computerGuesses[compRowGuessed][compColGuessed] = "!";
+        checkGameStatus();
         this.updateView();
         this.currentTurn = "Player";
+    }
+
+    public void checkGameStatus() {
+
+        if (computerRemainingShips == 0) {
+            this.winner = this.getPlayerName();
+            this.isGameEnded = true;
+        }
+        else if (playerRemainingShips == 0) {
+            this.winner = "Computer";
+            this.isGameEnded = true;
+        }
     }
 
     public void disableGrid(JButton[][] grid) {
@@ -623,7 +651,23 @@ public class BattleshipGame extends Object {
 
     }
 
-    public boolean getShipSunk() {
+    public void endGame() {
+
+    }
+
+    public void newGame() {
+
+    }
+
+    public void printResults() {
+
+    }
+
+    public String getWinner() {
+        return this.winner;
+    }
+
+    public boolean getShipSunk () {
         return this.isSunk;
     }
 
