@@ -55,7 +55,8 @@ public class BattleshipGame extends Object {
     private int[] playerShipLength = new int[] { 5, 3, 3, 2, 1 };
     private int[] computerShipLength = new int[] { 5, 3, 3, 2, 1 };
     private boolean isGameEnded;
-    private boolean isHit;
+    private boolean hasPlayerHit;
+    private boolean hasCompHit;
     private boolean isCompShipHorizontal;
     private boolean isComputerDeploy;
     private boolean isDeploymentFinished;
@@ -108,7 +109,6 @@ public class BattleshipGame extends Object {
                 computerGuesses = new String[15][15];
                 playerShips = new String[15][15];
                 computerShips = new String[15][15];
-                this.view.setGridSize(15);
                 this.isNewGame = true;
                 this.updateView();
                 this.isNewGame = false;
@@ -122,7 +122,6 @@ public class BattleshipGame extends Object {
                 computerGuesses = new String[20][20];
                 playerShips = new String[20][20];
                 computerShips = new String[20][20];
-                this.view.setGridSize(20);
                 this.isNewGame = true;
                 this.updateView();
                 this.isNewGame = false;
@@ -136,7 +135,6 @@ public class BattleshipGame extends Object {
                 computerGuesses = new String[25][25];
                 playerShips = new String[25][25];
                 computerShips = new String[25][25];
-                this.view.setGridSize(25);
                 this.isNewGame = true;
                 this.updateView();
                 this.isNewGame = false;
@@ -555,9 +553,9 @@ public class BattleshipGame extends Object {
     public void playerShipTurn(int rowClicked, int colClicked) {
 
         if (computerShips[rowClicked][colClicked] != "O") {
-            this.isHit = true;
             if (this.playerGuesses[rowClicked][colClicked] != "!") {
-
+                
+                this.hasPlayerHit = true;
                 String shipHit = computerShips[rowClicked][colClicked];
                 this.playerHits++;
                 this.computerShips[rowClicked][colClicked] = "O";
@@ -565,12 +563,7 @@ public class BattleshipGame extends Object {
             }
 
         } else {
-            this.isHit = false;
-        }
-
-        for (int x = 0; x < computerShips.length; x++) {
-            for (int y = 0; y < computerShips[x].length; y++) {
-            }
+            this.hasPlayerHit = false;
         }
 
         this.playerGuesses[rowClicked][colClicked] = "!";
@@ -585,12 +578,13 @@ public class BattleshipGame extends Object {
     }
 
     public void computerShipTurn() {
+
         Random random = new Random();
         boolean guessHorizontal = random.nextBoolean();
 
 
         // If the ship hasn't been hit yet
-        if (!this.getHitStatus()) {
+        if (!this.getCompHitStatus()) {
             // Make a random guess again
             this.compRowGuessed = (int) (Math.random() * (playerShips.length));
             this.compColGuessed = (int) (Math.random() * (playerShips.length));
@@ -606,15 +600,20 @@ public class BattleshipGame extends Object {
         }
 
         if (playerShips[compRowGuessed][compColGuessed] != "O") {
-            this.isHit = true;
             if (this.computerGuesses[compRowGuessed][compColGuessed] != "!") {
-
+                
+                this.hasCompHit = true;
                 String shipHit = playerShips[compRowGuessed][compColGuessed];
                 this.computerHits++;
                 this.playerShips[compRowGuessed][compColGuessed] = "O";
                 this.hasShipSunk(shipHit);
             }
-        }
+
+            }
+        else {
+                this.hasCompHit = false;
+            }
+        
 
         this.numCompGuesses++;
         this.computerGuesses[compRowGuessed][compColGuessed] = "!";
@@ -760,20 +759,32 @@ public class BattleshipGame extends Object {
         return this.currentTurn;
     }
 
-    public boolean getHitStatus() {
-        return this.isHit;
+    public boolean getPlayerHitStatus() {
+        return this.hasPlayerHit;
+    }
+
+    public boolean getCompHitStatus() {
+        return this.hasCompHit;
     }
 
     public boolean getDeploymentStatus() {
         return this.isDeploymentFinished;
     }
 
+    public int getGridSize() {
+        return this.getPlayerGuesses().length;
+    }
+
     public void setGameStatus(boolean status) {
         this.isGameEnded = status;
     }
 
-    public void setHitStatus(boolean status) {
-        this.isHit = status;
+    public void setPlayerHitStatus(boolean status) {
+        this.hasPlayerHit = status;
+    }
+
+    public void setCompHitStatus(boolean status) {
+        this.hasCompHit = status;
     }
 
     public void setPlayerGuessHighScore(int score) {

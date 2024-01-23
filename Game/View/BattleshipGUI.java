@@ -1,45 +1,47 @@
 package Game.View;
-
-import javax.imageio.plugins.jpeg.JPEGHuffmanTable;
-import javax.print.attribute.standard.DocumentName;
 import javax.swing.*;
-import javax.xml.bind.ValidationEvent;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.concurrent.TimeUnit;
-
 import Game.Controllers.ButtonController;
 import Game.Controllers.ShipControllerPlacement;
 import Game.GameObjects.BattleshipGame;
-import Game.Images.BattleshipImageComponent;
 
+/** BattleshipGUI class
+ * @author Abdul Mustafa Mohib & Marwa Zaryab
+ * @since 1/23/24
+ * A class that holds all components and methods associated with the view of the Battleship game; components are updated as 
+ *      a result of game actions and events
+ */
 public class BattleshipGUI extends JPanel {
 
+    //model
     private BattleshipGame model;
-    private BattleshipImageComponent battleship = new BattleshipImageComponent("icon.jpg");
-    private ButtonController bController;
 
     // title view instance variables
     private JPanel titleContentsPanel = new JPanel();
     private JPanel buttonsPanel = new JPanel();
     private JPanel bottomPanel = new JPanel();
     private JPanel namePanel = new JPanel();
+    private JButton exit = new JButton("Exit");
+    private JButton easy = new JButton("Easy");
+    private JButton medium = new JButton("Medium");
+    private JButton hard = new JButton("Hard");
+    private JTextField nameField = new JTextField();
+    private JLabel title = new JLabel();
 
-    private JButton statsButton = new JButton("Stats");
+    //end game view instance variables
     private JPanel endgamePanel = new JPanel();
     private JPanel endGameButtonsPanel = new JPanel();
     private JPanel labelsPanel = new JPanel();
-
+    private JPanel winnerPanel = new JPanel();
     private JLabel winnerLabel = new JLabel();
     private JLabel creditsLabel = new JLabel("- MARWA & MOHIB");
-    private JLabel thankYouLabel = new JLabel("THANK YOU FOR PLAYING!!! <3");
-
-    private JButton endGame = new JButton("End Game");
-
+    private JLabel thankYouLabel = new JLabel("THANK YOU FOR PLAYING! <3");
+    private JLabel saveStatsLabel = new JLabel("(Click \"Stats\" to save game data to file)");
     private JButton endExit = new JButton("Exit");
-
+    private JButton statsButton = new JButton("Stats");
+    
     // game view instance variables
     private JPanel gamePanel = new JPanel();
     private JPanel userPanel = new JPanel();
@@ -63,20 +65,8 @@ public class BattleshipGUI extends JPanel {
     private JPanel playerGridPanel = new JPanel();
     private JPanel computerGridPanel = new JPanel();
     private JPanel gapPanel = new JPanel();
-
-    // buttons
-    private JButton exit = new JButton("Exit");
-    private JButton easy = new JButton("Easy");
-    private JButton medium = new JButton("Medium");
-    private JButton hard = new JButton("Hard");
-    private JButton restart = new JButton("Restart");
-    private JButton emptyButton = new JButton();
-
-    // textfields
-    private JTextField nameField = new JTextField();
+    private JButton endGame = new JButton("End Game");
     private JTextField alignment = new JTextField(10);
-
-    // labels
     private JLabel userPrompt = new JLabel("Welcome Player 1! Please enter your name: ");
     private JLabel name = new JLabel();
     private JLabel computerName = new JLabel("Computer");
@@ -85,7 +75,6 @@ public class BattleshipGUI extends JPanel {
     private JLabel playerShipsSunk = new JLabel("Ships Sunk: ");
     private JLabel playerGuess = new JLabel("Player Guess: ");
     private JLabel computerGuess = new JLabel("Computer Guess: ");
-    private JLabel title = new JLabel();
     private JLabel validateOutput = new JLabel();
     private JLabel numPlayerGuesses = new JLabel("Player Guesses: ");
     private JLabel numCompGuesses = new JLabel("Computer Guesses: ");
@@ -96,26 +85,24 @@ public class BattleshipGUI extends JPanel {
     private JLabel missLabel = new JLabel("! - Miss");
     private JLabel hitLabel = new JLabel("O - Hit");
     private JLabel playerHighScore = new JLabel("Player Guess High Score: ");
-
-    // grids
     private JButton[][] playerGrid;
     private JButton[][] computerGrid;
-
-    // states
+    private JButton emptyButton = new JButton();
+    private JButton restart = new JButton("Restart");
+    public boolean isRestart = false;
+    
+    // enum instance variable
     private PANEL_STATES currentState;
 
-    // ints
-    private int gridSize;
-
-    // timer variables
+    // timer instance variables
     private Timer time;
     private long startTime;
     private int timeElaspedSeconds;
 
-    // parent frame
+    // parent frame instance variable
     private JFrame parentFrame;
 
-    // image icon
+    // image icon instance variable
     private ImageIcon icon = new ImageIcon("title.jpg");
 
     // colors
@@ -124,10 +111,7 @@ public class BattleshipGUI extends JPanel {
     private Color lightBlue = new Color(0, 0, 205);
     private Color darkBlue = new Color(30, 144, 255);
 
-    // booleans
-    public boolean isRestart = false;
-
-    // fonts
+    // font used
     Font f = new Font("Century Gothic", Font.BOLD, 14);
 
     // enums
@@ -232,7 +216,6 @@ public class BattleshipGUI extends JPanel {
         endgamePanel.setLayout(new BorderLayout());
         endGameButtonsPanel.setLayout(new BoxLayout(endGameButtonsPanel, BoxLayout.X_AXIS));
         // TODO add to top
-        JPanel winnerPanel = new JPanel();
 
         endgamePanel.setBackground(darkBlue);
         labelsPanel.setBackground(darkBlue);
@@ -240,9 +223,10 @@ public class BattleshipGUI extends JPanel {
         winnerLabel.setFont(new Font("Century Gothic", Font.BOLD, 40));
         creditsLabel.setFont(new Font("Century Gothic", Font.BOLD, 20));
         thankYouLabel.setFont(new Font("Century Gothic", Font.BOLD, 20));
+        saveStatsLabel.setFont(new Font("Century Gothc", Font.BOLD, 15));
         creditsLabel.setForeground(navyBlue);
         thankYouLabel.setForeground(navyBlue);
-
+        saveStatsLabel.setForeground(navyBlue);
         winnerLabel.setForeground(Color.black);
 
         endExit.setFont(new Font("Century Gothic", Font.BOLD, 43));
@@ -264,15 +248,19 @@ public class BattleshipGUI extends JPanel {
         winnerPanel.setBackground(darkBlue);
 
         if (this.model.getWinner().equals(this.model.getPlayerName())) {
-            winnerLabel.setText("PLAYER 1 WINS");
+            winnerLabel.setText(this.model.getPlayerName().toUpperCase() + " WINS!");
         } else {
-            winnerLabel.setText("COMPUTER WINS");
+            winnerLabel.setText("COMPUTER WINS!");
 
         }
 
         winnerPanel.add(winnerLabel);
+
+        labelsPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
         labelsPanel.add(thankYouLabel);
         labelsPanel.add(creditsLabel);
+        labelsPanel.add(saveStatsLabel);
+
 
         endgamePanel.add(winnerPanel, BorderLayout.NORTH);
         endgamePanel.add(labelsPanel, BorderLayout.CENTER);
@@ -359,15 +347,15 @@ public class BattleshipGUI extends JPanel {
         BoxLayout playerLayout = new BoxLayout(playerPanel, BoxLayout.Y_AXIS);
         BoxLayout computerLayout = new BoxLayout(computerPanel, BoxLayout.Y_AXIS);
         // BoxLayout timerLayout = new BoxLayout(timerPanel, BoxLayout.Y_AXIS);
-        GridLayout gameGrid = new GridLayout(this.getGridSize(), this.getGridSize());
+        GridLayout gameGrid = new GridLayout(this.model.getGridSize(), this.model.getGridSize());
         BoxLayout topLayout = new BoxLayout(statsPanel, BoxLayout.Y_AXIS);
         BoxLayout leftNumberLayout1 = new BoxLayout(leftNumberPanel1, BoxLayout.Y_AXIS);
         BoxLayout leftNumberLayout2 = new BoxLayout(leftNumberPanel2, BoxLayout.Y_AXIS);
         BoxLayout bottomLayout = new BoxLayout(outputPanel, BoxLayout.Y_AXIS);
         BoxLayout leftPanelLayout = new BoxLayout(fullLeftPanel, BoxLayout.Y_AXIS);
         BoxLayout rightPanelLayout = new BoxLayout(fullRightPanel, BoxLayout.Y_AXIS);
-        GridLayout topNumberLayout1 = new GridLayout(1, this.getGridSize() + 2);
-        GridLayout topNumberLayout2 = new GridLayout(1, this.getGridSize() + 1);
+        GridLayout topNumberLayout1 = new GridLayout(1, this.model.getGridSize() + 2);
+        GridLayout topNumberLayout2 = new GridLayout(1, this.model.getGridSize() + 1);
 
         // set layouts
         gamePanel.setLayout(gameLayout);
@@ -402,6 +390,11 @@ public class BattleshipGUI extends JPanel {
         userPanel.add(computerPanel);
         userPanel.setBackground(Color.black);
 
+        JPanel gridLabelPanel = new JPanel();
+        gridLabelPanel.add(missLabel);
+        gridLabelPanel.add(hitLabel);
+        gridLabelPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+
         // timer panel visuals
         timerPanel.setBackground(Color.black);
         // timerPanel.add(alignmentPanel);
@@ -412,6 +405,9 @@ public class BattleshipGUI extends JPanel {
         timerPanel.add(missLabel);
         timerPanel.add(hitLabel);
 
+
+        timerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         // holds the feedback label
         feedbackPanel.add(validateOutput);
         feedbackPanel.setBackground(Color.black);
@@ -419,24 +415,26 @@ public class BattleshipGUI extends JPanel {
         // basically the entire bottom panel
         outputPanel.add(feedbackPanel);
         outputPanel.add(timerPanel);
+        // outputPanel.add(restart);
+        // outputPanel.add(endGame);
         outputPanel.setBackground(Color.black);
 
         // make player grid
-        for (int x = 0; x < this.getGridSize(); x++) {
-            for (int y = 0; y < this.getGridSize(); y++) {
+        for (int x = 0; x < this.model.getGridSize(); x++) {
+            for (int y = 0; y < this.model.getGridSize(); y++) {
                 playerGrid[x][y] = new JButton();
                 playerGrid[x][y].setPreferredSize(new Dimension(30, 30));
-                playerGrid[x][y].setBackground(darkBlue);
+                playerGrid[x][y].setBackground(lightBlue);
                 playerGrid[x][y].setBorder(BorderFactory.createLineBorder(Color.black));
             }
         }
 
         // make computer grid
-        for (int x = 0; x < this.getGridSize(); x++) {
-            for (int y = 0; y < this.getGridSize(); y++) {
+        for (int x = 0; x < this.model.getGridSize(); x++) {
+            for (int y = 0; y < this.model.getGridSize(); y++) {
                 computerGrid[x][y] = new JButton();
                 computerGrid[x][y].setPreferredSize(new Dimension(30, 30));
-                computerGrid[x][y].setBackground(lightBlue);
+                computerGrid[x][y].setBackground(darkBlue);
                 computerGrid[x][y].setBorder(BorderFactory.createLineBorder(Color.black));
             }
         }
@@ -459,17 +457,17 @@ public class BattleshipGUI extends JPanel {
         leftPanel.add(leftNumberPanel1);
         leftPanel.add(playerGridPanel);
         leftPanel.setBackground(Color.black);
-        leftNumberPanel1.setPreferredSize(new Dimension(16, this.getGridSize() * 30));
+        leftNumberPanel1.setPreferredSize(new Dimension(16, this.model.getGridSize() * 30));
         leftNumberPanel1.setBackground(Color.black);
 
         rightPanel.add(leftNumberPanel2);
         rightPanel.add(computerGridPanel);
         rightPanel.setBackground(Color.black);
-        leftNumberPanel2.setPreferredSize(new Dimension(16, this.getGridSize() * 30));
+        leftNumberPanel2.setPreferredSize(new Dimension(16, this.model.getGridSize() * 30));
         leftNumberPanel2.setBackground(Color.black);
 
         // making left numbers for left grid
-        for (int x = 0; x < this.getGridSize(); x++) {
+        for (int x = 0; x < this.model.getGridSize(); x++) {
             JButton numButton = new JButton(x + "");
             numButton.setForeground(Color.white);
             numButton.setBackground(Color.black);
@@ -479,7 +477,7 @@ public class BattleshipGUI extends JPanel {
         }
 
         // making left numbers for right grid
-        for (int x = 0; x < this.getGridSize(); x++) {
+        for (int x = 0; x < this.model.getGridSize(); x++) {
             JButton numButton = new JButton(x + "");
             numButton.setForeground(Color.white);
             numButton.setBackground(Color.black);
@@ -493,7 +491,7 @@ public class BattleshipGUI extends JPanel {
         topNumberPanel1.add(gapPanel);
         gapPanel.setBackground(Color.black);
 
-        for (int x = 0; x < this.getGridSize(); x++) {
+        for (int x = 0; x < this.model.getGridSize(); x++) {
             JButton numButton = new JButton(x + "");
             numButton.setForeground(Color.white);
             numButton.setBackground(Color.black);
@@ -505,7 +503,7 @@ public class BattleshipGUI extends JPanel {
         // making top numbers for right grid
         topNumberPanel2.add(emptyButton);
         topNumberPanel2.setBackground(Color.black);
-        for (int x = 0; x < this.getGridSize(); x++) {
+        for (int x = 0; x < this.model.getGridSize(); x++) {
             JButton numButton = new JButton(x + "");
             numButton.setForeground(Color.white);
             numButton.setBackground(Color.black);
@@ -515,7 +513,7 @@ public class BattleshipGUI extends JPanel {
         }
 
         // player panel visuals
-        playerPanel.setPreferredSize(new Dimension(this.getGridSize() * 30, 50));
+        playerPanel.setPreferredSize(new Dimension(this.model.getGridSize() * 30, 50));
         playerPanel.setBackground(Color.BLACK);
         playerPanel.add(name);
         playerPanel.add(playerStats);
@@ -527,7 +525,7 @@ public class BattleshipGUI extends JPanel {
         playerStats.add(computerShipsRemaining);
 
         // computer panel visuals
-        computerPanel.setPreferredSize(new Dimension(this.getGridSize() * 30, 50));
+        computerPanel.setPreferredSize(new Dimension(this.model.getGridSize() * 30, 50));
         computerPanel.setBackground(Color.black);
         computerPanel.add(computerName);
         computerPanel.add(computerStats);
@@ -598,6 +596,21 @@ public class BattleshipGUI extends JPanel {
                 this.gamePanel.setVisible(true);
                 this.endGame.setVisible(false);
 
+                this.numPlayerGuesses
+                            .setText("Player Guesses: "
+                                    .concat(Integer.toString(this.model.getNumPlayerGuesses())));
+                    this.numCompGuesses
+                            .setText("Computer Guesses: ".
+                                    concat(Integer.toString(this.model.getNumCompGuesses())));
+                    this.playerShipsRemaining
+                            .setText("Player Ships Left: "
+                                    .concat(Integer.toString(this.model.getPlayerRemainingShips())));
+                    this.computerShipsRemaining
+                            .setText("Computer Ships Left: "
+                                    .concat(Integer.toString(this.model.getComputerRemainingShips())));
+                    this.playerHighScore.setText("Player Guess High Score: "
+                                .concat(Integer.toString(this.model.getPlayerGuessHighScore())));
+
                 if (this.model.getNewGame() == true) {
 
                     this.titleContentsPanel.setVisible(false);
@@ -640,20 +653,7 @@ public class BattleshipGUI extends JPanel {
 
                     this.alignmentPanel.setVisible(false);
                     this.parentFrame.pack();
-                    this.numPlayerGuesses
-                            .setText("Player Guesses: "
-                                    .concat(Integer.toString(this.model.getNumPlayerGuesses())));
-                    this.numCompGuesses
-                            .setText("Computer Guesses: ".
-                                    concat(Integer.toString(this.model.getNumCompGuesses())));
-                    this.playerShipsRemaining
-                            .setText("Player Ships Left: "
-                                    .concat(Integer.toString(this.model.getPlayerRemainingShips())));
-                    this.computerShipsRemaining
-                            .setText("Computer Ships Left: "
-                                    .concat(Integer.toString(this.model.getComputerRemainingShips())));
-                    this.playerHighScore.setText("Player Guess High Score: "
-                                .concat(Integer.toString(this.model.getPlayerGuessHighScore())));
+                    
 
                     if (this.model.getGameStatus() == false) {
 
@@ -661,7 +661,7 @@ public class BattleshipGUI extends JPanel {
                             if (this.model.getNumPlayerGuesses() == 0) {
                                 this.validateOutput.setText(this.model.getPlayerName() + "'s turn: ");
                             } else {
-                                if (this.model.getHitStatus() == true) {
+                                if (this.model.getPlayerHitStatus() == true) {
                                     this.validateOutput.setText(this.model.getPlayerName() + "'s turn: "
                                             + this.model.getPlayerName() + " guessed ("
                                             + this.model.getPlayerRowGuessed() + ", " + this.model.getPlayerColGuessed()
@@ -689,7 +689,7 @@ public class BattleshipGUI extends JPanel {
 
                         if (this.model.getGameTurn() == "Computer") {
 
-                            if (this.model.getHitStatus() == true) {
+                            if (this.model.getCompHitStatus() == true) {
                                 this.validateOutput.setText("Computer's turn: the computer guessed ("
                                         + this.model.getCompRowGuessed() + ", " + this.model.getCompColGuessed()
                                         + ") and hit a ship! Please do your turn!");
@@ -713,6 +713,7 @@ public class BattleshipGUI extends JPanel {
                     else {
 
                         endGame.setVisible(true);
+                        restart.setVisible(false);
                         this.validateOutput.setText("Game Ended! The winner is " + this.model.getWinner());
                         this.model.disableGrid(computerGrid);
                     }
@@ -723,6 +724,7 @@ public class BattleshipGUI extends JPanel {
                 this.gamePanel.setVisible(false);
                 this.titleContentsPanel.setVisible(false);
                 this.endgamePanel.setVisible(true);
+                this.restart.setVisible(true);
                 this.endGameView();
                 this.parentFrame = (JFrame) this.getTopLevelAncestor();
                 this.parentFrame.pack();
@@ -773,14 +775,6 @@ public class BattleshipGUI extends JPanel {
         endGame.addActionListener(buttonController);
         statsButton.addActionListener(buttonController);
         endExit.addActionListener(buttonController);
-    }
-
-    public void setGridSize(int i) {
-        this.gridSize = i;
-    }
-
-    public int getGridSize() {
-        return this.model.getPlayerGuesses().length;
     }
 
 }
