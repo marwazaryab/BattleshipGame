@@ -79,7 +79,7 @@ public class BattleshipGUI extends JPanel {
     private JLabel alignmentLabel = new JLabel("Alignment: Right(R) or Down(D)");
     private JLabel timer = new JLabel();
     private JLabel missLabel = new JLabel("! - Miss");
-    private JLabel hitLabel = new JLabel("O - Miss");
+    private JLabel hitLabel = new JLabel("O - Hit");
 
     //grids
     private JButton[][] playerGrid;
@@ -217,6 +217,8 @@ public class BattleshipGUI extends JPanel {
         numCompGuesses.setFont(f);
         playerShipsRemaining.setFont(f);
         computerShipsRemaining.setFont(f);
+        missLabel.setFont(f);
+        hitLabel.setFont(f);
 
         name.setFont(new Font("Century Gothic", Font.BOLD, 20));
         computerName.setFont(new Font("Century Gothic", Font.BOLD, 20));
@@ -238,7 +240,8 @@ public class BattleshipGUI extends JPanel {
         numCompGuesses.setForeground(Color.white);
         playerShipsRemaining.setForeground(Color.white);
         computerShipsRemaining.setForeground(Color.white);
-
+        missLabel.setForeground(Color.white);
+        hitLabel.setForeground(Color.white);
 
         // exit.setBackground(Color.blue);
         // exit.setForeground(Color.white);
@@ -304,8 +307,9 @@ public class BattleshipGUI extends JPanel {
         timerPanel.setBackground(Color.black);
         // timerPanel.add(alignmentPanel);
         timerPanel.add(timer);
-
         timerPanel.add(restart);
+        timerPanel.add(missLabel);
+        timerPanel.add(hitLabel);
 
         // holds the feedback label
         feedbackPanel.add(validateOutput);
