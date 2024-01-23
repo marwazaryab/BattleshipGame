@@ -222,7 +222,7 @@ public class BattleshipGUI extends JPanel {
         endGameButtonsPanel.add(exit);
 
 
-        if(this.model.isPlayerWinner()){
+        if(this.model.getWinner().equals(this.model.getPlayerName())){
             winnerLabel.setText("PLAYER 1 WINS");
         } else{
             winnerLabel.setText("COMPUTER WINS");
