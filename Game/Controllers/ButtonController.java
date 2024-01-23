@@ -71,6 +71,9 @@ public class ButtonController implements ActionListener {
             case "Restart":
                 this.model.restart();
                 break;
+
+            case "Stats":
+                this.model.outputStats();
                 
             default: 
                 break;

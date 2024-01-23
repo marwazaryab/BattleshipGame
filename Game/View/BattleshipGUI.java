@@ -1,5 +1,6 @@
 package Game.View;
 
+import javax.imageio.plugins.jpeg.JPEGHuffmanTable;
 import javax.swing.*;
 import javax.xml.bind.ValidationEvent;
 
@@ -24,6 +25,17 @@ public class BattleshipGUI extends JPanel {
     private JPanel buttonsPanel = new JPanel();
     private JPanel bottomPanel = new JPanel();
     private JPanel namePanel = new JPanel();
+    
+    private JButton statsButton = new JButton("Stats");
+    private JPanel endgamePanel = new JPanel();
+    private JPanel endGameButtonsPanel = new JPanel();
+    private JPanel labelsPanel = new JPanel();
+
+    private JLabel winnerLabel = new JLabel();
+    private JLabel creditsLabel = new JLabel("- MARWA & MOHIB");
+    private JLabel thankYouLabel = new JLabel("THANK YOU FOR PLAYING!!! <3");
+
+
 
     //game view instance variables
     private JPanel gamePanel = new JPanel();
@@ -86,6 +98,7 @@ public class BattleshipGUI extends JPanel {
     //states
     private PANEL_STATES currentState;
 
+
     //ints
     private int gridSize;
     
@@ -114,7 +127,7 @@ public class BattleshipGUI extends JPanel {
     public enum PANEL_STATES {
         TITLE,
         GAME,
-        END
+        END,
     }
 
     public BattleshipGUI(BattleshipGame data) {
@@ -190,6 +203,38 @@ public class BattleshipGUI extends JPanel {
         titleContentsPanel.add(title, BorderLayout.NORTH);
 
         this.add(titleContentsPanel);
+
+    }
+
+
+    public void endGameView(){
+
+        this.setPanelState(PANEL_STATES.END);
+
+        endgamePanel.setLayout(new BorderLayout());
+        endGameButtonsPanel.setLayout(new BoxLayout(endGameButtonsPanel, BoxLayout.X_AXIS));
+        labelsPanel.setLayout(new BoxLayout(endGameButtonsPanel, BoxLayout.Y_AXIS));
+
+        endGameButtonsPanel.add(restart);
+        endGameButtonsPanel.add(statsButton);
+        endGameButtonsPanel.add(exit);
+
+
+        if(this.model.isPlayerWinner()){
+            winnerLabel.setText("PLAYER 1 WINS");
+        } else{
+            winnerLabel.setText("COMPUTER WINS");
+
+        }
+
+        labelsPanel.add(thankYouLabel);
+        labelsPanel.add(creditsLabel);
+
+        endgamePanel.add(winnerLabel, BorderLayout.NORTH);
+        endgamePanel.add(labelsPanel, BorderLayout.CENTER);
+        endgamePanel.add(endGameButtonsPanel, BorderLayout.SOUTH);
+
+        this.add(endgamePanel);
 
     }
 
@@ -607,6 +652,11 @@ public class BattleshipGUI extends JPanel {
                 }
                 break;
 
+            case END:
+                endGameView();
+                break;
+            
+
             default:
                 break;
         }
@@ -637,14 +687,15 @@ public class BattleshipGUI extends JPanel {
 
     public void registerButtonController() {
 
-        ButtonController bController2 = new ButtonController(this.easy, this.medium, this.hard, this.exit, this.model,
+        ButtonController buttonController = new ButtonController(this.easy, this.medium, this.hard, this.exit, this.model,
                 this.nameField, this.restart);
 
-        exit.addActionListener(bController2);
-        easy.addActionListener(bController2);
-        medium.addActionListener(bController2);
-        hard.addActionListener(bController2);
-        restart.addActionListener(bController2);
+        exit.addActionListener(buttonController);
+        easy.addActionListener(buttonController);
+        medium.addActionListener(buttonController);
+        hard.addActionListener(buttonController);
+        restart.addActionListener(buttonController);
+        statsButton.addActionListener(buttonController);
     }
 
     public void setGridSize(int i) {
