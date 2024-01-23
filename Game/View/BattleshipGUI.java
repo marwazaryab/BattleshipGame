@@ -220,6 +220,8 @@ public class BattleshipGUI extends JPanel {
 
         endgamePanel.setLayout(new BorderLayout());
         endGameButtonsPanel.setLayout(new BoxLayout(endGameButtonsPanel, BoxLayout.X_AXIS));
+        // TODO add to top
+        JPanel winnerPanel = new JPanel();
 
         endgamePanel.setBackground(darkBlue);
         labelsPanel.setBackground(darkBlue);
@@ -248,18 +250,20 @@ public class BattleshipGUI extends JPanel {
         endGameButtonsPanel.add(statsButton);
         endGameButtonsPanel.add(endExit);
 
-        // TODO MAKEIT CENTER ALING
+        winnerPanel.setBackground(darkBlue);
+
         if (this.model.getWinner().equals(this.model.getPlayerName())) {
-            winnerLabel.setText("     PLAYER 1 WINS");
+            winnerLabel.setText("PLAYER 1 WINS");
         } else {
-            winnerLabel.setText("    COMPUTER WINS");
+            winnerLabel.setText("COMPUTER WINS");
 
         }
 
+        winnerPanel.add(winnerLabel);
         labelsPanel.add(thankYouLabel);
         labelsPanel.add(creditsLabel);
 
-        endgamePanel.add(winnerLabel, BorderLayout.NORTH);
+        endgamePanel.add(winnerPanel, BorderLayout.NORTH);
         endgamePanel.add(labelsPanel, BorderLayout.CENTER);
         endgamePanel.add(endGameButtonsPanel, BorderLayout.SOUTH);
 
