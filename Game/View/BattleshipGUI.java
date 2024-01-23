@@ -150,12 +150,22 @@ public class BattleshipGUI extends JPanel {
 
     }
 
+
+    /**
+     * @author Marwa
+     * a method that returns the time in seconds that has been elapsed
+     * @return time passed
+     */
     public int timePassed() {
         long currentTime = System.currentTimeMillis();
         return timeElaspedSeconds = (int) ((currentTime - startTime) / 1000);
 
     }
 
+    /**
+     * @author Marwa
+     * an action listener to 
+     */
     ActionListener timeListener = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
             timer.setText("Time: " + timePassed());
@@ -551,6 +561,11 @@ public class BattleshipGUI extends JPanel {
 
         this.add(gamePanel);
     }
+
+
+
+
+
 
     public void update() {
 

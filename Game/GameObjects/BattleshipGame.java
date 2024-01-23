@@ -465,7 +465,6 @@ public class BattleshipGame extends Object {
                 break;
         }
 
-
     }
 
     public void hasShipSunk(String shipHit) {
@@ -587,21 +586,37 @@ public class BattleshipGame extends Object {
 
     public void computerShipTurn() {
 
+        // Make a random guess
         this.compRowGuessed = (int) (Math.random() * (playerShips.length));
         this.compColGuessed = (int) (Math.random() * (playerShips.length));
+        boolean isPreviousHit = this.getHitStatus();
 
-        if (playerShips[compRowGuessed][compColGuessed] != "O") {
-            this.isHit = true;
-            if (this.computerGuesses[compRowGuessed][compColGuessed] != "!") {
+        // If the ship hasn't been hit yet
+        if (!isPreviousHit) {
+            // Make a random guess again
+            this.compRowGuessed = (int) (Math.random() * (playerShips.length));
+            this.compColGuessed = (int) (Math.random() * (playerShips.length));
 
-                String shipHit = playerShips[compRowGuessed][compColGuessed];
-                this.computerHits++;
-                this.playerShips[compRowGuessed][compColGuessed] = "O";
-                this.hasShipSunk(shipHit);
+            if (playerShips[compRowGuessed][compColGuessed] != "O") {
+                this.isHit = true;
+                if (this.computerGuesses[compRowGuessed][compColGuessed] != "!") {
+    
+                    String shipHit = playerShips[compRowGuessed][compColGuessed];
+                    this.computerHits++;
+                    this.playerShips[compRowGuessed][compColGuessed] = "O";
+                    this.hasShipSunk(shipHit);
+                }
+            } else {
+                this.isHit = false;
             }
-        } else {
-            this.isHit = false;
+    
+        } else { // Otherwise if the ship has been hit before
+
+            
+
+
         }
+
 
         this.numCompGuesses++;
         this.computerGuesses[compRowGuessed][compColGuessed] = "!";
@@ -820,7 +835,6 @@ public class BattleshipGame extends Object {
         outputFile.close();
 
     }
-
 
     // TODO ask Mr. Burns if the sorting it good
 
