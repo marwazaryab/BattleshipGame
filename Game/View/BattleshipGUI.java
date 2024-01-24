@@ -139,7 +139,6 @@ public class BattleshipGUI extends JPanel {
     }
 
     /**
-     * @author Mohib
      *         Default constructor for the GUI; sets the model within the class to
      *         the argument,
      *         registers button controller, and sets the panel state
@@ -163,7 +162,7 @@ public class BattleshipGUI extends JPanel {
      */
     public int timePassed() {
         long currentTime = System.currentTimeMillis();
-        return timeElaspedSeconds = (int) ((currentTime - startTime) / 1000);
+        return timeElaspedSeconds = (int) ((currentTime - startTime) / 1000); // return time passed
     }
 
     /**
@@ -832,14 +831,14 @@ public class BattleshipGUI extends JPanel {
         ShipControllerPlacement shipController = new ShipControllerPlacement(playerGrid, computerGrid, model,
                 alignment);
 
-        //add action listeners to player grid buttons
+        // for loop to add action listeners to player grid buttons
         for (int row = 0; row < playerGrid.length; row++) {
             for (int col = 0; col < playerGrid[0].length; col++) {
                 playerGrid[row][col].addActionListener(shipController);
             }
         }
 
-        //add action listeners to computer grid buttons
+        // for loop to add action listeners to computer grid buttons
         for (int row = 0; row < playerGrid.length; row++) {
             for (int col = 0; col < playerGrid[0].length; col++) {
                 computerGrid[row][col].addActionListener(shipController);
