@@ -1,7 +1,5 @@
-package Game.StartUp;
+
 import javax.swing.*;
-import Game.GameObjects.BattleshipGame;
-import Game.View.BattleshipGUI;
 
 /**
  * Battleship Class

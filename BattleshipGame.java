@@ -1,13 +1,11 @@
-package Game.GameObjects;
+
 
 import java.awt.Color;
 import java.awt.Font;
 import java.io.PrintWriter;
 import java.util.*;
 import javax.swing.JButton;
-import Game.Util.Prompt;
-import Game.View.BattleshipGUI;
-import Game.View.BattleshipGUI.PANEL_STATES;
+
 
 /**
  * BattleshipGame class
@@ -123,7 +121,7 @@ public class BattleshipGame extends Object {
 
             // If the level is 'Easy'
             case "Easy":
-                this.view.setPanelState(PANEL_STATES.GAME); // sets the state of the panel
+                this.view.setPanelState("GAME"); // sets the state of the panel
 
                 // Create new 15 by 15 arrays
                 playerGuesses = new String[15][15];
@@ -137,7 +135,7 @@ public class BattleshipGame extends Object {
 
             // If the level is 'Medium'
             case "Medium":
-                this.view.setPanelState(PANEL_STATES.GAME);
+                this.view.setPanelState("GAME");
 
                 playerGuesses = new String[20][20];
                 computerGuesses = new String[20][20];
@@ -150,7 +148,7 @@ public class BattleshipGame extends Object {
 
             // If the level is 'Hard'
             case "Hard":
-                view.setPanelState(PANEL_STATES.GAME);
+                view.setPanelState("GAME");
 
                 playerGuesses = new String[25][25];
                 computerGuesses = new String[25][25];
@@ -689,7 +687,7 @@ public class BattleshipGame extends Object {
         this.computerHits = 0;
 
         // Switch the panel state so it can display the title screen
-        this.view.setPanelState(PANEL_STATES.TITLE);
+        this.view.setPanelState("TITLE");
 
         // update the view
         this.updateView();
@@ -971,7 +969,7 @@ public class BattleshipGame extends Object {
      *         A method to end the game
      */
     public void end() {
-        this.view.setPanelState(PANEL_STATES.END); // switch the enum state and then update the view
+        this.view.setPanelState("END"); // switch the enum state and then update the view
         this.updateView();
     }
 

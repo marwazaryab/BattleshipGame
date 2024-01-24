@@ -1,10 +1,9 @@
-package Game.Controllers;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JTextField;
-import Game.GameObjects.BattleshipGame;
 
 /**
  * Button Controller Class

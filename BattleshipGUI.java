@@ -1,11 +1,8 @@
-package Game.View;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import Game.Controllers.ButtonController;
-import Game.Controllers.ShipControllerPlacement;
-import Game.GameObjects.BattleshipGame;
 
 /**
  * BattleshipGUI class
@@ -18,11 +15,12 @@ import Game.GameObjects.BattleshipGame;
  */
 public class BattleshipGUI extends JPanel {
 
-    // ------------------------------------------ INSTANCE VARIABLES ------------------------------------------
+    // ------------------------------------------ INSTANCE VARIABLES
+    // ------------------------------------------
 
     private BattleshipGame model; // the model of the view
 
-    // title view 
+    // title view
     private JPanel titleContentsPanel = new JPanel(); // The overall panel for the title view; holds all components
     private JPanel buttonsPanel = new JPanel(); // The panel that holds all of the title view buttons
     private JPanel bottomPanel = new JPanel(); // The panel that is put into the SOUTH section of the title contents
@@ -37,7 +35,7 @@ public class BattleshipGUI extends JPanel {
     private JLabel userPrompt = new JLabel("Welcome Player 1! Please enter your name: "); // The label that displays
                                                                                           // upon starting the game
 
-    // end game view 
+    // end game view
     private JPanel endgamePanel = new JPanel(); // The overall panel for the end game view
     private JPanel endGameButtonsPanel = new JPanel(); // The panel that holds the buttons for the end game view
     private JPanel labelsPanel = new JPanel(); // The panel that holds the labels for the end game view
@@ -51,7 +49,7 @@ public class BattleshipGUI extends JPanel {
     private JButton endExit = new JButton("Exit"); // The button that allows the player to exit the game
     private JButton statsButton = new JButton("Stats"); // The button that saves the game data to an output file
 
-    // game view 
+    // game view
     private JPanel gamePanel = new JPanel(); // The overall panel that holds all of the game view components
     private JPanel userPanel = new JPanel(); // The panel that holds data for the player and computer
     private JPanel outputPanel = new JPanel(); // The panel that holds data for the SOUTH section of the game panel
@@ -133,20 +131,21 @@ public class BattleshipGUI extends JPanel {
      * depending on game status
      */
     public enum PANEL_STATES {
-        TITLE,
-        GAME,
-        END,
+        TITLE, // title screen
+        GAME, // game screen
+        END, // end screen
     }
 
     /**
-     *         Default constructor for the GUI; sets the model within the class to
-     *         the argument,
-     *         registers button controller, and sets the panel state
+     * Default constructor for the GUI; sets the model within the class to
+     * the argument,
+     * registers button controller, and sets the panel state
+     * 
      * @param model The model for the BattleshipGUI
      */
     public BattleshipGUI(BattleshipGame data) {
         this.model = data;
-        this.setPanelState(PANEL_STATES.TITLE);
+        this.setPanelState("TITLE");
         this.model.setGUI(this);
         this.update();
         this.registerButtonController();
@@ -177,12 +176,36 @@ public class BattleshipGUI extends JPanel {
     };
 
     /**
-     * @author Marwa
      *         a method that sets the current panel state to the argument provided
-     * @param state
+     * @param state a string of what state is being changed
      */
-    public void setPanelState(PANEL_STATES state) {
-        this.currentState = state;
+    public void setPanelState(String state) {
+        PANEL_STATES pState = PANEL_STATES.TITLE;
+
+        // Switch case that is used for setting the state
+        switch (state) {
+            case "GAME": // If its "GAME" then set the state to game
+                pState = PANEL_STATES.GAME;
+                break;
+            case "TITLE":// If its "TITLE" then set the state to title
+                pState = PANEL_STATES.TITLE;
+                break;
+            case "END": // If its "END" then set the state to end
+                pState = PANEL_STATES.END;
+                break;
+            default:
+                break;
+        }
+
+        this.currentState = pState;
+    }
+
+    /**
+     * 
+     * @return the current panel state
+     */
+    public PANEL_STATES getPanelState() {
+        return this.currentState;
     }
 
     /**
@@ -250,7 +273,7 @@ public class BattleshipGUI extends JPanel {
      */
     public void endGameView() {
 
-        this.setPanelState(PANEL_STATES.END); // set the panel states to the end state
+        this.setPanelState("END"); // set the panel states to the end state
 
         // set layouts for panels
         endgamePanel.setLayout(new BorderLayout());
@@ -310,8 +333,8 @@ public class BattleshipGUI extends JPanel {
         endgamePanel.add(labelsPanel, BorderLayout.CENTER);
         endgamePanel.add(endGameButtonsPanel, BorderLayout.SOUTH);
 
-        //set preferred size for labels panel
-        labelsPanel.setPreferredSize(new Dimension(300,100));
+        // set preferred size for labels panel
+        labelsPanel.setPreferredSize(new Dimension(300, 100));
 
         // add the end game panel to this JPanel
         this.add(endgamePanel);
@@ -638,11 +661,12 @@ public class BattleshipGUI extends JPanel {
             // if the panel states is set to GAME
             case GAME:
 
-                //set the game panel to visisble and the end game panel to non-visible
+                // set the game panel to visisble and the end game panel to non-visible
                 this.gamePanel.setVisible(true);
                 this.endGame.setVisible(false);
 
-                //update the values for the player and computer stats using accessor methods from the model
+                // update the values for the player and computer stats using accessor methods
+                // from the model
                 this.numPlayerGuesses
                         .setText("Player Guesses: "
                                 .concat(Integer.toString(this.model.getNumPlayerGuesses())));
@@ -657,24 +681,25 @@ public class BattleshipGUI extends JPanel {
                 this.playerHighScore.setText("Player Guess High Score: "
                         .concat(Integer.toString(this.model.getPlayerGuessHighScore())));
 
-                //check to see if a new game has been started or not
+                // check to see if a new game has been started or not
                 if (this.model.getNewGame() == true) {
 
-                    //set the title contents panel to non-visible and display the alignment panel
+                    // set the title contents panel to non-visible and display the alignment panel
                     this.titleContentsPanel.setVisible(false);
                     this.alignmentPanel.setVisible(true);
 
-                    //make the player and computer grids using the String 2D dimensions from the model
+                    // make the player and computer grids using the String 2D dimensions from the
+                    // model
                     this.playerGrid = new JButton[this.model.getComputerGuesses().length][this.model
                             .getComputerGuesses().length];
                     this.computerGrid = new JButton[this.model.getComputerGuesses().length][this.model
                             .getComputerGuesses().length];
 
-                    //call the gameView method and register the ship controllers used for gameplay
+                    // call the gameView method and register the ship controllers used for gameplay
                     this.gameView();
                     this.registerShipController();
 
-                    //output greeting message
+                    // output greeting message
                     this.validateOutput.setText("Welcome " + this.model.getPlayerName() +
                             "! Please start by choosing an alignment for ship " + (this.model.getShipNum() + 1)
                             + " and then placing it on the left grid");
@@ -684,50 +709,50 @@ public class BattleshipGUI extends JPanel {
                     this.parentFrame.pack();
                 }
 
-                //if ship deployment is not finished run the code below
+                // if ship deployment is not finished run the code below
                 else if (this.model.getDeploymentStatus() == false) {
 
-                    //check to see if the position deployed is valid or not and display the respective message
+                    // check to see if the position deployed is valid or not and display the
+                    // respective message
                     if (this.model.getValidPosition() == true) {
                         this.validateOutput.setText("Please place ship " + (this.model.getShipNum() + 1));
-                    }
-                    else if (this.model.getValidPosition() == false) {
+                    } else if (this.model.getValidPosition() == false) {
                         this.validateOutput.setText("That is not a valid position! Please reselect a position");
                     }
 
-                    //if all ships have been deployed output the deployment message to the user
+                    // if all ships have been deployed output the deployment message to the user
                     if (this.model.getShipNum() == 5) {
                         this.validateOutput.setText(
                                 "Player ships deployed! Click once on computer grid to deploy computer ships.");
                     }
                 }
 
-                //if it is not a new game and deployment is also done, start the game play 
+                // if it is not a new game and deployment is also done, start the game play
                 else {
 
-                    //set the alignment panel to non-visible and resize frame
+                    // set the alignment panel to non-visible and resize frame
                     this.alignmentPanel.setVisible(false);
                     this.parentFrame.pack();
 
-                    //check to see if the game has ended or not
+                    // check to see if the game has ended or not
                     if (this.model.getGameStatus() == false) {
 
-                        //check to see whose turn it is
+                        // check to see whose turn it is
                         if (this.model.getGameTurn() == "Player") {
 
-                            //if it is the very first play of the game, prompt the user to do their turn 
+                            // if it is the very first play of the game, prompt the user to do their turn
                             if (this.model.getNumPlayerGuesses() == 0) {
                                 this.validateOutput.setText(this.model.getPlayerName() + "'s turn: ");
                             } else {
 
-                                //runs the code below if a player successfully hits a ship
+                                // runs the code below if a player successfully hits a ship
                                 if (this.model.getPlayerHitStatus() == true) {
                                     this.validateOutput.setText(this.model.getPlayerName() + "'s turn: "
                                             + this.model.getPlayerName() + " guessed ("
                                             + this.model.getPlayerRowGuessed() + ", " + this.model.getPlayerColGuessed()
                                             + ") and hit a ship! Click the grid for computer's turn!");
 
-                                    //checks to see if the player has sunk a ship
+                                    // checks to see if the player has sunk a ship
                                     if (this.model.getCompShipSunk() == true) {
                                         this.validateOutput.setText(this.model.getPlayerName() + "'s turn: "
                                                 + this.model.getPlayerName() + " guessed ("
@@ -736,12 +761,13 @@ public class BattleshipGUI extends JPanel {
                                                 + ") and sunk a ship! Click the grid for computer's turn!");
                                     }
 
-                                    //sets the position clicked by the player to "O" to display a hit
+                                    // sets the position clicked by the player to "O" to display a hit
                                     this.computerGrid[this.model.getPlayerRowGuessed()][this.model
                                             .getPlayerColGuessed()].setText("O");
-                                } 
-                                
-                                //runs the code below if a player misses a ship; displays the respective symbol on the grid
+                                }
+
+                                // runs the code below if a player misses a ship; displays the respective symbol
+                                // on the grid
                                 else {
                                     this.validateOutput.setText(this.model.getPlayerName() + "'s turn: "
                                             + this.model.getPlayerName() + " guessed ("
@@ -753,28 +779,29 @@ public class BattleshipGUI extends JPanel {
                             }
                         }
 
-                        //if it is the computer's turn for the game
+                        // if it is the computer's turn for the game
                         if (this.model.getGameTurn() == "Computer") {
 
-                            //runs the code below if the computer hits a ship
+                            // runs the code below if the computer hits a ship
                             if (this.model.getCompHitStatus() == true) {
                                 this.validateOutput.setText("Computer's turn: the computer guessed ("
                                         + this.model.getCompRowGuessed() + ", " + this.model.getCompColGuessed()
                                         + ") and hit a ship! Please do your turn!");
 
-                                //checks to see if the computer has sunk a ship
+                                // checks to see if the computer has sunk a ship
                                 if (this.model.getPlayerShipSunk() == true) {
                                     this.validateOutput.setText("Computer's turn: the computer guessed ("
                                             + this.model.getCompRowGuessed() + ", " + this.model.getCompColGuessed()
                                             + ") and sunk a ship! Please do your turn!");
                                 }
 
-                                //sets the position clicked by the computer to "O" to display a hit
+                                // sets the position clicked by the computer to "O" to display a hit
                                 this.playerGrid[this.model.getCompRowGuessed()][this.model
                                         .getCompColGuessed()].setText("O");
-                            } 
-                            
-                            //runs the code below if the computer misses a ship; displays the respective symbol on the grid
+                            }
+
+                            // runs the code below if the computer misses a ship; displays the respective
+                            // symbol on the grid
                             else {
                                 this.validateOutput.setText("Computer's turn: the computer guessed ("
                                         + this.model.getCompRowGuessed() + ", " + this.model.getCompColGuessed()
@@ -785,14 +812,14 @@ public class BattleshipGUI extends JPanel {
                         }
                     }
 
-                    //runs the code below if the game has ended and someone has won
+                    // runs the code below if the game has ended and someone has won
                     else {
 
-                        //set the end game panel to visible and set the restart button to non-visible
+                        // set the end game panel to visible and set the restart button to non-visible
                         endGame.setVisible(true);
                         restart.setVisible(false);
 
-                        //call the getWinner() method to retrieve the winner and display the winner
+                        // call the getWinner() method to retrieve the winner and display the winner
                         this.validateOutput.setText("Game Ended! The winner is " + this.model.getWinner());
                         this.model.disableGrid(computerGrid);
                     }
@@ -802,13 +829,14 @@ public class BattleshipGUI extends JPanel {
             // if the panel states is set to END
             case END:
 
-                //set the game panel and title contents panel to non-visible and set the end game panel to visible
+                // set the game panel and title contents panel to non-visible and set the end
+                // game panel to visible
                 this.gamePanel.setVisible(false);
                 this.titleContentsPanel.setVisible(false);
                 this.endgamePanel.setVisible(true);
                 this.restart.setVisible(true);
 
-                //call the end game view and resize frame
+                // call the end game view and resize frame
                 this.endGameView();
                 this.parentFrame = (JFrame) this.getTopLevelAncestor();
                 this.parentFrame.pack();
@@ -823,11 +851,12 @@ public class BattleshipGUI extends JPanel {
 
     /**
      * @author Marwa
-     * a method that registers the ship controller; adds action listeners to the player and computer grids
+     *         a method that registers the ship controller; adds action listeners to
+     *         the player and computer grids
      */
     public void registerShipController() {
 
-        //create the instance of the ship controller
+        // create the instance of the ship controller
         ShipControllerPlacement shipController = new ShipControllerPlacement(playerGrid, computerGrid, model,
                 alignment);
 
@@ -846,17 +875,19 @@ public class BattleshipGUI extends JPanel {
         }
     }
 
-     /**
+    /**
      * @author Mohib
-     * a method that registers the button controller; adds action listeners to buttons and textfields that 
-     * are used throughout the game
+     *         a method that registers the button controller; adds action listeners
+     *         to buttons and textfields that
+     *         are used throughout the game
      */
     public void registerButtonController() {
 
-        //create the instance of the button controller
+        // create the instance of the button controller
         ButtonController buttonController = new ButtonController(this.model, this.nameField);
 
-        //add action listeners to the respective buttons used within the button controller
+        // add action listeners to the respective buttons used within the button
+        // controller
         exit.addActionListener(buttonController);
         easy.addActionListener(buttonController);
         medium.addActionListener(buttonController);
