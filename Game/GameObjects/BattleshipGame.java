@@ -644,8 +644,6 @@ public class BattleshipGame extends Object {
 
     }
 
-    // TODO if we have time add a time highscore
-
     /**
      * @author Marwa
      *         A method that resets all of the values
@@ -654,7 +652,7 @@ public class BattleshipGame extends Object {
 
         currentRound++; //increment the round number
 
-        //reset values 
+        //reset all the values 
         this.isGameEnded = false;
         this.view.isRestart = true;
         this.setPlayerName(null);
@@ -671,6 +669,8 @@ public class BattleshipGame extends Object {
         this.numCompGuesses = 0;
         this.playerHits = 0;
         this.computerHits = 0;
+
+        // Switch the panel state so it can display the title screen
         this.view.setPanelState(PANEL_STATES.TITLE);
 
         //update the view
@@ -784,45 +784,6 @@ public class BattleshipGame extends Object {
             }
         }
 
-
-
-        // if (this.getPlayerShipSunk() == false ) {
-        //     guessHorizontal = this.computerGuessHorizontal(compRowGuessed, compColGuessed);
-        // }
-
-        // // If the ship hasn't been hit yet and the last guess did not sink a ship
-        // if (!this.getCompHitStatus() || this.getPlayerShipSunk() == false) {
-        //     // Make a random guess
-        //     this.compRowGuessed = (int) (Math.random() * (playerShips.length));
-        //     this.compColGuessed = (int) (Math.random() * (playerShips.length));
-
-        // } else { // Otherwise if the ship has been hit before
-
-        //     if (guessHorizontal == true) {
-        //         this.compColGuessed++; // update the column but keep the row the same
-        //     } else { // otherwise if guessing vertical
-        //         this.compRowGuessed++; // increment the row but keep the column the same
-        //     }
-
-        // }
-
-        // // If the coordinate guessed is not empty or a missed ship
-        // if (!playerShips[compRowGuessed][compColGuessed].equals("O")) {
-        //     if (!this.computerGuesses[compRowGuessed][compColGuessed].equals("!")) {
-
-        //         this.hasCompHit = true; // Then the computer hit the ship
-        //         String shipHit = playerShips[compRowGuessed][compColGuessed]; // Create a string of the ship that was
-        //                                                                       // hit to pass into the method
-        //         this.computerHits++;
-        //         this.playerShips[compRowGuessed][compColGuessed] = "O";
-        //         this.hasShipSunk(shipHit); // Run this method to check if the ship has been sunken
-
-        //     }
-
-        // } else {
-        //     this.hasCompHit = false;
-        // }
-
         this.numCompGuesses++;
         this.computerGuesses[compRowGuessed][compColGuessed] = "!";
         checkGameStatus();
@@ -861,7 +822,7 @@ public class BattleshipGame extends Object {
             this.isGameEnded = true; //set the game to ended
 
             // if the player hits a new highscore
-            if (this.getNumPlayerGuesses() > this.getPlayerGuessHighScore()) {
+            if (this.getNumPlayerGuesses() < this.getPlayerGuessHighScore()) {
                 this.setPlayerGuessHighScore(this.getNumPlayerGuesses()); // Set the highscore of the player
             }
 
@@ -908,8 +869,8 @@ public class BattleshipGame extends Object {
         }
 
         //output stats and labels to file
-        outputFile.println("\nNumber of Guesses (Player): " + this.getPlayerHits());
-        outputFile.println("Number of Guesses (Computer): " + this.getComputerHits());
+        outputFile.println("\nNumber of Hits (Player): " + this.getPlayerHits());
+        outputFile.println("Number of Hits (Computer): " + this.getComputerHits());
         outputFile.println("Timer End: " + this.view.timePassed() + " seconds");
 
         //output player high score list
@@ -930,11 +891,15 @@ public class BattleshipGame extends Object {
      */
     public void sortPlayerGuessHighScore(int[] array) {
 
+        //Loop through the array
         for (int x = 1; x < array.length; x++) {
-            int current = array[x];
+            int current = array[x]; // Set the current position
             int position = x;
 
+            // While the index is over 0 and the element before the position is greater than the current
             while (position > 0 && array[position - 1] > current) {
+
+                // swap
                 array[position] = array[position - 1];
                 position--;
             }
@@ -949,7 +914,11 @@ public class BattleshipGame extends Object {
      * @param array
      */
     public void printArrayFile(PrintWriter outputFile, int[] array) {
+
+        // For loop to loop through all the elements in the array
         for (int i = 0; i < array.length; i++) {
+
+            // only print out the array element when the highscore isn't zero
             if (array[i] != 0) {
                 outputFile.println(array[i]);
             }
@@ -961,7 +930,7 @@ public class BattleshipGame extends Object {
      *         A method to end the game
      */
     public void end() {
-        this.view.setPanelState(PANEL_STATES.END); // switch the enum state
+        this.view.setPanelState(PANEL_STATES.END); // switch the enum state and then update the view
         this.updateView();
     }
 
@@ -1226,8 +1195,7 @@ public class BattleshipGame extends Object {
     // ------------------------------------------ SETTOR METHODS ------------------------------------------
 
     /**
-     * @author Marwa
-     *         A method to set the high score of the player
+     *  A method to set the high score of the player
      * @param score to add
      */
     public void setPlayerGuessHighScore(int score) {

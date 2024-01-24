@@ -1,7 +1,6 @@
 ---------------------- GAME ANALYSIS ----------------------
-Current Round: 2              	WINNER STATUS: PLAYER 1 WON  
-Number of Guesses (Player): 14
-Number of Guesses (Computer): 0
-Timer End: 85 seconds
+Current Round: 1              	WINNER STATUS: PLAYER 1 WON  
+Number of Hits (Player): 14
+Number of Hits (Computer): 1
+Timer End: 17 seconds
 Player Highscore list: 
-15
