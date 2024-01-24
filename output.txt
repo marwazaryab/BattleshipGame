@@ -2,6 +2,6 @@
 Current Round: 2              	WINNER STATUS: PLAYER 1 WON  
 Number of Guesses (Player): 14
 Number of Guesses (Computer): 0
-Timer End: 66 seconds
+Timer End: 85 seconds
 Player Highscore list: 
-14
+15

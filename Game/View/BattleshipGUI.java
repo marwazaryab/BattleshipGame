@@ -22,7 +22,7 @@ public class BattleshipGUI extends JPanel {
 
     private BattleshipGame model; // the model of the view
 
-    // title view
+    // title view 
     private JPanel titleContentsPanel = new JPanel(); // The overall panel for the title view; holds all components
     private JPanel buttonsPanel = new JPanel(); // The panel that holds all of the title view buttons
     private JPanel bottomPanel = new JPanel(); // The panel that is put into the SOUTH section of the title contents
@@ -37,7 +37,7 @@ public class BattleshipGUI extends JPanel {
     private JLabel userPrompt = new JLabel("Welcome Player 1! Please enter your name: "); // The label that displays
                                                                                           // upon starting the game
 
-    // end game view instance variables
+    // end game view 
     private JPanel endgamePanel = new JPanel(); // The overall panel for the end game view
     private JPanel endGameButtonsPanel = new JPanel(); // The panel that holds the buttons for the end game view
     private JPanel labelsPanel = new JPanel(); // The panel that holds the labels for the end game view
@@ -51,7 +51,7 @@ public class BattleshipGUI extends JPanel {
     private JButton endExit = new JButton("Exit"); // The button that allows the player to exit the game
     private JButton statsButton = new JButton("Stats"); // The button that saves the game data to an output file
 
-    // game view instance variables
+    // game view 
     private JPanel gamePanel = new JPanel(); // The overall panel that holds all of the game view components
     private JPanel userPanel = new JPanel(); // The panel that holds data for the player and computer
     private JPanel outputPanel = new JPanel(); // The panel that holds data for the SOUTH section of the game panel
@@ -146,7 +146,6 @@ public class BattleshipGUI extends JPanel {
      * @param model The model for the BattleshipGUI
      */
     public BattleshipGUI(BattleshipGame data) {
-
         this.model = data;
         this.setPanelState(PANEL_STATES.TITLE);
         this.model.setGUI(this);
@@ -311,6 +310,9 @@ public class BattleshipGUI extends JPanel {
         endgamePanel.add(winnerPanel, BorderLayout.NORTH);
         endgamePanel.add(labelsPanel, BorderLayout.CENTER);
         endgamePanel.add(endGameButtonsPanel, BorderLayout.SOUTH);
+
+        //set preferred size for labels panel
+        labelsPanel.setPreferredSize(new Dimension(300,100));
 
         // add the end game panel to this JPanel
         this.add(endgamePanel);
@@ -748,7 +750,6 @@ public class BattleshipGUI extends JPanel {
                                             + ") and missed! Click the grid for computer's turn!");
                                     this.computerGrid[this.model.getPlayerRowGuessed()][this.model
                                             .getPlayerColGuessed()].setText("!");
-
                                 }
                             }
                         }
