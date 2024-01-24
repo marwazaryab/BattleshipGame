@@ -641,7 +641,6 @@ public class BattleshipGame extends Object {
                 playerRemainingShips--;
             }
         }
-
     }
 
     /**
@@ -720,13 +719,16 @@ public class BattleshipGame extends Object {
      */
     public void computerShipTurn() {
         
-        boolean guessHorizontal = true;
+        boolean guessHorizontal = true; // boolean value used to determine if computer should guess horizontall or not
 
+        //retrieve a random guess
         this.compRowGuessed = (int) (Math.random() * (playerShips.length));
         this.compColGuessed = (int) (Math.random() * (playerShips.length));
         
+        //if a ship has not been hit
         if (this.getCompHitStatus() == false) {
 
+            //check to see if the random guess has not been guessed before and it hits a ship
             if (!playerShips[compRowGuessed][compColGuessed].equals("O")) {
                 if (!this.computerGuesses[compRowGuessed][compColGuessed].equals("!")) {
     
@@ -737,6 +739,7 @@ public class BattleshipGame extends Object {
                     this.playerShips[compRowGuessed][compColGuessed] = "O";
                     this.hasShipSunk(shipHit); // Run this method to check if the ship has been sunken
 
+                    //if the ship does not sink after the hit, save the positions of the coordinate
                     if (hasPlayerShipSunk == false) {
                         oldCompRowGuessed = compRowGuessed;
                         oldCompColGuessed = compColGuessed;
@@ -744,25 +747,33 @@ public class BattleshipGame extends Object {
     
                 }
     
+            //if a hit has not been made, set the boolean value to false
             } else {
                 this.hasCompHit = false;
             }
         }
 
+        //if a hit has been made
         else {
 
+            //set the computer row and column guessed 
             compRowGuessed = oldCompRowGuessed;
             compColGuessed = oldCompColGuessed;
 
+            //check to see what direction the player ship is present in 
             guessHorizontal = this.computerGuessHorizontal(compRowGuessed, compColGuessed);
 
+            //if the ship is present horizontally increase the column guessed
             if (guessHorizontal == true) {
                 compColGuessed++;
             }
+
+            //else increase the row guessed
             else {
                 compRowGuessed++;
             }
 
+            //check to see if the random guess has not been guessed before and it hits a ship
             if (!playerShips[compRowGuessed][compColGuessed].equals("O")) {
                 if (!this.computerGuesses[compRowGuessed][compColGuessed].equals("!")) {
     
@@ -773,19 +784,24 @@ public class BattleshipGame extends Object {
                     this.playerShips[compRowGuessed][compColGuessed] = "O";
                     this.hasShipSunk(shipHit); // Run this method to check if the ship has been sunken
     
+                    //check to see if the ships has sunk 
                     if (hasPlayerShipSunk == false) {
                         oldCompRowGuessed = compRowGuessed;
                         oldCompColGuessed = compColGuessed;
                     }
                 }
     
+            //the ship has not been hit 
             } else {
                 this.hasCompHit = false;
             }
         }
 
+        //incrmenet compouter guesses and set the position guessed to "!"
         this.numCompGuesses++;
         this.computerGuesses[compRowGuessed][compColGuessed] = "!";
+
+        //check to see if game has ended and update view; also switch the turn 
         checkGameStatus();
         this.updateView();
         this.currentTurn = "Player";
