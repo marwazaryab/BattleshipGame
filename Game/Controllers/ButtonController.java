@@ -16,14 +16,8 @@ import Game.GameObjects.BattleshipGame;
 public class ButtonController implements ActionListener {
     
     //instance variables
-    private JButton exit;
-    private JButton easy;
-    private JButton medium;
-    private JButton hard;
     private BattleshipGame model;
     private JTextField field;
-
-    //TODO - why do the arguments and instance variables not match??
     
     /**
      * @author Mohib and Marwa
@@ -38,10 +32,8 @@ public class ButtonController implements ActionListener {
      * @param end the end button
      * @param titleScreen the title screen button
      */
-    public ButtonController (JButton easyButton, JButton mediumButton, JButton hardButton, JButton exit, BattleshipGame data, JTextField f, JButton end, JButton titleScreen) {
-        this.easy = easyButton;
-        this.medium = mediumButton;
-        this.hard = hardButton;
+    public ButtonController (BattleshipGame data, JTextField f) {
+      
         this.field = f;
         this.model = data;
     }

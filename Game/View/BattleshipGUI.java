@@ -854,8 +854,7 @@ public class BattleshipGUI extends JPanel {
     public void registerButtonController() {
 
         //create the instance of the button controller
-        ButtonController buttonController = new ButtonController(this.easy, this.medium, this.hard, this.exit,
-                this.model, this.nameField, this.restart, this.endGame);
+        ButtonController buttonController = new ButtonController(this.model, this.nameField);
 
         //add action listeners to the respective buttons used within the button controller
         exit.addActionListener(buttonController);

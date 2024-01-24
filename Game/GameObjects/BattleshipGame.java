@@ -292,7 +292,7 @@ public class BattleshipGame extends Object {
                     // set text on the computer grid respective to size of computer ship length
                     for (int i = 0; i < computerShipsLength[computerShipNum]; i++) {
                         computerShips[computerShipRow][computerShipCol + i] = "X"; // set the array in the model to be
-                                                                                   // equal to "X"
+                        // equal to "X"
                     }
 
                     updateComputerShips(computerGrid, computerShipNum); // call the updateComputerShips method
