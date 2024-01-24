@@ -54,11 +54,15 @@ public class BattleshipGame extends Object {
     private boolean isDeploymentFinished; // Boolean value that is true when the deployment of both ships are done
     private boolean isValidPosition; // Boolean value that is true when there a guess is valid
     private boolean isNewGame; // Boolean value that is true when a new game can start
-    private boolean isSunk; // Boolean value that determines when a ship has been sunk
+    private boolean hasCompShipSunk; // Boolean value that determines when a computer ship has been sunk
+    private boolean hasPlayerShipSunk; // Boolean value that determines when a player ship has been sunk
     private Random randomDirection; // A random object to make a random direction when deploying computer ships
     private int currentRound; // The current round of the game (first game, second game etc)
     private int[] playerHighScores = new int[100]; // An array of the players high scores
     private int highScoreIndex; // An index of the players high scores
+
+    int oldCompRowGuessed = 0;
+    int oldCompColGuessed = 0;
 
     /**
      * BattleshipGame Constructor -- sets instance variable values
@@ -80,7 +84,8 @@ public class BattleshipGame extends Object {
         this.computerShipNum = 0;
         this.numPlayerGuesses = 0;
         this.numCompGuesses = 0;
-        this.isSunk = false;
+        this.hasCompShipSunk = false;
+        this.hasPlayerShipSunk = false;
         this.currentRound = 1;
         this.computerRemainingShips = 5;
         this.playerRemainingShips = 5;
@@ -589,21 +594,21 @@ public class BattleshipGame extends Object {
 
                     //if a matching number is found, the ship is not sunk
                     if (computerShips[x][y].equals(shipHit)) {
-                        isSunk = false;
+                        hasCompShipSunk = false;
                         break;
                     } else { //the ship is sunk
-                        isSunk = true;
+                        hasCompShipSunk = true;
                     }
                 }
 
                 //break out of the loop
-                if (isSunk == false) {
+                if (hasCompShipSunk == false) {
                     break;
                 }
             }
 
             //if the computer ship is sunk decrement the computer remaining ships
-            if (isSunk == true) {
+            if (hasCompShipSunk == true) {
                 computerRemainingShips--;
             }
 
@@ -618,21 +623,21 @@ public class BattleshipGame extends Object {
 
                     //if a matching number is found, the ship is not sunk
                     if (playerShips[x][y].equals(shipHit)) {
-                        isSunk = false;
+                        hasPlayerShipSunk = false;
                         break; 
                     } else { // the ship is sunk
-                        isSunk = true;
+                        hasPlayerShipSunk = true;
                     }
                 }
 
                 //break out of the loop
-                if (isSunk == false) {
+                if (hasPlayerShipSunk == false) {
                     break;
                 }
             }
 
             //if the player ship is sunk decrement the player remaining ships
-            if (isSunk == true) {
+            if (hasPlayerShipSunk == true) {
                 playerRemainingShips--;
             }
         }
@@ -714,49 +719,109 @@ public class BattleshipGame extends Object {
      *         A method that allows the computer to make guesses
      */
     public void computerShipTurn() {
+        
+        boolean guessHorizontal = true;
 
         this.compRowGuessed = (int) (Math.random() * (playerShips.length));
         this.compColGuessed = (int) (Math.random() * (playerShips.length));
+        
+        if (this.getCompHitStatus() == false) {
 
-        Random random = new Random();
-        boolean guessHorizontal = true;
+            if (!playerShips[compRowGuessed][compColGuessed].equals("O")) {
+                if (!this.computerGuesses[compRowGuessed][compColGuessed].equals("!")) {
+    
+                    this.hasCompHit = true; // Then the computer hit the ship
+                    String shipHit = playerShips[compRowGuessed][compColGuessed]; // Create a string of the ship that was
+                                                                                  // hit to pass into the method
+                    this.computerHits++;
+                    this.playerShips[compRowGuessed][compColGuessed] = "O";
+                    this.hasShipSunk(shipHit); // Run this method to check if the ship has been sunken
 
-        if (this.getShipSunk()) {
-            guessHorizontal = this.computerGuessHorizontal(compRowGuessed, compColGuessed);
+                    if (hasPlayerShipSunk == false) {
+                        oldCompRowGuessed = compRowGuessed;
+                        oldCompColGuessed = compColGuessed;
+                    }
+    
+                }
+    
+            } else {
+                this.hasCompHit = false;
+            }
         }
 
-        // If the ship hasn't been hit yet and the last guess did not hit sink a shit
-        if (!this.getCompHitStatus() || this.getShipSunk()) {
-            // Make a random guess
-            this.compRowGuessed = (int) (Math.random() * (playerShips.length));
-            this.compColGuessed = (int) (Math.random() * (playerShips.length));
+        else {
 
-        } else { // Otherwise if the ship has been hit before
+            compRowGuessed = oldCompRowGuessed;
+            compColGuessed = oldCompColGuessed;
+
+            guessHorizontal = this.computerGuessHorizontal(compRowGuessed, compColGuessed);
 
             if (guessHorizontal == true) {
-                this.compColGuessed++; // update the column but keep the row the same
-            } else { // otherwise if guessing vertical
-                this.compRowGuessed++; // increment the row but keep the column the same
+                compColGuessed++;
+            }
+            else {
+                compRowGuessed++;
             }
 
-        }
-
-        // If the coordinate guessed is not empty or a missed ship
-        if (!playerShips[compRowGuessed][compColGuessed].equals("O")) {
-            if (!this.computerGuesses[compRowGuessed][compColGuessed].equals("!")) {
-
-                this.hasCompHit = true; // Then the computer hit the ship
-                String shipHit = playerShips[compRowGuessed][compColGuessed]; // Create a string of the ship that was
-                                                                              // hit to pass into the method
-                this.computerHits++;
-                this.playerShips[compRowGuessed][compColGuessed] = "O";
-                this.hasShipSunk(shipHit); // Run this method to check if the ship has been sunken
-
+            if (!playerShips[compRowGuessed][compColGuessed].equals("O")) {
+                if (!this.computerGuesses[compRowGuessed][compColGuessed].equals("!")) {
+    
+                    this.hasCompHit = true; // Then the computer hit the ship
+                    String shipHit = playerShips[compRowGuessed][compColGuessed]; // Create a string of the ship that was
+                                                                                  // hit to pass into the method
+                    this.computerHits++;
+                    this.playerShips[compRowGuessed][compColGuessed] = "O";
+                    this.hasShipSunk(shipHit); // Run this method to check if the ship has been sunken
+    
+                    if (hasPlayerShipSunk == false) {
+                        oldCompRowGuessed = compRowGuessed;
+                        oldCompColGuessed = compColGuessed;
+                    }
+                }
+    
+            } else {
+                this.hasCompHit = false;
             }
-
-        } else {
-            this.hasCompHit = false;
         }
+
+
+
+        // if (this.getPlayerShipSunk() == false ) {
+        //     guessHorizontal = this.computerGuessHorizontal(compRowGuessed, compColGuessed);
+        // }
+
+        // // If the ship hasn't been hit yet and the last guess did not sink a ship
+        // if (!this.getCompHitStatus() || this.getPlayerShipSunk() == false) {
+        //     // Make a random guess
+        //     this.compRowGuessed = (int) (Math.random() * (playerShips.length));
+        //     this.compColGuessed = (int) (Math.random() * (playerShips.length));
+
+        // } else { // Otherwise if the ship has been hit before
+
+        //     if (guessHorizontal == true) {
+        //         this.compColGuessed++; // update the column but keep the row the same
+        //     } else { // otherwise if guessing vertical
+        //         this.compRowGuessed++; // increment the row but keep the column the same
+        //     }
+
+        // }
+
+        // // If the coordinate guessed is not empty or a missed ship
+        // if (!playerShips[compRowGuessed][compColGuessed].equals("O")) {
+        //     if (!this.computerGuesses[compRowGuessed][compColGuessed].equals("!")) {
+
+        //         this.hasCompHit = true; // Then the computer hit the ship
+        //         String shipHit = playerShips[compRowGuessed][compColGuessed]; // Create a string of the ship that was
+        //                                                                       // hit to pass into the method
+        //         this.computerHits++;
+        //         this.playerShips[compRowGuessed][compColGuessed] = "O";
+        //         this.hasShipSunk(shipHit); // Run this method to check if the ship has been sunken
+
+        //     }
+
+        // } else {
+        //     this.hasCompHit = false;
+        // }
 
         this.numCompGuesses++;
         this.computerGuesses[compRowGuessed][compColGuessed] = "!";
@@ -776,8 +841,8 @@ public class BattleshipGame extends Object {
      */
     public boolean computerGuessHorizontal(int row, int col) {
 
-        if (col + 1 < playerShips[0].length && playerShips[row][col + 1].equals("X")
-                || col - 1 < playerShips[0].length && playerShips[row][col - 1].equals("X")) {
+        if ((col + 1) < playerShips[0].length && playerShips[row][col + 1].equals("X")
+                || col - 1 != -1 && playerShips[row][col - 1].equals("X")) {
             return true;
         } else {
             return false;
@@ -911,11 +976,19 @@ public class BattleshipGame extends Object {
     }
 
     /**
-     * method that checks if ship is sunk
+     * method that checks if computer ship is sunk
      * @return whether ship is sunk
      */
-    public boolean getShipSunk() {
-        return this.isSunk;
+    public boolean getCompShipSunk() {
+        return this.hasCompShipSunk;
+    }
+
+    /**
+     * method that checks if player ship is sunk
+     * @return whether ship is sunk
+     */
+    public boolean getPlayerShipSunk() {
+        return this.hasPlayerShipSunk;
     }
 
     /**

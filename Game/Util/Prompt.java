@@ -1,6 +1,4 @@
 package Game.Util;
-
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -8,7 +6,7 @@ import java.util.*;
 
 /**
  * Prompt Class
- * A class to get a printwriter 
+ * A class used to get a printwriter 
  */
 public class Prompt {
 

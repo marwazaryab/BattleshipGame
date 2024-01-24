@@ -729,7 +729,7 @@ public class BattleshipGUI extends JPanel {
                                             + ") and hit a ship! Click the grid for computer's turn!");
 
                                     //checks to see if the player has sunk a ship
-                                    if (this.model.getShipSunk() == true) {
+                                    if (this.model.getCompShipSunk() == true) {
                                         this.validateOutput.setText(this.model.getPlayerName() + "'s turn: "
                                                 + this.model.getPlayerName() + " guessed ("
                                                 + this.model.getPlayerRowGuessed() + ", "
@@ -764,7 +764,7 @@ public class BattleshipGUI extends JPanel {
                                         + ") and hit a ship! Please do your turn!");
 
                                 //checks to see if the computer has sunk a ship
-                                if (this.model.getShipSunk() == true) {
+                                if (this.model.getPlayerShipSunk() == true) {
                                     this.validateOutput.setText("Computer's turn: the computer guessed ("
                                             + this.model.getCompRowGuessed() + ", " + this.model.getCompColGuessed()
                                             + ") and sunk a ship! Please do your turn!");
