@@ -137,6 +137,23 @@ public class BattleshipGUI extends JPanel {
     }
 
     /**
+     * an action listener to retrieve the current time that has passed using
+     * the Timer object
+     */
+    ActionListener timeListener = new ActionListener() {
+
+        @Override
+        /**
+         * A method that runs with the action listener
+         * 
+         * @param ActionEvent e the action performed
+         */
+        public void actionPerformed(ActionEvent e) {
+            timer.setText("Time: " + timePassed());
+        }
+    };
+
+    /**
      * Default constructor for the GUI; sets the model within the class to
      * the argument,
      * registers button controller, and sets the panel state
@@ -160,23 +177,13 @@ public class BattleshipGUI extends JPanel {
      * @return time passed
      */
     public int timePassed() {
-        long currentTime = System.currentTimeMillis();
+        long currentTime = System.currentTimeMillis(); // current time of the game
         return timeElaspedSeconds = (int) ((currentTime - startTime) / 1000); // return time passed
     }
 
     /**
-     * @author Marwa
-     *         an action listener to retrieve the current time that has passed using
-     *         the Timer object
-     */
-    ActionListener timeListener = new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-            timer.setText("Time: " + timePassed());
-        }
-    };
-
-    /**
-     *         a method that sets the current panel state to the argument provided
+     * a method that sets the current panel state to the argument provided
+     * 
      * @param state a string of what state is being changed
      */
     public void setPanelState(String state) {
@@ -197,7 +204,7 @@ public class BattleshipGUI extends JPanel {
                 break;
         }
 
-        this.currentState = pState;
+        this.currentState = pState; //Set current State
     }
 
     /**
@@ -617,7 +624,7 @@ public class BattleshipGUI extends JPanel {
     }
 
     /**
-     * @author Mohib
+     * @author Mohib and Marwa
      *         a method that updates the display of the JComponents within the view
      *         everytime an action is performed;
      *         it integrates accessor methods from the model to provide accurate
