@@ -696,7 +696,7 @@ public class BattleshipGame extends Object {
     }
 
     /**
-     * @author Marwa and Mohib
+     * @author Mohib
      *         A method that allows the player to perform their turn and identifies
      *         whether
      *         they have hit, miss, or sunk a ship
