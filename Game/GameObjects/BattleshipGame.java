@@ -291,7 +291,6 @@ public class BattleshipGame extends Object {
 
                     // set text on the computer grid respective to size of computer ship length
                     for (int i = 0; i < computerShipsLength[computerShipNum]; i++) {
-                        computerGrid[computerShipRow][computerShipCol + i].setText("X");
                         computerShips[computerShipRow][computerShipCol + i] = "X"; // set the array in the model to be
                                                                                    // equal to "X"
                     }
@@ -309,7 +308,6 @@ public class BattleshipGame extends Object {
 
                     // set text on the computer grid respective to size of computer ship length
                     for (int i = 0; i < computerShipsLength[computerShipNum]; i++) {
-                        computerGrid[computerShipRow + i][computerShipCol].setText("X");
                         computerShips[computerShipRow + i][computerShipCol] = "X"; // set the array in the model
                                                                                    // to be equal to "X"
                     }
@@ -699,8 +697,9 @@ public class BattleshipGame extends Object {
 
     /**
      * @author Marwa and Mohib
-     * A method that allows the player to perform their turn and identifies whether
-     * they have hit, miss, or sunk a ship
+     *         A method that allows the player to perform their turn and identifies
+     *         whether
+     *         they have hit, miss, or sunk a ship
      * 
      * @param rowClicked the row that the button was clicked
      * @param colClicked the column that the button was clicked
@@ -743,14 +742,15 @@ public class BattleshipGame extends Object {
 
         boolean guessHorizontal = true; // boolean value used to determine if computer should guess horizontall or not
 
-        //retrieve a random guess
+        // retrieve a random guess
         this.compRowGuessed = (int) (Math.random() * (playerShips.length));
         this.compColGuessed = (int) (Math.random() * (playerShips.length));
 
-        //if a ship has not been hit
+        // if a ship has not been hit
         if (this.getCompHitStatus() == false) {
 
-            //check to see if the random guess has not been guessed before and it hits a ship
+            // check to see if the random guess has not been guessed before and it hits a
+            // ship
             if (!playerShips[compRowGuessed][compColGuessed].equals("O")) {
                 if (!this.computerGuesses[compRowGuessed][compColGuessed].equals("!")) {
 
@@ -762,41 +762,42 @@ public class BattleshipGame extends Object {
                     this.playerShips[compRowGuessed][compColGuessed] = "O";
                     this.hasShipSunk(shipHit); // Run this method to check if the ship has been sunken
 
-                    //if the ship does not sink after the hit, save the positions of the coordinate
+                    // if the ship does not sink after the hit, save the positions of the coordinate
                     if (hasPlayerShipSunk == false) {
                         oldCompRowGuessed = compRowGuessed;
                         oldCompColGuessed = compColGuessed;
                     }
 
                 }
-    
-            //if a hit has not been made, set the boolean value to false
+
+                // if a hit has not been made, set the boolean value to false
             } else {
                 this.hasCompHit = false;
             }
         }
 
-        //if a hit has been made
+        // if a hit has been made
         else {
 
-            //set the computer row and column guessed 
+            // set the computer row and column guessed
             compRowGuessed = oldCompRowGuessed;
             compColGuessed = oldCompColGuessed;
 
-            //check to see what direction the player ship is present in 
+            // check to see what direction the player ship is present in
             guessHorizontal = this.computerGuessHorizontal(compRowGuessed, compColGuessed);
 
-            //if the ship is present horizontally increase the column guessed
+            // if the ship is present horizontally increase the column guessed
             if (guessHorizontal == true) {
                 compColGuessed++;
             }
 
-            //else increase the row guessed
+            // else increase the row guessed
             else {
                 compRowGuessed++;
             }
 
-            //check to see if the random guess has not been guessed before and it hits a ship
+            // check to see if the random guess has not been guessed before and it hits a
+            // ship
             if (!playerShips[compRowGuessed][compColGuessed].equals("O")) {
                 if (!this.computerGuesses[compRowGuessed][compColGuessed].equals("!")) {
 
@@ -807,25 +808,25 @@ public class BattleshipGame extends Object {
                     this.computerHits++;
                     this.playerShips[compRowGuessed][compColGuessed] = "O";
                     this.hasShipSunk(shipHit); // Run this method to check if the ship has been sunken
-    
-                    //check to see if the ships has sunk 
+
+                    // check to see if the ships has sunk
                     if (hasPlayerShipSunk == false) {
                         oldCompRowGuessed = compRowGuessed;
                         oldCompColGuessed = compColGuessed;
                     }
                 }
-    
-            //the ship has not been hit 
+
+                // the ship has not been hit
             } else {
                 this.hasCompHit = false;
             }
         }
 
-        //incrmenet compouter guesses and set the position guessed to "!"
+        // incrmenet compouter guesses and set the position guessed to "!"
         this.numCompGuesses++;
         this.computerGuesses[compRowGuessed][compColGuessed] = "!";
 
-        //check to see if game has ended and update view; also switch the turn 
+        // check to see if game has ended and update view; also switch the turn
         checkGameStatus();
         this.updateView();
         this.currentTurn = "Player";
