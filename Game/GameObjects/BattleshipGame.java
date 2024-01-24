@@ -672,7 +672,7 @@ public class BattleshipGame extends Object {
         Random random = new Random();
         boolean guessHorizontal = true;
 
-        if (!this.getShipSunk()) {
+        if (this.getShipSunk()) {
             guessHorizontal = this.computerGuessHorizontal(compRowGuessed, compColGuessed);
         }
 
@@ -726,7 +726,9 @@ public class BattleshipGame extends Object {
      *         horizontal
      */
     public boolean computerGuessHorizontal(int row, int col) {
-        if (playerShips[row + 1][col].equals("X")) {
+
+        if (col + 1 < playerShips[0].length && playerShips[row][col + 1].equals("X")
+                || col - 1 < playerShips[0].length && playerShips[row][col - 1].equals("X")) {
             return true;
         } else {
             return false;
