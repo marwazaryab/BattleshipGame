@@ -1,0 +1,1 @@
+Final project for Grade 12 Computer Science made by myself and Mohib. It is a game of battleship a player can go against an AI. It includes an easy, medium and hard mode with different grid sizes to make guessing harder. The AI plays with a similar style as a human, where it makes guesses around a target until it fully sinks the ship.
